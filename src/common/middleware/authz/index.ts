@@ -1,4 +1,3 @@
-import path from 'path';
 import { Enforcer, newEnforcer } from 'casbin';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request } from 'express';

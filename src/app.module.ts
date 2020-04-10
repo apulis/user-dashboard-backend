@@ -9,14 +9,17 @@ import databaseConfig from 'config/database.json';
 
 import { AuthzMiddleware } from 'src/common/middleware/authz';
 import { RoleService } from './role/role.service';
+import { UserService } from './user/user.service';
+import { UserModule } from './user/user.module';
 
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(databaseConfig as TypeOrmModule),
+    UserModule,
   ],
   controllers: [AppController, UserController, UserGroupController, RoleController],
-  providers: [AppService, RoleService],
+  providers: [AppService, RoleService, UserService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

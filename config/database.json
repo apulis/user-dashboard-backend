@@ -5,6 +5,4 @@
   "username": "root",
   "password": "123456",
   "database": "user_group",
-  "entities": [],
-  "synchronize": true
 }
