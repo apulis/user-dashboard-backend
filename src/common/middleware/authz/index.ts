@@ -9,7 +9,8 @@ import { ConnectionOptions } from 'typeorm';
 
 interface IRequest extends Request {
   state: {
-    currentUser?: any
+    currentUser?: any;
+    enforcer?: any
   }
 }
 
@@ -19,14 +20,15 @@ let initedAdapter = false;
 // authz returns the authorizer, uses a Casbin enforcer as input
 @Injectable()
 export class AuthzMiddleware implements NestMiddleware {
-  async use(req: Request, res: Response, next: Function) {
+  async use(req: IRequest, res: Response, next: Function) {
     if (!initedAdapter) {
       a = await TypeORMAdapter.newAdapter(databaseConfig as ConnectionOptions);
       initedAdapter = true;
     }
     const enforcer = await newEnforcer('src/common/middleware/authz/authz_model.conf', a);
-    //
-    console.log('enforcer', enforcer)
+    await enforcer.loadPolicy();
+    if (!req.state) req.state = {};
+    req.state.enforcer = enforcer;
     next();
   }
 }
