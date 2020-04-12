@@ -1,3 +1,4 @@
+import { Connection } from 'typeorm';
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -22,6 +23,7 @@ import { UserModule } from './user/user.module';
   providers: [AppService, RoleService, UserService],
 })
 export class AppModule {
+  constructor(private connection: Connection) {}
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthzMiddleware)
