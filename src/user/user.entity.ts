@@ -32,4 +32,5 @@ export class User {
 
   @Column('varchar', { length: 255 })
   note: string;
+
 }
