@@ -11,7 +11,7 @@ async function bootstrap() {
     .addTag('user group')
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('/user-dashboard', app, document);
+  SwaggerModule.setup('/docs', app, document);
   await app.listen(5001);
 }
 bootstrap();
