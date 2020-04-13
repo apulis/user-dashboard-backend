@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Timestamp } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 
 
@@ -32,5 +32,4 @@ export class User {
 
   @Column('varchar', { length: 255 })
   note: string;
-  
 }

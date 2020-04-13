@@ -1,35 +1,16 @@
-import { Connection } from 'typeorm';
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserController } from './user/user.controller';
-import { UserGroupController } from './user-group/user-group.controller';
-import { RoleController } from './role/role.controller';
-import databaseConfig from 'config/database.json';
-
-import { AuthzMiddleware } from 'src/common/middleware/authz';
-import { RoleService } from './role/role.service';
-import { UserService } from './user/user.service';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-
+import { typeOrmConfig } from './config/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(databaseConfig as TypeOrmModule),
+    TypeOrmModule.forRoot(typeOrmConfig as TypeOrmModuleOptions),
     UserModule,
   ],
-  controllers: [AppController, UserController, UserGroupController, RoleController],
-  providers: [AppService, RoleService, UserService],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {
-  constructor(private connection: Connection) {}
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthzMiddleware)
-      .forRoutes({
-        path: '*',
-        method: RequestMethod.ALL,
-      })
-  }
-}
+export class AppModule {}
