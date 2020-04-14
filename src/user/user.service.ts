@@ -1,8 +1,10 @@
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res } from '@nestjs/common';
 import { IUserMessage } from './user.controller';
+
+import { RegisterTypes } from 'src/config/enums'
 
 interface ICreateUser extends IUserMessage {
   createTime: string;
@@ -21,6 +23,14 @@ export class UserService {
     return await this.usersRepository.createQueryBuilder('user').skip(pageNo).take(pageSize).getMany();
   }
 
+  async userNameUnique(userName: string[]) {
+    return await this.usersRepository
+      .createQueryBuilder()
+      .select('userName')
+      .where("user.userName IN (:...names)", { names: userName })
+      .execute()
+  }
+
   async create(users: IUserMessage[]): Promise<any> {
     const newUsers: ICreateUser[] = [];
     users.forEach(u => {
@@ -28,16 +38,16 @@ export class UserService {
       newUsers.push({
         ...u,
         openId: u.userName,
-        registerType: 'Account',
+        registerType: RegisterTypes.Account,
         createTime: new Date().getTime() + '',
       })
-    })
+    });
     return await this.usersRepository
       .createQueryBuilder()
       .insert()
       .into(User)
       .values(newUsers)
-      .execute()
+      .execute();
 
   }
 

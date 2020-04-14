@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
 
 
@@ -13,7 +13,7 @@ export class User {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, unique: true })
   userName: string;
 
   @IsString()
@@ -21,42 +21,35 @@ export class User {
   @Column('varchar', { length: 255 })
   password: string;
 
-  @IsOptional()   
   @IsString()
   @Length(1, 18)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   nickName: string;
 
-  @IsOptional()
   @IsString()
   @Length(5, 18)
   @Column('varchar', { length: 255 })
   openId: string;
 
-  @IsOptional()
   @IsString()
   @Length(1, 18)
   @Column('varchar', { length: 255 })
   registerType: string;
 
-  @IsOptional()
   @IsEmail()
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   email: string;
 
-  @IsOptional()
   @IsString()
   @Length(9, 15)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   phone: string;
 
-  @IsOptional()
   @IsString()
   @Length(5, 25)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   note: string;
 
-  @IsOptional()
   @Column('varchar', { length: 255 })
   createTime: string;
 }

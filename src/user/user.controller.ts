@@ -40,11 +40,21 @@ export class UserController {
   @Post('/')
   async createUsers(@Body() body: ICreateUser, @Res() res: Response) {
     const { userMessage, userRole } = body;
-    await this.userService.create(userMessage);
-    res.status(HttpStatus.CREATED).send({
-      success: true,
-      message: 'ok',
-    })
+    const userNames = userMessage.map(val => val.userName);
+    const uniqueUserName = await this.userService.userNameUnique(userNames);
+    if (uniqueUserName && uniqueUserName.length > 0) {
+      res.status(HttpStatus.OK).json({
+        success: false,
+        conflictedUserName: uniqueUserName,
+      })
+    } else {
+      await this.userService.create(userMessage);
+      // TODO: ADD ROLE
+      res.status(HttpStatus.CREATED).send({
+        success: true,
+        message: 'ok',
+      })
+    }
   }
 
 }
