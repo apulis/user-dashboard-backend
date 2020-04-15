@@ -29,7 +29,7 @@ export class UserController {
     @Query('pageSize') pageSize: string,
     @Res() res: Response
   ): Promise<User[]> {
-    const result = await this.userService.find(Number(pageNo), Number(pageSize));
+    const result = await this.userService.find(Number(pageNo) - 1, Number(pageSize));
     res.status(HttpStatus.OK).json({
       success: true,
       list: result.list,

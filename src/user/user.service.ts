@@ -23,7 +23,7 @@ export class UserService {
     const total = await this.usersRepository.count();
     const list = await this.usersRepository
       .createQueryBuilder('user')
-      .skip(pageNo)
+      .skip(pageNo * pageSize)
       .take(pageSize)
       .getMany();
     return {
