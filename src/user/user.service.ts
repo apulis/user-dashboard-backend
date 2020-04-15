@@ -23,6 +23,8 @@ export class UserService {
     const total = await this.usersRepository.count();
     const list = await this.usersRepository
       .createQueryBuilder('user')
+      .select(['user.userName', 'user.nickName', 'user.phone', 'user.email', 'user.note'])
+      .where('isDelete != 1')
       .skip(pageNo * pageSize)
       .take(pageSize)
       .getMany();
