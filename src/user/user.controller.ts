@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param } fr
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
+import { UpdateResult } from 'typeorm';
 
 export interface IUserMessage {
   userName: string;
@@ -27,9 +28,16 @@ export class UserController {
   async getUsers(
     @Query('pageNo') pageNo: string, 
     @Query('pageSize') pageSize: string,
-    @Res() res: Response
+    @Res() res: Response,
+    @Query('search') search?: string
   ): Promise<User[]> {
-    const result = await this.userService.find(Number(pageNo) - 1, Number(pageSize));
+    let result;
+    if (search) {
+      result = await this.userService.findLike(Number(pageNo) - 1, Number(pageSize), search);
+    } else {
+      result = await this.userService.find(Number(pageNo) - 1, Number(pageSize));
+    }
+    
     res.status(HttpStatus.OK).json({
       success: true, 
       list: result.list,
@@ -61,6 +69,10 @@ export class UserController {
   @Delete('/')
   async removeUsers(@Body() body: string[], @Res() res: Response) {
     const userNames = body
-    const result = await this.userService.remove(userNames);
+    const result: UpdateResult = await this.userService.remove(userNames);
+    res.status(HttpStatus.ACCEPTED).json({
+      success: true,
+      message: `Success remove ${result.raw.affectedRows} records`
+    })
   }
 }
