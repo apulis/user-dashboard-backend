@@ -19,8 +19,17 @@ export class UserService {
     private readonly usersRepository: Repository<User>,
   ) { }
 
-  async find(pageNo: number, pageSize: number): Promise<User[]> {
-    return await this.usersRepository.createQueryBuilder('user').skip(pageNo).take(pageSize).getMany();
+  async find(pageNo: number, pageSize: number): Promise<{list: User[], total: number}> {
+    const total = await this.usersRepository.count();
+    const list = await this.usersRepository
+      .createQueryBuilder('user')
+      .skip(pageNo)
+      .take(pageSize)
+      .getMany();
+    return {
+      list,
+      total
+    };
   }
 
   async userNameUnique(userName: string[]) {

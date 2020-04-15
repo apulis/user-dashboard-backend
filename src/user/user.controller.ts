@@ -23,18 +23,19 @@ export interface ICreateUser {
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/')
+  @Get('/list')
   async getUsers(
     @Query('pageNo') pageNo: string, 
     @Query('pageSize') pageSize: string,
     @Res() res: Response
   ): Promise<User[]> {
-    const list = await this.userService.find(Number(pageNo), Number(pageSize));
+    const result = await this.userService.find(Number(pageNo), Number(pageSize));
     res.status(HttpStatus.OK).json({
       success: true,
-      list,
+      list: result.list,
+      total: result.total,
     });
-    return list;
+    return result.list;
   }
 
   @Post('/')
