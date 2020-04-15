@@ -45,8 +45,11 @@ export class UserService {
     const total = await this.usersRepository
       .createQueryBuilder('user')
       .where('isDelete != 1')
-      .andWhere(userNameQuery)
-      .orWhere(nickNameQuery)
+      .andWhere(new Brackets(subQuery => {
+        return subQuery
+          .where(userNameQuery)
+          .orWhere(nickNameQuery)
+      }))
       .setParameters(
         {search: search}
       )
@@ -59,10 +62,7 @@ export class UserService {
         return subQuery
           .where(userNameQuery)
           .orWhere(nickNameQuery)
-
       }))
-      // .andWhere(userNameQuery)
-      // .orWhere(nickNameQuery)
       .setParameters(
         {search: search}
       )
