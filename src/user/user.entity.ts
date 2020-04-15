@@ -52,4 +52,7 @@ export class User {
 
   @Column('varchar', { length: 255 })
   createTime: string;
+
+  @Column('int', { default: 0 })
+  isDelete: number;
 }
