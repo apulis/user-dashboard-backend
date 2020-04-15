@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, Query, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
@@ -31,7 +31,7 @@ export class UserController {
   ): Promise<User[]> {
     const result = await this.userService.find(Number(pageNo) - 1, Number(pageSize));
     res.status(HttpStatus.OK).json({
-      success: true,
+      success: true, 
       list: result.list,
       total: result.total,
     });
@@ -58,4 +58,9 @@ export class UserController {
     }
   }
 
+  @Delete('/')
+  async removeUsers(@Body() body: string[], @Res() res: Response) {
+    const userNames = body
+    const result = await this.userService.remove(userNames);
+  }
 }

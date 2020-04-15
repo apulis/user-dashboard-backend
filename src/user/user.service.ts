@@ -62,8 +62,15 @@ export class UserService {
 
   }
 
-  async remove() {
-    
+  async remove(userNames: string[]): Promise<any> {
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .update(User)
+      .set({isDelete: 1})
+      .where('user.userName IN (:userNames)', {
+        userNames: userNames
+      })
+      .execute()
   }
   
 }
