@@ -20,11 +20,15 @@ export class UserService {
     private readonly usersRepository: Repository<User>,
   ) { }
 
-  async find(pageNo: number, pageSize: number): Promise<{list: User[], total: number}> {
-    const total = await this.usersRepository
+  async getUserCount(): Promise<number> {
+    return await this.usersRepository
       .createQueryBuilder('user')
       .where('isDelete != 1')
       .getCount();
+  }
+
+  async find(pageNo: number, pageSize: number): Promise<{list: User[], total: number}> {
+    const total = await this.getUserCount();
     const list = await this.usersRepository
       .createQueryBuilder('user')
       .select(['user.userName', 'user.nickName', 'user.phone', 'user.email', 'user.note'])
