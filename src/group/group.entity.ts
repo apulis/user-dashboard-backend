@@ -6,6 +6,7 @@ import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-valid
 @Entity({
   name: 'group'
 })
+@Index(['name'], {unique: true})
 export class Group {
 
   @PrimaryGeneratedColumn()
@@ -13,13 +14,19 @@ export class Group {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255, unique: true })
+  @Column('varchar', { length: 255 })
   name: string;
-
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 255, unique: true })
-  desc: string;
+  @Column('varchar', { length: 255 })
+  note: string;
+
+  @IsString()
+  @Length(1, 40)
+  @Column('varchar', { length: 255 })
+  createTime: string;
   
+  @Column('int', { default: 0 })
+  isDelete: number;
 }
