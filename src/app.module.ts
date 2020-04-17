@@ -9,19 +9,13 @@ import { PermissionModule } from './permission/permission.module';
 
 import { CasbinModule } from './common/authz';
 import { RoleModule } from './role/role.module';
+import { ConnectionOptions } from 'typeorm';
 
 
 @Module({
   imports: [
     CasbinModule.forRootAsync(
-      {
-        type: "mysql",
-        host: "localhost",
-        port: 3306,
-        username: "root",
-        password: "123456",
-        database: "user_group"
-      },
+      typeOrmConfig as ConnectionOptions,
       "src/common/authz/authz.model.conf"
     ),
     TypeOrmModule.forRoot(typeOrmConfig as TypeOrmModuleOptions),
