@@ -1,13 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
-import { IsString, IsEmail, Length, IsOptional } from 'class-validator';
+import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
 
 
 
 @Entity({
-  name: 'group'
+  name: 'role'
 })
 @Index(['name'], {unique: true})
-export class Group {
+export class Role {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,7 +26,11 @@ export class Group {
   @Length(1, 40)
   @Column('varchar', { length: 255 })
   createTime: string;
+
+  @Column('int', { default: 0 })
+  isPreset: number;
   
   @Column('int', { default: 0 })
   isDelete: number;
+
 }

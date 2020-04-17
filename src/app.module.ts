@@ -8,6 +8,7 @@ import { GroupModule } from './group/group.module';
 import { PermissionModule } from './permission/permission.module';
 
 import { CasbinModule } from './common/authz';
+import { RoleModule } from './role/role.module';
 
 
 @Module({
@@ -27,6 +28,7 @@ import { CasbinModule } from './common/authz';
     UserModule,
     GroupModule,
     PermissionModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
