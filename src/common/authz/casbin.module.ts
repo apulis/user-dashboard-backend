@@ -1,8 +1,8 @@
 import { DynamicModule, Module, Provider } from "@nestjs/common";
-import { Adapter, Enforcer } from "casbin";
+import { Adapter, Enforcer, DefaultRoleManager } from "casbin";
 import { ConnectionOptions } from "typeorm";
 import TypeORMAdapter from "typeorm-adapter";
-import { CASBIN_ENFORCER } from "./casbin.constants";
+import { CASBIN_ENFORCER, CASBIN_ROLE_MANAGER } from "./casbin.constants";
 import { CasbinService } from "./casbin.service";
 
 @Module({})
@@ -21,10 +21,17 @@ export class CasbinModule {
         return enforcer;
       }
     };
+    const casbinRoleManagerProvider: Provider = {
+      provide: CASBIN_ROLE_MANAGER,
+      useFactory: async () => {
+        const roleManager = await new DefaultRoleManager(10);
+        return roleManager;
+      }
+    };
     return {
-      exports: [casbinEnforcerProvider, CasbinService],
+      exports: [casbinEnforcerProvider, casbinRoleManagerProvider, CasbinService],
       module: CasbinModule,
-      providers: [casbinEnforcerProvider, CasbinService]
+      providers: [casbinEnforcerProvider, casbinRoleManagerProvider, CasbinService]
     };
   }
 }
