@@ -26,17 +26,29 @@ export class UserController {
 
   @Get('/list')
   async getUsers(
-    @Query('pageNo') pageNo: string, 
-    @Query('pageSize') pageSize: string,
     @Res() res: Response,
+    @Query('pageNo') pageNo?: string | number, 
+    @Query('pageSize') pageSize?: string | number,
     @Query('search') search?: string
   ): Promise<User[]> {
     let result;
-    if (search) {
-      result = await this.userService.findLike(Number(pageNo) - 1, Number(pageSize), search);
-    } else {
-      result = await this.userService.find(Number(pageNo) - 1, Number(pageSize));
+    if (typeof pageNo === 'undefined') {
+      pageNo = 1;
     }
+    if (typeof pageSize === 'undefined') {
+      if (search) {
+        result = await this.userService.findAllLike(search);
+      } else {
+        result = await this.userService.findAll();
+      }
+    } else {
+      if (search) {
+        result = await this.userService.findLike(Number(pageNo) - 1, Number(pageSize), search);
+      } else {
+        result = await this.userService.find(Number(pageNo) - 1, Number(pageSize));
+      }
+    }
+    
     
     res.status(HttpStatus.OK).json({
       success: true, 

@@ -13,6 +13,11 @@ interface ICreateUser extends IUserMessage {
   registerType: string;
 }
 
+const userNameQuery = 'userName LIKE :search';
+const nickNameQuery = 'nickName LIKE :search';
+const emailQuery = 'email LIKE :search';
+const noteQuery = 'note LIKE :search';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -42,9 +47,20 @@ export class UserService {
     };
   }
 
-  async findLike(pageNo: number, pageSize: number, search: string): Promise<{list: User[], total: number}> {
-    const userNameQuery = 'userName LIKE :search';
-    const nickNameQuery = 'nickName LIKE :search';
+  async findAll() {
+    const total = await this.getUserCount();
+    const list = await this.usersRepository
+      .createQueryBuilder('user')
+      .select(['user.userName', 'user.nickName', 'user.phone', 'user.email', 'user.note'])
+      .where('isDelete != 1')
+      .getMany();
+    return {
+      list,
+      total
+    };
+  }
+
+  async findAllLike(search?: string) {
     search = '%' + search + '%';
     const total = await this.usersRepository
       .createQueryBuilder('user')
@@ -66,6 +82,44 @@ export class UserService {
         return subQuery
           .where(userNameQuery)
           .orWhere(nickNameQuery)
+          .orWhere(emailQuery)
+          .orWhere(noteQuery)
+      }))
+      .setParameters(
+        {search: search}
+      )
+      .getMany();
+    return {
+      list,
+      total
+    };
+  }
+
+  async findLike(pageNo: number, pageSize: number, search: string): Promise<{list: User[], total: number}> {
+    
+    search = '%' + search + '%';
+    const total = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('isDelete != 1')
+      .andWhere(new Brackets(subQuery => {
+        return subQuery
+          .where(userNameQuery)
+          .orWhere(nickNameQuery)
+      }))
+      .setParameters(
+        {search: search}
+      )
+      .getCount();
+    const list = await this.usersRepository
+      .createQueryBuilder('user')
+      .select(['user.userName', 'user.nickName', 'user.phone', 'user.email', 'user.note'])
+      .where('isDelete != 1')
+      .andWhere(new Brackets(subQuery => {
+        return subQuery
+          .where(userNameQuery)
+          .orWhere(nickNameQuery)
+          .orWhere(emailQuery)
+          .orWhere(noteQuery)
       }))
       .setParameters(
         {search: search}
