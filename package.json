@@ -26,6 +26,7 @@
     "@nestjs/swagger": "^4.5.1",
     "@nestjs/typeorm": "^6.3.3",
     "casbin": "^4.2.1",
+    "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "dotenv": "^8.2.0",
     "mysql": "^2.18.1",
