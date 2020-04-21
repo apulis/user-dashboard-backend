@@ -59,5 +59,16 @@ export class GroupService {
         .getMany();
     }
     
-  }  
+  }
+  
+  async removeGroup(groupNames: string[]) {
+    return await this.groupRepository
+      .createQueryBuilder('group')
+      .update(Group)
+      .set({isDelete: 1})
+      .where('group.name IN (:groupNames)', {
+        groupNames: groupNames
+      })
+      .execute()
+  }
 }
