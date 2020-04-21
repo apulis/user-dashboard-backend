@@ -6,9 +6,7 @@ import { AddUsersToGroupDto } from './group-user.dto'
 
 @Controller('/group-user')
 export class GroupUserController {
-  constructor(private readonly groupUserService: GroupUserService) {
-    console.log(123)
-  }
+  constructor(private readonly groupUserService: GroupUserService) { }
 
   @Post()
   async addUsersToGroups(@Body() body: AddUsersToGroupDto, @Res() res: Response) {
