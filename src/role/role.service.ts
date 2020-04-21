@@ -55,7 +55,7 @@ export class RoleService {
     if (search) {
       const list = await this.roleRepository
         .createQueryBuilder('role')
-        .select(['role.id', 'role.name', 'role.createTime', 'role.isPreset'])
+        .select(['role.id', 'role.name', 'role.createTime', 'role.isPreset', 'role.note'])
         .where('isDelete != 1')
         .andWhere(new Brackets(subQuery => {
           return subQuery
@@ -74,7 +74,7 @@ export class RoleService {
     } else {
       const list = await this.roleRepository
         .createQueryBuilder('role')
-        .select(['role.id', 'role.name', 'role.createTime', 'role.isPreset'])
+        .select(['role.id', 'role.name', 'role.createTime', 'role.isPreset', 'role.note'])
         .where('isDelete != 1')
         .skip(pageNo * pageSize)
         .take(pageSize)
