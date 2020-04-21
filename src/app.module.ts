@@ -10,7 +10,6 @@ import { PermissionModule } from './permission/permission.module';
 import { CasbinModule } from './common/authz';
 import { RoleModule } from './role/role.module';
 import { ConnectionOptions } from 'typeorm';
-import { GroupUserController } from './group-user/group-user.controller';
 import { GroupUserModule } from './group-user/group-user.module';
 import { GroupRoleModule } from './group-role/group-role.module';
 
@@ -29,7 +28,7 @@ import { GroupRoleModule } from './group-role/group-role.module';
     GroupUserModule,
     GroupRoleModule,
   ],
-  controllers: [AppController, GroupUserController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
