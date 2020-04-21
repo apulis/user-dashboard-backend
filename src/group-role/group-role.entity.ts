@@ -4,6 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 @Entity({
   name: 'group_role'
 })
+@Index(['groupName', 'userName'], { unique: true })
 export class GroupRole {
 
   @PrimaryGeneratedColumn()
