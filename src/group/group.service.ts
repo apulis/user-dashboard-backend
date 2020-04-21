@@ -23,7 +23,10 @@ export class GroupService {
       .createQueryBuilder()
       .insert()
       .into(Group)
-      .values(groupInfo)
+      .values({
+        ...groupInfo,
+        createTime: new Date().getTime() + '',
+      })
       .execute()
   }
 
