@@ -17,7 +17,7 @@ class removeGroupDto {
   @IsArray()
   @IsNotEmpty()
   @ApiProperty({
-    description: '需要删除的组的名称数组',
+    description: '需要删除的组的id数组',
     example: [1, 2, 3]
   })
   groupIds: number[];
