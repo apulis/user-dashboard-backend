@@ -1,13 +1,9 @@
-import { MaxLength } from 'class-validator'
+import { IsArray } from 'class-validator'
 
 export class AddUsersToGroupDto {
-  @MaxLength(50, {
-    each: true,
-  })
+  @IsArray()
   userNames: string[];
   
-  @MaxLength(50, {
-    each: true,
-  })
+  @IsArray()
   groupNames: string[];
 }
