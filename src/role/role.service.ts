@@ -29,7 +29,7 @@ export class RoleService {
   ) { }
 
   public async getRoleCount(search?: string) {
-    if (search) {
+    if (!search) {
       return await this.roleRepository
         .createQueryBuilder('role')
         .where('isDelete != 1')
