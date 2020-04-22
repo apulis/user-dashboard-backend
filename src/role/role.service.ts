@@ -91,12 +91,26 @@ export class RoleService {
   }
 
   public async createRole(role: ICreateRole) {
-    role.createTime = new Date().getTime() + '';
-    return await this.roleRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Role)
-      .values(role)
-      .execute()
+    const result = await this.roleRepository
+      .findOne({
+        name: role.name,
+      })
+    if (result) {
+      result.createTime = new Date().getTime() + '';
+      result.isPreset = 0;
+      result.note = role.note;
+      result.isDelete = 0
+      return this.roleRepository
+        .save(result);
+    } else {
+      role.createTime = new Date().getTime() + '';
+      return await this.roleRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Role)
+        .values(role)
+        .execute()
+    }
+    
   }
 }
