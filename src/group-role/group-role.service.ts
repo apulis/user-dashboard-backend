@@ -2,15 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupRole } from './group-role.entity';
 import { Repository } from 'typeorm';
-import { GroupController } from 'src/group/group.controller';
 
-const mapUserNamesAndGroupNames = (roleNames: string[], groupNames: string[]) => {
-  const groupRole: {roleName: string; groupName: string}[] = [];
+const mapUserIdsAndGroupIds = (roleNames: number[], groupNames: number[]) => {
+  const groupRole: {roleId: number; groupId: number}[] = [];
   groupNames.forEach(g => {
     roleNames.forEach(u => {
       groupRole.push({
-        roleName: u,
-        groupName: g,
+        roleId: u,
+        groupId: g,
       })
     })
   })
@@ -25,8 +24,8 @@ export class GroupRoleService {
     private readonly groupRoleRepository: Repository<GroupRole>,
   ) { }
 
-  async checkDuplicateItems(roleNames: string[], groupNames: string[]) {
-    const groupRole = mapUserNamesAndGroupNames(roleNames, groupNames);
+  async checkDuplicateItems(roleIds: number[], groupIds: number[]) {
+    const groupRole = mapUserIdsAndGroupIds(roleIds, groupIds);
     const result = await this.groupRoleRepository
       .find({
         where: groupRole
@@ -34,8 +33,8 @@ export class GroupRoleService {
     return result;
   }
 
-  async addRoleToGroup(roleNames: string[], groupNames: string[]) {
-    const groupRole = mapUserNamesAndGroupNames(roleNames, groupNames);
+  async addRoleToGroup(roleIds: number[], groupIds: number[]) {
+    const groupRole = mapUserIdsAndGroupIds(roleIds, groupIds);
     return await this.groupRoleRepository
       .createQueryBuilder()
       .insert()
@@ -43,7 +42,5 @@ export class GroupRoleService {
       .values(groupRole)
       .execute()
   }
-
-
 
 }

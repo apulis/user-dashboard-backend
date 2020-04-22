@@ -4,15 +4,15 @@ import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 @Entity({
   name: 'group_role'
 })
-@Index(['groupName', 'roleName'], { unique: true })
+@Index(['groupId', 'roleId'], { unique: true })
 export class GroupRole {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 255 })
-  roleName: string;
+  @Column('int')
+  roleId: number;
 
-  @Column('varchar', { length: 255 })
-  groupName: string;
+  @Column('int')
+  groupId: number;
 }

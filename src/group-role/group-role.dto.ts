@@ -2,13 +2,13 @@ import { IsArray, ArrayNotEmpty } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AddRoleToGroupDto {
-  @ApiProperty({description: '角色名称数组', example: ['role_1']})
+  @ApiProperty({description: '角色id数组', example: [1, 2, 3]})
   @IsArray()
   @ArrayNotEmpty()
-  roleNames: string[];
+  roleIds: number[];
 
-  @ApiProperty({description: '组名称数组', example: ['group_1']})
+  @ApiProperty({description: '组id数组', example: [1, 2, 3]})
   @IsArray()
   @ArrayNotEmpty()
-  groupNames: string[];
+  groupIds: number[];
 }
