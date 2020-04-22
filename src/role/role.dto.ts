@@ -1,6 +1,6 @@
 import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger';
 
-import { IsNotEmpty , Length} from 'class-validator';
+import { IsNotEmpty , Length, ArrayNotEmpty, IsArray} from 'class-validator';
 
 export class CreateRoleDto {
   
@@ -14,4 +14,12 @@ export class CreateRoleDto {
   @Length(1, 50)
   note: string
   
+}
+
+
+export class RemoveRoleDto {
+  @ApiProperty({ description: '删除角色的id' })
+  @ArrayNotEmpty()
+  @IsArray()
+  roleIds: number[]
 }

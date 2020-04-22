@@ -1,9 +1,9 @@
-import { Controller, Get, Query, Res, HttpStatus, Post, Body } from '@nestjs/common';
-import { ApiTags, ApiExtraModels, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Query, Res, HttpStatus, Post, Body, Delete } from '@nestjs/common';
+import { ApiTags, ApiExtraModels, ApiOperation, ApiProperty } from '@nestjs/swagger';
 import { Response }  from 'express'
 
 
-import { CreateRoleDto } from './role.dto'
+import { CreateRoleDto, RemoveRoleDto } from './role.dto'
 import { RoleService } from './role.service';
 
 @Controller('role')
@@ -38,6 +38,16 @@ export class RoleController {
     res.status(HttpStatus.CREATED).json({
       success: true,
       message: 'suucess',
+    })
+  }
+
+  @Delete()
+  @ApiOperation({ description: '删除角色' })
+  async remove(@Body() body: RemoveRoleDto, @Res() res: Response) {
+    await this.roleService.removeRoles(body.roleIds);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: `success delete role ${body.roleIds.join(', ')}`
     })
   }
 }

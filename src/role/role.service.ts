@@ -113,4 +113,15 @@ export class RoleService {
     }
     
   }
+
+  public async removeRoles(roleIds: number[]) {
+    return await this.roleRepository
+      .createQueryBuilder('role')
+      .update(Role)
+      .set({isDelete: 1})
+      .where('role.id IN (:roleIds)', {
+        roleIds: roleIds
+      })
+      .execute()
+  }
 }
