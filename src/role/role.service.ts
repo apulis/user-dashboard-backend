@@ -62,7 +62,7 @@ export class RoleService {
             .where(nameQuery)
             .orWhere(noteQuery)
         }))
-        .skip(pageNo * pageSize)
+        .skip(pageNo)
         .take(pageSize)
         .getMany();
       const total = await this.getRoleCount(search);
@@ -76,7 +76,7 @@ export class RoleService {
         .createQueryBuilder('role')
         .select(['role.id', 'role.name', 'role.createTime', 'role.isPreset', 'role.note'])
         .where('isDelete != 1')
-        .skip(pageNo * pageSize)
+        .skip(pageNo)
         .take(pageSize)
         .getMany();
       const total = await this.getRoleCount();
