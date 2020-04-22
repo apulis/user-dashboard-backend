@@ -12,6 +12,7 @@ import { RoleModule } from './role/role.module';
 import { ConnectionOptions } from 'typeorm';
 import { GroupUserModule } from './group-user/group-user.module';
 import { GroupRoleModule } from './group-role/group-role.module';
+import { UserRoleModule } from './user-role/user-role.module';
 
 
 @Module({
@@ -27,6 +28,7 @@ import { GroupRoleModule } from './group-role/group-role.module';
     RoleModule,
     GroupUserModule,
     GroupRoleModule,
+    UserRoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
