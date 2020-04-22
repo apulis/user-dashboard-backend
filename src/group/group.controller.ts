@@ -18,9 +18,9 @@ class removeGroupDto {
   @IsNotEmpty()
   @ApiProperty({
     description: '需要删除的组的名称数组',
-    example: ['group_1']
+    example: [1, 2, 3]
   })
-  groupNames: string[];
+  groupIds: number[];
 
 }
 
@@ -48,10 +48,10 @@ export class GroupController {
 
   @Delete('/')
   async removeGroup(@Body() body: removeGroupDto, @Res() res: Response) {
-    await this.groupService.removeGroup(body.groupNames);
+    await this.groupService.removeGroup(body.groupIds);
     res.status(HttpStatus.OK).json({
       success: true,
-      messsage: 'success delete ' + body.groupNames
+      messsage: 'success delete ' + body.groupIds
     })
   }
 }

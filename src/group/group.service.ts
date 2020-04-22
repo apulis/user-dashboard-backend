@@ -64,13 +64,13 @@ export class GroupService {
     
   }
   
-  async removeGroup(groupNames: string[]) {
+  async removeGroup(groupIds: number[]) {
     return await this.groupRepository
       .createQueryBuilder('group')
       .update(Group)
       .set({isDelete: 1})
-      .where('group.name IN (:groupNames)', {
-        groupNames: groupNames
+      .where('group.id IN (:groupIds)', {
+        groupIds: groupIds
       })
       .execute()
   }
