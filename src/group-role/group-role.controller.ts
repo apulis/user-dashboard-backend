@@ -3,18 +3,7 @@ import { Response } from 'express';
 
 
 import { GroupRoleService } from './group-role.service';
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { IsArray } from 'class-validator';
-
-class AddRoleToGroupDto {
-  @ApiProperty({description: '角色名称数组', example: ['role_1']})
-  @IsArray()
-  roleNames: string[];
-
-  @ApiProperty({description: '组名称数组', example: ['group_1']})
-  @IsArray({})
-  groupNames: string[];
-}
+import { AddRoleToGroupDto } from './group-role.dto';
 
 @Controller('group-role')
 export class GroupRoleController {
