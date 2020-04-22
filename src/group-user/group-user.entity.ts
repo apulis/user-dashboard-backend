@@ -4,16 +4,16 @@ import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 @Entity({
   name: 'group_user'
 })
-@Index(['groupName', 'userName'], { unique: true })
+@Index(['groupId', 'userId'], { unique: true })
 export class GroupUser {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 255 })
-  groupName: string;
+  @Column('int')
+  groupId: number;
 
-  @Column('varchar', { length: 255 })
-  userName: string;
+  @Column('int')
+  userId: number;
 
 }

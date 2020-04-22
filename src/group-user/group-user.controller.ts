@@ -10,10 +10,10 @@ export class GroupUserController {
 
   @Post()
   async addUsersToGroups(@Body() body: AddUsersToGroupDto, @Res() res: Response) {
-    const { userNames, groupNames } = body;
-    const duplicate = await this.groupUserService.checkDuplicateItems(userNames, groupNames);
+    const { userIds, groupIds } = body;
+    const duplicate = await this.groupUserService.checkDuplicateItems(userIds, groupIds);
     if (duplicate.length === 0) {
-      await this.groupUserService.addUsersToGroups(userNames, groupNames);
+      await this.groupUserService.addUsersToGroups(userIds, groupIds);
       res.status(HttpStatus.CREATED).json({
         success: true,
         message: 'ok'

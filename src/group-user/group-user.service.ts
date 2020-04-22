@@ -4,13 +4,13 @@ import { Repository } from 'typeorm';
 
 import { GroupUser } from './group-user.entity';
 
-const mapUserNamesAndGroupNames = (userNames: string[], groupNames: string[]) => {
-  const groupUser: {userName: string; groupName: string}[] = [];
-  groupNames.forEach(g => {
-    userNames.forEach(u => {
+const mapUserIdsAndGroupIds = (userIds: number[], groupIds: number[]) => {
+  const groupUser: {userId: number; groupId: number}[] = [];
+  groupIds.forEach(g => {
+    userIds.forEach(u => {
       groupUser.push({
-        userName: u,
-        groupName: g,
+        userId: u,
+        groupId: g,
       })
     })
   })
@@ -24,8 +24,8 @@ export class GroupUserService {
     private readonly groupUserRepository: Repository<GroupUser>,
   ) { }
 
-  async checkDuplicateItems(userNames: string[], groupNames: string[]) {
-    const groupUser = mapUserNamesAndGroupNames(userNames, groupNames);
+  async checkDuplicateItems(userIds: number[], groupIds: number[]) {
+    const groupUser = mapUserIdsAndGroupIds(userIds, groupIds);
     const result = await this.groupUserRepository
       .find({
         where: groupUser
@@ -33,8 +33,8 @@ export class GroupUserService {
     return result;
   }
    
-  async addUsersToGroups(userNames: string[], groupNames: string[]) {
-    const groupUser = mapUserNamesAndGroupNames(userNames, groupNames);
+  async addUsersToGroups(userIds: number[], groupIds: number[]) {
+    const groupUser = mapUserIdsAndGroupIds(userIds, groupIds);
     return await this.groupUserRepository
       .createQueryBuilder()
       .insert()

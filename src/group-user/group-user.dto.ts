@@ -3,9 +3,9 @@ import { IsArray, ArrayNotEmpty } from 'class-validator'
 export class AddUsersToGroupDto {
   @ArrayNotEmpty()
   @IsArray()
-  userNames: string[];
+  userIds: number[];
   
   @ArrayNotEmpty()
   @IsArray()
-  groupNames: string[];
+  groupIds: number[];
 }
