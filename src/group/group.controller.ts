@@ -8,7 +8,6 @@ import { ApiTags, ApiProperty } from '@nestjs/swagger';
 
 export interface ICreateGroup {
   name: string;
-  desc: string;
   note: string;
   roles: string[];
 }

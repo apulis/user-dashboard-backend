@@ -19,7 +19,13 @@ export class GroupService {
   ) { }
 
   async createGroup(groupInfo: ICreateGroup) {
-    return await this.groupRepository
+    // 如果之前有这个名称，那么去更新 isDelete 状态
+    const result = await this.groupRepository
+      .findOne({
+        name: groupInfo.name
+      })
+    if (!result) {
+      return await this.groupRepository
       .createQueryBuilder()
       .insert()
       .into(Group)
@@ -28,6 +34,15 @@ export class GroupService {
         createTime: new Date().getTime() + '',
       })
       .execute()
+    } else {
+      result.isDelete = 0;
+      result.createTime = new Date().getTime() + '';
+      result.note = groupInfo.note;
+      return await this.groupRepository.save(result);
+    }
+      
+
+    
   }
 
   async getAllGroupCount(): Promise<number> {
