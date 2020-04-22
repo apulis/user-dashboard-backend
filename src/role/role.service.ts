@@ -68,7 +68,6 @@ export class RoleService {
         .skip(pageNo)
         .take(pageSize)
         .getMany();
-      console.log('search', search)
       const total = await this.getRoleCount(search);
       return {
         total,
