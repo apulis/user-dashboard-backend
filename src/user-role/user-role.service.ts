@@ -3,13 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRole } from './user-role.entity';
 import { Repository } from 'typeorm';
 
-const mapUserNamesAndRoleNames = (userNames: string[], roleNames: string[]) => {
-  const userRole: {userName: string; roleName: string}[] = [];
-  roleNames.forEach(r => {
-    userNames.forEach(u => {
+const mapUserIdsAndRoleIds = (userIds: number[], roleIds: number[]) => {
+  const userRole: {userId: number; roleId: number}[] = [];
+  roleIds.forEach(r => {
+    userIds.forEach(u => {
       userRole.push({
-        userName: u,
-        roleName: r,
+        userId: u,
+        roleId: r,
       })
     })
   })
@@ -24,8 +24,8 @@ export class UserRoleService {
     private readonly userRoleRepository: Repository<UserRole>,
   ) { }
 
-  async checkDuplicateItems(userNames: string[], roleNames: string[]) {
-    const userRole = mapUserNamesAndRoleNames(userNames, roleNames);
+  async checkDuplicateItems(userNames: number[], roleNames: number[]) {
+    const userRole = mapUserIdsAndRoleIds(userNames, roleNames);
     const result = await this.userRoleRepository
       .find({
         where: userRole
@@ -33,8 +33,8 @@ export class UserRoleService {
     return result;
   }
 
-  async addRoleToUser(userNames: string[], roleNames: string[]) {
-    const userRole = mapUserNamesAndRoleNames(userNames, roleNames);
+  async addRoleToUser(userNames: number[], roleNames: number[]) {
+    const userRole = mapUserIdsAndRoleIds(userNames, roleNames);
     return await this.userRoleRepository
       .createQueryBuilder()
       .insert()

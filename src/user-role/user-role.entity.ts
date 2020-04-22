@@ -5,15 +5,15 @@ import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-valid
 @Entity({
   name: 'user-role'
 })
-@Index(['roleName', 'userName'], { unique: true })
+@Index(['userId', 'roleId'], { unique: true })
 export class UserRole {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 255 })
-  userName: string;
+  @Column('int')
+  userId: number;
 
-  @Column('varchar', { length: 255 })
-  roleName: string;
+  @Column('int')
+  roleId: number;
 }

@@ -5,16 +5,16 @@ export class AddRoleToUserDto {
   @ArrayNotEmpty()
   @IsArray()
   @ApiProperty({
-    description: '用户名数组',
+    description: '用户id数组',
     required: true
   })
-  userNames: string[];
+  userIds: number[];
 
   @ArrayNotEmpty()
   @IsArray()
   @ApiProperty({
-    description: '角色名称数组',
+    description: '角色id数组',
     required: true
   })
-  roleNames: string[];
+  roleIds: number[];
 }

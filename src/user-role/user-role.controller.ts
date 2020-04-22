@@ -15,10 +15,10 @@ export class UserRoleController {
     description: '给用户添加角色'
   })
   async addRoleToUsers(@Body() body: AddRoleToUserDto, @Res() res: Response) {
-    const { userNames, roleNames } = body;
-    const duplicate = await this.userRoleService.checkDuplicateItems(userNames, roleNames);
+    const { userIds, roleIds } = body;
+    const duplicate = await this.userRoleService.checkDuplicateItems(userIds, roleIds);
     if (duplicate.length === 0) {
-      await this.userRoleService.addRoleToUser(userNames, roleNames)
+      await this.userRoleService.addRoleToUser(userIds, roleIds)
       res.status(HttpStatus.CREATED).json({
         success: true,
         message: 'ok'
