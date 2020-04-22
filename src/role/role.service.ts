@@ -62,9 +62,13 @@ export class RoleService {
             .where(nameQuery)
             .orWhere(noteQuery)
         }))
+        .setParameters(
+          { search: `%${search}%` }
+        )
         .skip(pageNo)
         .take(pageSize)
         .getMany();
+      console.log('search', search)
       const total = await this.getRoleCount(search);
       return {
         total,
