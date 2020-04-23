@@ -42,4 +42,11 @@ export class UserRoleService {
       .values(userRole)
       .execute()
   }
+
+  async findUserRolesById(userId: number) {
+    return await this.userRoleRepository
+      .find({
+        userId,
+      })
+  }
 }
