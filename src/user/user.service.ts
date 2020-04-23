@@ -7,6 +7,8 @@ import { IUserMessage } from './user.controller';
 
 import { RegisterTypes } from 'src/config/enums'
 import { User } from './user.entity';
+import { UserRole } from 'src/user-role/user-role.entity';
+
 interface ICreateUser extends IUserMessage {
   createTime: string;
   openId: string;
@@ -23,6 +25,8 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @InjectRepository(UserRole)
+    private readonly userRoleRepository: Repository<UserRole>
   ) { }
 
   async getUserCount(): Promise<number> {
@@ -169,6 +173,14 @@ export class UserService {
       .where('user.userName IN (:userNames)', {
         userNames: userNames
       })
+      .execute()
+  }
+
+  async findUserByUserNames(userNames: string[]): Promise<any[]> {
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .select(['userName', 'id'])
+      .where("user.userName IN (:userNames)", { userNames: userNames })
       .execute()
   }
   

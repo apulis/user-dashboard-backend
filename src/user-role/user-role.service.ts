@@ -33,8 +33,8 @@ export class UserRoleService {
     return result;
   }
 
-  async addRoleToUser(userNames: number[], roleNames: number[]) {
-    const userRole = mapUserIdsAndRoleIds(userNames, roleNames);
+  async addRoleToUser(userIds: number[], roleIds: number[]) {
+    const userRole = mapUserIdsAndRoleIds(userIds, roleIds);
     return await this.userRoleRepository
       .createQueryBuilder()
       .insert()

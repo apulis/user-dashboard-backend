@@ -3,6 +3,8 @@ import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { UpdateResult } from 'typeorm';
+import { UserRoleService } from 'src/user-role/user-role.service';
+import { CreateUserDto } from './user.dto'
 
 export interface IUserMessage {
   userName: string;
@@ -11,6 +13,7 @@ export interface IUserMessage {
   email?: string;
   nickName?: string;
   note?: string;
+  id?: number;
 }
 
 export type TypeUserRole = string[];
@@ -22,7 +25,10 @@ export interface ICreateUser {
 
 @Controller('/users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userRoleService: UserRoleService
+    ) {}
 
   @Get('/list')
   async getUsers(
@@ -59,7 +65,7 @@ export class UserController {
   }
 
   @Post('/')
-  async createUsers(@Body() body: ICreateUser, @Res() res: Response) {
+  async createUsers(@Body() body: CreateUserDto, @Res() res: Response) {
     const { userMessage, userRole } = body;
     const userNames = userMessage.map(val => val.userName);
     const uniqueUserName = await this.userService.userNameUnique(userNames);
@@ -70,7 +76,10 @@ export class UserController {
       })
     } else {
       await this.userService.create(userMessage);
-      // TODO: ADD ROLE
+      const userNames = userMessage.map(u => u.userName)
+      const userInfo = await this.userService.findUserByUserNames(userNames);
+      const userIds = userInfo.map(u => u.id);
+      await this.userRoleService.addRoleToUser(userIds, userRole);
       res.status(HttpStatus.CREATED).send({
         success: true,
         message: 'ok',
