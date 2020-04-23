@@ -25,7 +25,7 @@ export class GroupService {
         name: groupInfo.name
       })
     if (!result) {
-      return await this.groupRepository
+      await this.groupRepository
       .createQueryBuilder()
       .insert()
       .into(Group)
@@ -38,9 +38,12 @@ export class GroupService {
       result.isDelete = 0;
       result.createTime = new Date().getTime() + '';
       result.note = groupInfo.note;
-      return await this.groupRepository.save(result);
+      await this.groupRepository.save(result);
     }
-      
+    return this.groupRepository
+      .findOne({
+        name: groupInfo.name
+      })
 
     
   }

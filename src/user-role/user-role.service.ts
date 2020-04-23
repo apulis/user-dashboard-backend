@@ -78,9 +78,13 @@ export class UserRoleService {
         willInsert.push(r)
       }
     })
-    const removeItems = await this.userRoleRepository
-      .findByIds(willDelete)
-    this.userRoleRepository.remove(removeItems);
-    await this.addRoleToUser([userId], willInsert);
+    if (willDelete.length > 0) {
+      const removeItems = await this.userRoleRepository
+        .findByIds(willDelete);
+      this.userRoleRepository.remove(removeItems);
+    }
+    if (willInsert.length > 0) {
+      await this.addRoleToUser([userId], willInsert);
+    }
   }
 }
