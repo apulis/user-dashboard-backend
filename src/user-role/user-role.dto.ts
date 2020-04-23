@@ -1,4 +1,4 @@
-import { IsArray, ArrayNotEmpty } from 'class-validator'
+import { IsArray, ArrayNotEmpty, IsNumber } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AddRoleToUserDto {
@@ -17,4 +17,15 @@ export class AddRoleToUserDto {
     required: true
   })
   roleIds: number[];
+}
+
+
+export class EditUserRolesDto {
+  
+  @IsNumber()
+  userId: number;
+
+  @IsArray()
+  roleIds: number[]
+
 }

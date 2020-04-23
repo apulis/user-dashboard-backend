@@ -49,4 +49,38 @@ export class UserRoleService {
         userId,
       })
   }
+
+  async eidtUserRoles(userId: number, roleIds: number[]) {
+    // 1. 删除数据库有但是roleIds没有的
+    // 2. 增加以前没有的
+    const userRoles = await this.findUserRolesById(userId);
+    const dbRoleIds = userRoles.map(val => {
+      return {
+        roleId: val.roleId,
+        id: val.id,
+      }
+    });
+    const willDelete: number[] = [];
+    const willInsert: number[] = [];
+    dbRoleIds.forEach(r => {
+      if (roleIds.includes(r.roleId)) {
+        // 数据库有，roleIds也有的，不管
+      } else {
+        // 数据库有，roleIds 没有的，删除
+        willDelete.push(r.id)
+      }
+    })
+    roleIds.forEach(r => {
+      if (dbRoleIds.find(v => v.roleId === r)) {
+        // 数据库有，roleIds也有的，不管
+      } else {
+        // 数据库没有，roleIds 有的，新增
+        willInsert.push(r)
+      }
+    })
+    const removeItems = await this.userRoleRepository
+      .findByIds(willDelete)
+    this.userRoleRepository.remove(removeItems);
+    await this.addRoleToUser([userId], willInsert);
+  }
 }

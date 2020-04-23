@@ -1,9 +1,9 @@
-import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param, Patch } from '@nestjs/common';
 import { UserRoleService } from './user-role.service';
 
-import { AddRoleToUserDto } from './user-role.dto'
+import { AddRoleToUserDto, EditUserRolesDto } from './user-role.dto'
 import { Response } from 'express';
-import { ApiTags, ApiOperation, ApiMovedPermanentlyResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @Controller('user-role')
 @ApiTags('关联角色和用户')
@@ -29,6 +29,19 @@ export class UserRoleController {
         duplicate
       })
     }
+  }
+
+  @Patch()
+  @ApiOperation({
+    description: '修改用户的角色',
+  })
+  async editUserRoles(@Body() body: EditUserRolesDto, @Res() res: Response) {
+    const { userId, roleIds } = body;
+    await this.userRoleService.eidtUserRoles(userId, roleIds);
+    res.send({
+      success: true,
+      message: 'ok',
+    })
   }
 
   @Get('/userId/:userId')
