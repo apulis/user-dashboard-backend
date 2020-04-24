@@ -124,4 +124,12 @@ export class RoleService {
       })
       .execute()
   }
+  
+  public async getRolesByRoleIds(roleIds: number[]) {
+    return await this.roleRepository
+      .createQueryBuilder('role')
+      .select(['name', 'id', 'note'])
+      .where("role.id IN (:roleIds)", { roleIds: roleIds })
+      .execute()
+  }
 }

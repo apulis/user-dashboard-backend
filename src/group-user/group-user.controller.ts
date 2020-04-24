@@ -40,7 +40,6 @@ export class GroupUserController {
   })
   async getUsersForGroup(@Query('groupId') groupId: number, @Res() res: Response) {
     groupId = Number(groupId);
-    console.log(groupId)
     if (!isNaN(groupId)) {
       const users = await this.groupUserService.getUsersByGroupId(groupId);
       const userIds = users.map(val => val.userId);

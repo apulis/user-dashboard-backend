@@ -43,4 +43,12 @@ export class GroupRoleService {
       .execute()
   }
 
+  async getRolesById(groupId: number) {
+    return await this.groupRoleRepository
+      .createQueryBuilder('group-role')
+      .select(['group-role.roleId'])
+      .where('groupId = ' + groupId)
+      .getMany()
+  }
+
 }
