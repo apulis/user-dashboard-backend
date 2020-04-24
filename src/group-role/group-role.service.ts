@@ -51,4 +51,14 @@ export class GroupRoleService {
       .getMany()
   }
 
+  async removeRoleForGroup(groupId: number, roleId: number) {
+    const removeItem = await this.groupRoleRepository
+      .findOne({
+        groupId,
+        roleId,
+      });
+    if (removeItem) {
+      this.groupRoleRepository.remove(removeItem);
+    }
+  }
 }

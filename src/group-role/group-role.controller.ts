@@ -1,4 +1,4 @@
-import { Controller, Post, Res, Body, HttpService, HttpStatus, HttpCode, Get, Query } from '@nestjs/common';
+import { Controller, Post, Res, Body, HttpService, HttpStatus, HttpCode, Get, Query, Delete, Param } from '@nestjs/common';
 import { Response } from 'express';
 
 
@@ -55,7 +55,23 @@ export class GroupRoleController {
       res.send({
         success: true,
         list: roleInfos,
-      })
+      });
     }
+  }
+
+  @Delete('/:groupId')
+  @ApiOperation({
+    description: '删除某个用户组的某个角色'
+  })
+  async removeRoleForGroup(@Param('groupId') groupId: number, @Query('roleId') roleId: number, @Res() res: Response ) {
+    groupId = Number(groupId);
+    roleId = Number(roleId);
+    if (!isNaN(groupId) && !isNaN(roleId)) {
+      await this.groupRoleService.removeRoleForGroup(groupId, roleId);
+    }
+    res.send({
+      success: true,
+      message: 'ok'
+    })
   }
 }
