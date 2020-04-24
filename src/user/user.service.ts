@@ -185,7 +185,7 @@ export class UserService {
   async findUsersByUserIds(userIds: number[]): Promise<any[]> {
     return await this.usersRepository
       .createQueryBuilder('user')
-      .select(['user.userName', 'user.id', 'user.nickName', 'user.email', 'user.openId', 'user.note'])
+      .select(['userName', 'id', 'nickName', 'email', 'openId', 'note', 'phone'])
       .where("user.id IN (:userIds)", { userIds: userIds })
       .execute()
   }
