@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch } from '@nestjs/common';
 
 import { Response, } from 'express';
-import { ApiTags, ApiProperty } from '@nestjs/swagger';
+import { ApiTags, ApiProperty, ApiOperation } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 import { GroupService } from './group.service';
@@ -34,6 +34,9 @@ export class GroupController {
     ) {}
   
   @Get('/list')
+  @ApiOperation({
+    description: '查询用户组列表'
+  })
   async getGroups(
     @Res() res: Response,
     @Query('search') search?: string

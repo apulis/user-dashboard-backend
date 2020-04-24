@@ -183,5 +183,12 @@ export class UserService {
       .where("user.userName IN (:userNames)", { userNames: userNames })
       .execute()
   }
-  
+
+  async findUsersByUserIds(userIds: number[]): Promise<any[]> {
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .select(['*'])
+      .where("user.id IN (:userIds)", { userIds: userIds })
+      .execute()
+  }
 }

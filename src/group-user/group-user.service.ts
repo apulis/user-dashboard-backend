@@ -43,4 +43,12 @@ export class GroupUserService {
       .execute()
 
   }
+
+  async getUsersByGroupId(groupId: number) {
+    return await this.groupUserRepository
+      .createQueryBuilder('group-user')
+      .select(['group-user.userId'])
+      .where('groupId = ' + groupId)
+      .getMany()
+  }
 }
