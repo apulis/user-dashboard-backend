@@ -25,8 +25,6 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    @InjectRepository(UserRole)
-    private readonly userRoleRepository: Repository<UserRole>
   ) { }
 
   async getUserCount(): Promise<number> {
