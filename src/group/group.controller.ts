@@ -66,4 +66,14 @@ export class GroupController {
       messsage: 'success delete ' + body.groupIds
     })
   }
+
+  @Get('/:id')
+  async getGroupDetail(@Param('id') id: number, @Res() res: Response) {
+    id = Number(id);
+    const result = await this.groupService.getGroupDetail(id);
+    res.send({
+      success: true,
+      data: result,
+    });
+  }
 }

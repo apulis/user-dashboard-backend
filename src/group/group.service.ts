@@ -92,4 +92,11 @@ export class GroupService {
       })
       .execute()
   }
+
+  async getGroupDetail(id: number) {
+    return await this.groupRepository
+      .findOne({
+        id: id  
+      })
+  }
 }
