@@ -42,6 +42,13 @@ export class GroupUserController {
     groupId = Number(groupId);
     if (!isNaN(groupId)) {
       const users = await this.groupUserService.getUsersByGroupId(groupId);
+      if (users.length === 0) {
+        res.send({
+          success: true,
+          list: []
+        })
+        return;
+      }
       const userIds = users.map(val => val.userId);
       const userInfos = await this.userService.findUsersByUserIds(userIds);
       res.send({
