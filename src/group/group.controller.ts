@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch } from '@nestjs/common';
 
 import { Response, } from 'express';
 import { ApiTags, ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 import { GroupService } from './group.service';
-import { CreateGroupDto } from './group.dto';
+import { CreateGroupDto, EditGroupDto } from './group.dto';
 import { GroupRoleService } from 'src/group-role/group-role.service';
 
 export interface ICreateGroup {
@@ -75,5 +75,16 @@ export class GroupController {
       success: true,
       data: result,
     });
+  }
+
+  @Patch('/:id')
+  async editGroupDetail(@Param('id') id: number, @Res() res: Response, @Body() body: EditGroupDto) {
+    id = Number(id);
+    const { name, note} = body;
+    await this.groupService.editGroupDetail(id, note, name);
+    res.send({
+      success: true,
+      messsage: 'ok'
+    })
   }
 }

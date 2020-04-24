@@ -24,3 +24,19 @@ export class CreateGroupDto {
   })
   role: number[];
 }
+
+export class EditGroupDto {
+  @IsString()
+  @ApiProperty({
+    description: '编辑用户组名称',
+    example: 'group_1'
+  })
+  name: string;
+
+  @IsString()
+  @ApiProperty({
+    description: '用户组描述',
+    example: '研发小组A'
+  })
+  note: string;
+}

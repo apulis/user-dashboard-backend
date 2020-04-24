@@ -99,4 +99,13 @@ export class GroupService {
         id: id  
       })
   }
+
+  async editGroupDetail(id: number, note: string, name: string) {
+    const detail = await this.groupRepository.findOne(id);
+    if (detail) {
+      detail.name = name;
+      detail.note = note;
+      await this.groupRepository.save(detail);
+    }
+  }
 }
