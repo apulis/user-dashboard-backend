@@ -1,7 +1,7 @@
-import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param, Patch, Delete } from '@nestjs/common';
 import { UserRoleService } from './user-role.service';
 
-import { AddRoleToUserDto, EditUserRolesDto } from './user-role.dto'
+import { AddRoleToUserDto, EditUserRolesDto, RemoveUserRoleDto } from './user-role.dto'
 import { Response } from 'express';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
@@ -76,6 +76,16 @@ export class UserRoleController {
     res.send({
       success: true,
       list: roleInfo
+    })
+  }
+
+  @Delete('/:userId')
+  async removeUserROle(@Param('userId') userId: number, @Res() res: Response, @Query() query: RemoveUserRoleDto) {
+    const { roleId } = query;
+    userId = Number(userId);
+    await this.userRoleService.removeRoleForUser(userId, roleId);
+    res.send({
+      success: true,
     })
   }
 }

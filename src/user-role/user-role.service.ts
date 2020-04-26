@@ -87,4 +87,16 @@ export class UserRoleService {
       await this.addRoleToUser([userId], willInsert);
     }
   }
+
+  async removeRoleForUser(userId: number, roleId: number): Promise<boolean> {
+    const removeItem = await this.userRoleRepository.findOne({
+      userId,
+      roleId
+    })
+    if (removeItem) {
+      await this.userRoleRepository.remove(removeItem);
+      return true
+    }
+    return false;
+  }
 }

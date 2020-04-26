@@ -1,4 +1,4 @@
-import { IsArray, ArrayNotEmpty, IsNumber } from 'class-validator'
+import { IsArray, ArrayNotEmpty, IsNumber, IsString } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AddRoleToUserDto {
@@ -28,4 +28,10 @@ export class EditUserRolesDto {
   @IsArray()
   roleIds: number[]
 
+}
+
+
+export class RemoveUserRoleDto {
+  @IsString()
+  roleId: number;
 }
