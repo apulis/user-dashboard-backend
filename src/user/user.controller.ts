@@ -5,6 +5,7 @@ import { User } from './user.entity';
 import { UpdateResult } from 'typeorm';
 import { UserRoleService } from 'src/user-role/user-role.service';
 import { CreateUserDto, EditUserDto } from './user.dto'
+import { ApiProperty } from '@nestjs/swagger';
 
 export interface IUserMessage {
   userName: string;
@@ -31,6 +32,9 @@ export class UserController {
     ) {}
 
   @Get('/list')
+  @ApiProperty({
+    description: '分页获取用户列表'
+  })
   async getUsers(
     @Res() res: Response,
     @Query('pageNo') pageNo?: string | number, 
@@ -65,6 +69,9 @@ export class UserController {
   }
 
   @Post('/')
+  @ApiProperty({
+    description: '新增用户'
+  })
   async createUsers(@Body() body: CreateUserDto, @Res() res: Response) {
     const { userMessage, userRole } = body;
     const userNames = userMessage.map(val => val.userName);
@@ -88,6 +95,9 @@ export class UserController {
   }
 
   @Delete('/')
+  @ApiProperty({
+    description: '删除用户'
+  })
   async removeUsers(@Body() body: string[], @Res() res: Response) {
     const userNames = body
     const result: UpdateResult = await this.userService.remove(userNames);
@@ -98,6 +108,9 @@ export class UserController {
   }
 
   @Get('/detail/:id')
+  @ApiProperty({
+    description: '获取用户详情'
+  })
   async getUserById(@Param('id') id: number, @Res() res: Response) {
     const userId = Number(id);
     const user = await this.userService.getUserById(userId);
@@ -108,6 +121,9 @@ export class UserController {
   }
 
   @Patch('/:id')
+  @ApiProperty({
+    description: '修改用户角色'
+  })
   async editUserRole(@Param('id') id: number, @Body() userInfo: EditUserDto, @Res() res: Response) {
     const userId = Number(id);
     const { email, phone, note, nickName} = userInfo;
@@ -118,6 +134,9 @@ export class UserController {
   }
 
   @Get('/count')
+  @ApiProperty({
+    description: '获取用户总数'
+  })
   async getTotalUsersCount(@Res() res: Response) {
     const count: number = await this.userService.getUserCount()
     res.send({
