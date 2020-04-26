@@ -34,11 +34,6 @@ export class GroupService {
         createTime: new Date().getTime() + '',
       })
       .execute()
-    } else {
-      result.isDelete = 0;
-      result.createTime = new Date().getTime() + '';
-      result.note = groupInfo.note;
-      await this.groupRepository.save(result);
     }
     return this.groupRepository
       .findOne({
@@ -51,7 +46,6 @@ export class GroupService {
   async getAllGroupCount(): Promise<number> {
     return await this.groupRepository
       .createQueryBuilder('group')
-      .where('isDelete != 1')
       .getCount();
   }
 
@@ -60,7 +54,6 @@ export class GroupService {
       return await this.groupRepository
       .createQueryBuilder('group')
       .select(['group.name', 'group.note', 'group.createTime', 'group.id'])
-      .where('isDelete != 1')
       .getMany();
     } else {
       const nameQuery = 'name LIKE :search';
@@ -68,7 +61,6 @@ export class GroupService {
       return await this.groupRepository
         .createQueryBuilder('group')
         .select(['group.name', 'group.note', 'group.createTime', 'group.id'])
-        .where('isDelete != 1')
         .andWhere(new Brackets(subQuery => {
           return subQuery
             .where(nameQuery)
@@ -85,8 +77,8 @@ export class GroupService {
   async removeGroup(groupIds: number[]) {
     return await this.groupRepository
       .createQueryBuilder('group')
-      .update(Group)
-      .set({isDelete: 1})
+      .softDelete()
+      .from(Group)
       .where('group.id IN (:groupIds)', {
         groupIds: groupIds
       })
