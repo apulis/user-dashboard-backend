@@ -4,10 +4,11 @@ import { Response } from 'express';
 
 import { GroupRoleService } from './group-role.service';
 import { AddRoleToGroupDto } from './group-role.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
 
 @Controller('group-role')
+@ApiTags('用户组和角色关联')
 export class GroupRoleController {
   constructor(
     private readonly groupRoleService: GroupRoleService,

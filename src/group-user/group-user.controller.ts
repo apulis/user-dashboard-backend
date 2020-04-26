@@ -4,10 +4,11 @@ import { Response } from 'express';
 import { GroupUserService } from './group-user.service';
 import { AddUsersToGroupDto } from './group-user.dto'
 import { UserService } from 'src/user/user.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GroupService } from 'src/group/group.service';
 
 @Controller('group-user')
+@ApiTags('用户组和用户关联')
 export class GroupUserController {
   constructor(
     private readonly groupUserService: GroupUserService,

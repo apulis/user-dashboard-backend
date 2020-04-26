@@ -5,7 +5,7 @@ import { User } from './user.entity';
 import { UpdateResult } from 'typeorm';
 import { UserRoleService } from 'src/user-role/user-role.service';
 import { CreateUserDto, EditUserDto } from './user.dto'
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
 
 export interface IUserMessage {
   userName: string;
@@ -25,6 +25,7 @@ export interface ICreateUser {
 }
 
 @Controller('/users')
+@ApiTags('用户')
 export class UserController {
   constructor(
     private readonly userService: UserService,

@@ -26,6 +26,7 @@ class removeGroupDto {
 }
 
 @Controller('group')
+@ApiTags('用户组相关')
 export class GroupController {
 
   constructor(
