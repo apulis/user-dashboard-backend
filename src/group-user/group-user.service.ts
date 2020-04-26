@@ -59,4 +59,16 @@ export class GroupUserService {
       .where('userId = ' + userId)
       .getMany()
   }
+
+  async removeGroupForUser(groupId: number, userId: number): Promise<boolean> {
+    const deleteItem = await this.groupUserRepository.findOne({
+      groupId,
+      userId
+    })
+    if (deleteItem) {
+      await this.groupUserRepository.remove(deleteItem);
+      return true
+    }
+    return false
+  }
 }

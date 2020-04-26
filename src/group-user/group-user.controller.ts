@@ -1,4 +1,4 @@
-import { Controller, Post, Res, Body, Get, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Post, Res, Body, Get, HttpStatus, Query, Delete, Param } from '@nestjs/common';
 
 import { Response } from 'express';
 import { GroupUserService } from './group-user.service';
@@ -81,6 +81,19 @@ export class GroupUserController {
       res.send({
         success: true,
         list: groupInfos,
+      })
+    }
+  }
+
+  @Delete('/:groupId')
+  async removeGroupForUser(@Param('groupId') groupId: number, @Query('userId') userId: number, @Res() res: Response) {
+    groupId = Number(groupId);
+    userId = Number(userId);
+    console.log(groupId, userId)
+    if (!isNaN(groupId) && !isNaN(userId)) {
+      await this.groupUserService.removeGroupForUser(groupId, userId);
+      res.send({
+        success: true
       })
     }
   }
