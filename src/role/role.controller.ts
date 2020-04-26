@@ -50,4 +50,14 @@ export class RoleController {
       message: `success delete role ${body.roleIds.join(', ')}`
     })
   }
+
+  @Get('/count')
+  @ApiOperation({ description: '获取角色总数' })
+  async getRolesTotal(@Res() res: Response) {
+    const count = await this.roleService.getRoleCount()
+    res.send({
+      success: true,
+      count,
+    })
+  }
 }
