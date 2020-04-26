@@ -32,13 +32,11 @@ export class RoleService {
     if (!search) {
       return await this.roleRepository
         .createQueryBuilder('role')
-        .where('isDelete != 1')
         .getCount();
     } else {
       search = `%${search}%`;
       return await this.roleRepository
         .createQueryBuilder('role')
-        .where('isDelete != 1')
         .andWhere(new Brackets(subQuery => {
           return subQuery
             .where(nameQuery)
@@ -56,7 +54,6 @@ export class RoleService {
       const list = await this.roleRepository
         .createQueryBuilder('role')
         .select(['role.id', 'role.name', 'role.createTime', 'role.isPreset', 'role.note'])
-        .where('isDelete != 1')
         .andWhere(new Brackets(subQuery => {
           return subQuery
             .where(nameQuery)
@@ -78,7 +75,6 @@ export class RoleService {
       const list = await this.roleRepository
         .createQueryBuilder('role')
         .select(['role.id', 'role.name', 'role.createTime', 'role.isPreset', 'role.note'])
-        .where('isDelete != 1')
         .skip(pageNo)
         .take(pageSize)
         .getMany();
@@ -99,7 +95,6 @@ export class RoleService {
       result.createTime = new Date().getTime() + '';
       result.isPreset = 0;
       result.note = role.note;
-      result.isDelete = 0
       return this.roleRepository
         .save(result);
     } else {
@@ -117,8 +112,8 @@ export class RoleService {
   public async removeRoles(roleIds: number[]) {
     return await this.roleRepository
       .createQueryBuilder('role')
-      .update(Role)
-      .set({isDelete: 1})
+      .softDelete()
+      .from(Role)
       .where('role.id IN (:roleIds)', {
         roleIds: roleIds
       })

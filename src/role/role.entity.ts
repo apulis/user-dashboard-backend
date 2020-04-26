@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn } from 'typeorm';
 import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
 
 
@@ -29,8 +29,8 @@ export class Role {
 
   @Column('int', { default: 0 })
   isPreset: number;
-  
-  @Column('int', { default: 0 })
-  isDelete: number;
+
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAt: Date
 
 }
