@@ -14,8 +14,8 @@ export class RoleController {
   @Get()
   @ApiOperation({ description: '分页查询角色列表'})
   async index(
-    @Query('pageNo') pageNo: string | number, 
-    @Query('pageSize') pageSize: string | number,
+    @Query('pageNo') pageNo: number, 
+    @Query('pageSize') pageSize: number,
     @Res() res: Response,
     @Query('search') search?: string
   ) {

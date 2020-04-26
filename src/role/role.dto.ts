@@ -18,7 +18,7 @@ export class CreateRoleDto {
 
 
 export class RemoveRoleDto {
-  @ApiProperty({ description: '删除角色的id' })
+  @ApiProperty({ description: '删除角色的id', example: [1, 2, 3] })
   @ArrayNotEmpty()
   @IsArray()
   roleIds: number[]
