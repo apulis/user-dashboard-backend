@@ -96,4 +96,13 @@ export class UserController {
       message: `Success remove ${result.raw.affectedRows} records`
     })
   }
+
+  @Get('/:id')
+  async getUserById(@Param('id') id: number, @Res() res: Response) {
+    const user = await this.userService.getUserById(id);
+    res.send({
+      success: true,
+      user: user[0],
+    })
+  }
 }

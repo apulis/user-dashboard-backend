@@ -189,4 +189,13 @@ export class UserService {
       .where("user.id IN (:userIds)", { userIds: userIds })
       .execute()
   }
+
+  async getUserById(id: number) {
+    return await this.usersRepository
+    .createQueryBuilder('user')
+    .select(['userName', 'id', 'nickName', 'email', 'openId', 'note', 'phone'])
+    .where('id = ' + id)
+    .take(1)
+    .execute()
+  }
 }
