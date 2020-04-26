@@ -108,4 +108,12 @@ export class GroupService {
       await this.groupRepository.save(detail);
     }
   }
+
+  async getGroupInfos(groupIds: number[]) {
+    return await this.groupRepository
+      .createQueryBuilder('group')
+      .select(['name', 'id', 'note'])
+      .where("group.id IN (:groupIds)", { groupIds: groupIds })
+      .execute()
+  }
 }

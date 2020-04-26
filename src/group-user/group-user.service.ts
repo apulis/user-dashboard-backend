@@ -51,4 +51,12 @@ export class GroupUserService {
       .where('groupId = ' + groupId)
       .getMany()
   }
+
+  async getGroupsByUserId(userId: number) {
+    return await this.groupUserRepository
+      .createQueryBuilder('group-user')
+      .select(['group-user.groupId'])
+      .where('userId = ' + userId)
+      .getMany()
+  }
 }

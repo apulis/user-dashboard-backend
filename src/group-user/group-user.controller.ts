@@ -5,12 +5,14 @@ import { GroupUserService } from './group-user.service';
 import { AddUsersToGroupDto } from './group-user.dto'
 import { UserService } from 'src/user/user.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { GroupService } from 'src/group/group.service';
 
 @Controller('group-user')
 export class GroupUserController {
   constructor(
     private readonly groupUserService: GroupUserService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly groupService: GroupService
   ) { }
 
   @Post()
@@ -57,6 +59,30 @@ export class GroupUserController {
       })
     }
   }
-    
+
+  @Get('/group-info')
+  @ApiOperation({
+    description: '根据userId获取用户组信息',
+  })
+  async getGroupInfoByUserId(@Query('userId') userId: number, @Res() res: Response) {
+    userId = Number(userId);
+    console.log(211234, userId)
+    if (!isNaN(userId)) {
+      const groups = await this.groupUserService.getGroupsByUserId(userId);
+      if (groups.length === 0) {
+        res.send({
+          success: true,
+          list: []
+        });
+        return;
+      }
+      const groupIds = groups.map(val => val.groupId);
+      const groupInfos = await this.groupService.getGroupInfos(groupIds);
+      res.send({
+        success: true,
+        list: groupInfos,
+      })
+    }
+  }
 }
   
