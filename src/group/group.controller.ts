@@ -70,7 +70,7 @@ export class GroupController {
     })
   }
 
-  @Get('/:id')
+  @Get('/detail/:id')
   async getGroupDetail(@Param('id') id: number, @Res() res: Response) {
     id = Number(id);
     const result = await this.groupService.getGroupDetail(id);
