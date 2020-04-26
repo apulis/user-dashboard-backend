@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { UpdateResult } from 'typeorm';
 import { UserRoleService } from 'src/user-role/user-role.service';
-import { CreateUserDto } from './user.dto'
+import { CreateUserDto, EditUserDto } from './user.dto'
 
 export interface IUserMessage {
   userName: string;
@@ -99,10 +99,21 @@ export class UserController {
 
   @Get('/:id')
   async getUserById(@Param('id') id: number, @Res() res: Response) {
-    const user = await this.userService.getUserById(id);
+    const userId = Number(id);
+    const user = await this.userService.getUserById(userId);
     res.send({
       success: true,
       user: user[0],
+    })
+  }
+
+  @Patch('/:id')
+  async editUserRole(@Param('id') id: number, @Body() userInfo: EditUserDto, @Res() res: Response) {
+    const userId = Number(id);
+    const { email, phone, note, nickName} = userInfo;
+    await this.userService.editUserDetail(id, email, phone, note, nickName);
+    res.send({
+      success: true,
     })
   }
 }

@@ -1,4 +1,4 @@
-import { ArrayNotEmpty } from "class-validator";
+import { ArrayNotEmpty, IsString, IsEmail,  } from "class-validator";
 import { ApiProperty, ApiTags, ApiMovedPermanentlyResponse } from "@nestjs/swagger";
 
 
@@ -32,4 +32,19 @@ export class CreateUserDto {
     ]
   })
   userRole: number[]
-} 
+}
+
+export class EditUserDto {
+  
+  @IsString()
+  nickName: string;
+
+  @IsString()
+  email: string;
+
+  @IsString()
+  note: string;
+
+  @IsString()
+  phone: string;
+}

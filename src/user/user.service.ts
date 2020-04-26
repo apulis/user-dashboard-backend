@@ -8,6 +8,7 @@ import { IUserMessage } from './user.controller';
 import { RegisterTypes } from 'src/config/enums'
 import { User } from './user.entity';
 import { UserRole } from 'src/user-role/user-role.entity';
+import { EditUserDto } from './user.dto';
 
 interface ICreateUser extends IUserMessage {
   createTime: string;
@@ -197,5 +198,16 @@ export class UserService {
     .where('id = ' + id)
     .take(1)
     .execute()
+  }
+
+  async editUserDetail(id: number, email: string, phone: string, note: string, nickName: string) {
+    const detail = await this.usersRepository.findOne(id);
+    if (detail) {
+      detail.nickName = nickName;
+      detail.note = note;
+      detail.phone = phone;
+      detail.email = email;
+      await this.usersRepository.save(detail);
+    }
   }
 }
