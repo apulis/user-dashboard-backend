@@ -90,4 +90,13 @@ export class GroupController {
       messsage: 'ok'
     })
   }
+
+  @Get('/count')
+  async getGroupTotalCount(@Res() res: Response) {
+    const count = await this.groupService.getAllGroupCount();
+    res.send({
+      success: true,
+      count,
+    })
+  }
 }
