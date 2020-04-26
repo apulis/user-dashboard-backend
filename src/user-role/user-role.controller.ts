@@ -4,11 +4,15 @@ import { UserRoleService } from './user-role.service';
 import { AddRoleToUserDto, EditUserRolesDto } from './user-role.dto'
 import { Response } from 'express';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { RoleService } from 'src/role/role.service';
 
 @Controller('user-role')
 @ApiTags('关联角色和用户')
 export class UserRoleController {
-  constructor(private readonly userRoleService: UserRoleService) { }
+  constructor(
+    private readonly userRoleService: UserRoleService,
+    private readonly roleService: RoleService
+  ) { }
 
   @Post()
   @ApiOperation({
@@ -50,10 +54,28 @@ export class UserRoleController {
   })
   async getRoleByUserId(@Param('userId') userId: number, @Res() res: Response) {
     userId = Number(userId);
-    const result = await this.userRoleService.findUserRolesById(userId);
+    const result = await this.userRoleService.findUserRoleIdsById(userId);
     res.send({
       success: true,
       list: result
+    })
+  }
+
+  @Get('/:userId/info')
+  async getRoleInfo(@Param('userId') userId: number, @Res() res: Response) {
+    userId = Number(userId);
+    const roleIds = await this.userRoleService.findUserRoleIdsById(userId);
+    if (roleIds.length === 0) {
+      res.send({
+        success: true,
+        list: []
+      })
+      return;
+    }
+    const roleInfo = await this.roleService.getRolesByRoleIds(roleIds.map(val => val.roleId));
+    res.send({
+      success: true,
+      list: roleInfo
     })
   }
 }

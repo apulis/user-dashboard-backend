@@ -43,7 +43,7 @@ export class UserRoleService {
       .execute()
   }
 
-  async findUserRolesById(userId: number) {
+  async findUserRoleIdsById(userId: number) {
     return await this.userRoleRepository
       .find({
         userId,
@@ -53,7 +53,7 @@ export class UserRoleService {
   async eidtUserRoles(userId: number, roleIds: number[]) {
     // 1. 删除数据库有但是roleIds没有的
     // 2. 增加以前没有的
-    const userRoles = await this.findUserRolesById(userId);
+    const userRoles = await this.findUserRoleIdsById(userId);
     const dbRoleIds = userRoles.map(val => {
       return {
         roleId: val.roleId,
