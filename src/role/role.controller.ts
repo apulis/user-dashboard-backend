@@ -34,9 +34,9 @@ export class RoleController {
     @Body() body: CreateRoleDto,
     @Res() res: Response
   ) {
-    await this.roleService.createRole(body)
+    const duplicate = await this.roleService.createRole(body)
     res.status(HttpStatus.CREATED).json({
-      success: true,
+      success: duplicate,
       message: 'suucess',
     })
   }

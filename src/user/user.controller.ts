@@ -97,7 +97,7 @@ export class UserController {
     })
   }
 
-  @Get('/:id')
+  @Get('/detail/:id')
   async getUserById(@Param('id') id: number, @Res() res: Response) {
     const userId = Number(id);
     const user = await this.userService.getUserById(userId);
@@ -114,6 +114,15 @@ export class UserController {
     await this.userService.editUserDetail(userId, email, phone, note, nickName);
     res.send({
       success: true,
+    })
+  }
+
+  @Get('/count')
+  async getTotalUsersCount(@Res() res: Response) {
+    const count: number = await this.userService.getUserCount()
+    res.send({
+      success: true,
+      count,
     })
   }
 }

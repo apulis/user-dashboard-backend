@@ -6,7 +6,6 @@ import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-valid
 @Entity({
   name: 'role'
 })
-@Index(['name'], {unique: true})
 export class Role {
 
   @PrimaryGeneratedColumn()
