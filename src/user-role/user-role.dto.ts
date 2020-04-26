@@ -6,7 +6,8 @@ export class AddRoleToUserDto {
   @IsArray()
   @ApiProperty({
     description: '用户id数组',
-    required: true
+    required: true,
+    example: [1, 2, 3]
   })
   userIds: number[];
 
@@ -14,7 +15,8 @@ export class AddRoleToUserDto {
   @IsArray()
   @ApiProperty({
     description: '角色id数组',
-    required: true
+    required: true,
+    example: [1, 2, 3]
   })
   roleIds: number[];
 }
@@ -23,9 +25,17 @@ export class AddRoleToUserDto {
 export class EditUserRolesDto {
   
   @IsNumber()
+  @ApiProperty({
+    description: '用户id数组',
+    example: [1, 2, 3]
+  })
   userId: number;
 
   @IsArray()
+  @ApiProperty({
+    description: '角色id数组',
+    example: [1, 2, 3]
+  })
   roleIds: number[]
 
 }

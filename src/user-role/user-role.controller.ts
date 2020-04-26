@@ -50,7 +50,7 @@ export class UserRoleController {
 
   @Get('/userId/:userId')
   @ApiOperation({
-    description: '查询某个用户已有的roleId'
+    description: '查询某个用户已有的roleId',
   })
   async getRoleByUserId(@Param('userId') userId: number, @Res() res: Response) {
     userId = Number(userId);
