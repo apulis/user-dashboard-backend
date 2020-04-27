@@ -19,7 +19,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule,
     CasbinModule.forRootAsync(
       typeOrmConfig as ConnectionOptions,
       "src/common/authz/authz.model.conf"

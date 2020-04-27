@@ -9,6 +9,8 @@ import { RegisterTypes } from 'src/config/enums'
 import { User } from './user.entity';
 import { UserRole } from 'src/user-role/user-role.entity';
 import { EditUserDto } from './user.dto';
+import { ConfigService } from 'config/config.service';
+import { encodePassword } from 'src/utils';
 
 interface ICreateUser extends IUserMessage {
   createTime: string;
@@ -24,8 +26,8 @@ const noteQuery = 'note LIKE :search';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    private readonly config: ConfigService,
   ) { }
 
   async getUserCount(): Promise<number> {
@@ -146,8 +148,11 @@ export class UserService {
 
   async create(users: IUserMessage[]): Promise<any> {
     const newUsers: ICreateUser[] = [];
+    const SECRET_KEY = this.config.get('SECRET_KEY');
+    console.log('users', users)
     users.forEach(u => {
       // TODO: encode u.password
+      u.password = encodePassword(u.password, SECRET_KEY);
       newUsers.push({
         ...u,
         openId: u.userName,

@@ -9,20 +9,19 @@ import { ConfigService } from 'config/config.service';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    // @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly config: ConfigService,
   ) {
-    this.config = config;
   }
   
   async validateUser(userName: string, password: string) {
-    const user = await this.usersRepository.findOne({
-      userName,
-    })
-    const SECRET_KEY = this.config.get('SECRET_KEY');
-    if (user && user.password === encodePassword(password, SECRET_KEY)) {
-      return true;
-    }
-    return false;
+    // const user = await this.usersRepository.findOne({
+    //   userName,
+    // })
+    // const SECRET_KEY = this.config.get('SECRET_KEY');
+    // if (user && user.password === encodePassword(password, SECRET_KEY)) {
+    //   return true;
+    // }
+    // return false;
   }
 }
