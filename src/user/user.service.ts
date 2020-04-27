@@ -149,9 +149,7 @@ export class UserService {
   async create(users: IUserMessage[]): Promise<any> {
     const newUsers: ICreateUser[] = [];
     const SECRET_KEY = this.config.get('SECRET_KEY');
-    console.log('users', users)
     users.forEach(u => {
-      // TODO: encode u.password
       u.password = encodePassword(u.password, SECRET_KEY);
       newUsers.push({
         ...u,
