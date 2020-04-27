@@ -15,4 +15,5 @@ export class GroupRole {
 
   @Column('int')
   groupId: number;
+
 }

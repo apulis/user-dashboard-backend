@@ -5,7 +5,7 @@ import { ApiTags, ApiProperty, ApiOperation } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 import { GroupService } from './group.service';
-import { CreateGroupDto, EditGroupDto } from './group.dto';
+import { CreateGroupDto, EditGroupDto, RemoveGroupDto } from './group.dto';
 import { GroupRoleService } from 'src/group-role/group-role.service';
 
 export interface ICreateGroup {
@@ -14,16 +14,7 @@ export interface ICreateGroup {
   role: number[];
 }
 
-class removeGroupDto {
-  @IsArray()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: '需要删除的组的id数组',
-    example: [1, 2, 3]
-  })
-  groupIds: number[];
 
-}
 
 @Controller('group')
 @ApiTags('用户组相关')
@@ -63,7 +54,7 @@ export class GroupController {
   }
 
   @Delete('/')
-  async removeGroup(@Body() body: removeGroupDto, @Res() res: Response) {
+  async removeGroup(@Body() body: RemoveGroupDto, @Res() res: Response) {
     await this.groupService.removeGroup(body.groupIds);
     res.json({
       success: true,

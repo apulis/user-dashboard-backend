@@ -1,4 +1,4 @@
-import { IsString, ArrayNotEmpty } from "class-validator";
+import { IsString, ArrayNotEmpty, IsArray } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 
@@ -39,4 +39,15 @@ export class EditGroupDto {
     example: '研发小组A'
   })
   note: string;
+}
+
+export class RemoveGroupDto {
+  @IsArray()
+  @ArrayNotEmpty()
+  @ApiProperty({
+    description: '需要删除的组的id数组',
+    example: [1, 2, 3]
+  })
+  groupIds: number[];
+
 }
