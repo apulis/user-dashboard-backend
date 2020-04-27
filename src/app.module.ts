@@ -13,7 +13,6 @@ import { ConnectionOptions } from 'typeorm';
 import { GroupUserModule } from './group-user/group-user.module';
 import { GroupRoleModule } from './group-role/group-role.module';
 import { UserRoleModule } from './user-role/user-role.module';
-import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 
 
@@ -33,7 +32,7 @@ import { AuthModule } from './auth/auth.module';
     UserRoleModule,
     AuthModule,
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
