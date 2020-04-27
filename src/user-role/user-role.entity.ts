@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
-import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne } from 'typeorm';
 
 
 @Entity({
