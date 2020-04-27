@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { typeOrmConfig } from './config/typeorm';
 import { GroupModule } from './group/group.module';
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     CasbinModule.forRootAsync(
       typeOrmConfig as ConnectionOptions,
       "src/common/authz/authz.model.conf"

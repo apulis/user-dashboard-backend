@@ -13,12 +13,14 @@ export class AuthController {
 
   @Post('/register')
   async register(@Body() body: RegisterDto) {
-    //
+    const { userName, password, nickName } = body;
+    
   }
 
   @Post('/login')
   async login(@Body() body: LoginDto) {
-    //
+    const { userName, password } = body;
+
   }
 
   @Get('/currentUser')
