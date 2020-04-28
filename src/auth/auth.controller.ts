@@ -31,15 +31,18 @@ export class AuthController {
     const validatedUser = await this.authService.validateUser(userName, password);
     if (validatedUser) {
       const token = await this.authService.getIdToken(validatedUser.id, validatedUser.userName);
+      const currentAuthority = await this.authService.getUserRoles(validatedUser.id);
       res.cookie('token', token);
       res.send({
         success: true,
         token,
+        currentAuthority,
+        currentPermission: [],
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED).send({
         success: false,
-        message: 'UNAUTHORIZED'
+        message: 'UNAUTHORIZED',
       })
     }
   }
