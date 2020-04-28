@@ -7,9 +7,11 @@ export function md5(content: string) {
   return md5.update(content).digest('hex');
 }
 
-
-
 export const encodePassword = (password: string, SECRET_KEY: string) => {
   const str = `password=${password}&key=${SECRET_KEY}`;
   return md5(str);
+}
+
+export const getJwtExp = () => {
+  return new Date().getTime() / 1000 + 2 * 24 * 60 * 60;
 }
