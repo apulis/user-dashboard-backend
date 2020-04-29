@@ -9,7 +9,7 @@ import { RoleService } from 'src/role/role.service';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('group-role')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('用户组和角色关联')
 export class GroupRoleController {
   constructor(

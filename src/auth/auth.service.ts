@@ -73,10 +73,9 @@ export class AuthService {
     return currentAuthority.map(val => val.name);
   }
 
-  async validateUser(payaload: any): Promise<undefined | User> {
-    return this.usersRepository.findOne({
-      userName: payaload.userName,
-    })
+  async validateUser(uid: number): Promise<undefined | User> {
+    const user = await this.usersRepository.findOne(uid);
+    return user;
   }
 
 }

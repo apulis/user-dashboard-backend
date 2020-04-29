@@ -9,7 +9,7 @@ import { GroupService } from 'src/group/group.service';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('group-user')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('用户组和用户关联')
 export class GroupUserController {
   constructor(

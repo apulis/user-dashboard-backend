@@ -15,6 +15,7 @@ import { GroupUserModule } from './group-user/group-user.module';
 import { GroupRoleModule } from './group-role/group-role.module';
 import { UserRoleModule } from './user-role/user-role.module';
 import { AuthModule } from './auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
 
 
 @Module({

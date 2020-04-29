@@ -8,7 +8,7 @@ import { RoleService } from './role.service';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('role')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('角色')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}

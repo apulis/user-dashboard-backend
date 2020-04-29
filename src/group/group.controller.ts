@@ -18,7 +18,7 @@ export interface ICreateGroup {
 
 
 @Controller('group')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('用户组相关')
 export class GroupController {
 

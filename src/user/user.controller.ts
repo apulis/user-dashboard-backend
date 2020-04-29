@@ -26,7 +26,7 @@ export interface ICreateUser {
 }
 
 @Controller('/users')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('用户')
 export class UserController {
   constructor(

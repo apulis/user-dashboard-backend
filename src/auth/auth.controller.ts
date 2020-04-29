@@ -1,10 +1,8 @@
-import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './auth.dto';
-import { encodePassword } from 'src/utils';
-import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
@@ -49,9 +47,9 @@ export class AuthController {
   }
 
   @Get('/currentUser')
-  @UseGuards(AuthGuard())
-  async getCurrentUser(): Promise<string[]> {
-    return ['role1']
+  @UseGuards(AuthGuard('jwt'))
+  async getCurrentUser(@Req() req: Request): Promise<any> {
+    console.log('request', req.user)
   }
 
   @Get('/microsoft')
