@@ -19,15 +19,14 @@ export class Group {
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, default: '' })
   note: string;
 
   @IsString()
   @Length(1, 40)
   @Column('varchar', { length: 255 })
   createTime: string;
-  
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: Date
+  deletedAt: Date;
 }
