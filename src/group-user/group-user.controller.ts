@@ -1,4 +1,4 @@
-import { Controller, Post, Res, Body, Get, HttpStatus, Query, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Res, Body, Get, HttpStatus, Query, Delete, Param, UseGuards } from '@nestjs/common';
 
 import { Response } from 'express';
 import { GroupUserService } from './group-user.service';
@@ -6,8 +6,10 @@ import { AddUsersToGroupDto } from './group-user.dto'
 import { UserService } from 'src/user/user.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GroupService } from 'src/group/group.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('group-user')
+@UseGuards(AuthGuard())
 @ApiTags('用户组和用户关联')
 export class GroupUserController {
   constructor(

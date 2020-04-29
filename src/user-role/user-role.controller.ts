@@ -1,12 +1,14 @@
-import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, Get, Query, Param, Patch, Delete, UseGuards } from '@nestjs/common';
 import { UserRoleService } from './user-role.service';
 
 import { AddRoleToUserDto, EditUserRolesDto, RemoveUserRoleDto } from './user-role.dto'
 import { Response } from 'express';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user-role')
+@UseGuards(AuthGuard())
 @ApiTags('关联角色和用户')
 export class UserRoleController {
   constructor(

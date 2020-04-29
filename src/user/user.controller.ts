@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
@@ -6,6 +6,7 @@ import { UpdateResult } from 'typeorm';
 import { UserRoleService } from 'src/user-role/user-role.service';
 import { CreateUserDto, EditUserDto } from './user.dto'
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 export interface IUserMessage {
   userName: string;
@@ -25,6 +26,7 @@ export interface ICreateUser {
 }
 
 @Controller('/users')
+@UseGuards(AuthGuard())
 @ApiTags('用户')
 export class UserController {
   constructor(

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch, UseGuards } from '@nestjs/common';
 
 import { Response, } from 'express';
 import { ApiTags, ApiProperty, ApiOperation } from '@nestjs/swagger';
@@ -7,6 +7,7 @@ import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 import { GroupService } from './group.service';
 import { CreateGroupDto, EditGroupDto, RemoveGroupDto } from './group.dto';
 import { GroupRoleService } from 'src/group-role/group-role.service';
+import { AuthGuard } from '@nestjs/passport';
 
 export interface ICreateGroup {
   name: string;
@@ -17,6 +18,7 @@ export interface ICreateGroup {
 
 
 @Controller('group')
+@UseGuards(AuthGuard())
 @ApiTags('用户组相关')
 export class GroupController {
 

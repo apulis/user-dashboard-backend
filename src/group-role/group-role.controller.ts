@@ -1,4 +1,4 @@
-import { Controller, Post, Res, Body, HttpService, HttpStatus, HttpCode, Get, Query, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Res, Body, HttpService, HttpStatus, HttpCode, Get, Query, Delete, Param, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 
 
@@ -6,8 +6,10 @@ import { GroupRoleService } from './group-role.service';
 import { AddRoleToGroupDto } from './group-role.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('group-role')
+@UseGuards(AuthGuard())
 @ApiTags('用户组和角色关联')
 export class GroupRoleController {
   constructor(
