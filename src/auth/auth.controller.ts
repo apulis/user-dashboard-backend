@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Res, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './auth.dto';
@@ -28,7 +29,7 @@ export class AuthController {
   @Post('/login')
   async login(@Body() body: LoginDto, @Res() res: Response) {
     const { userName, password } = body;
-    const validatedUser = await this.authService.validateUser(userName, password);
+    const validatedUser = await this.authService.validateUserAccount(userName, password);
     if (validatedUser) {
       const token = await this.authService.getIdToken(validatedUser.id, validatedUser.userName);
       const currentAuthority = await this.authService.getUserRoles(validatedUser.id);
@@ -48,7 +49,18 @@ export class AuthController {
   }
 
   @Get('/currentUser')
+  @UseGuards(AuthGuard())
   async getCurrentUser(): Promise<string[]> {
     return ['role1']
+  }
+
+  @Get('/microsoft')
+  async loginWithMicrosoft() {
+    console.log(111)
+  }
+
+  @Get('/wechat')
+  async loginWithWechat() {
+    //
   }
 }

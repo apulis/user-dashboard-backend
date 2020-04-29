@@ -24,7 +24,7 @@ export class AuthService {
   ) {
   }
   
-  async validateUser(userName: string, password: string): Promise<false | User> {
+  async validateUserAccount(userName: string, password: string): Promise<false | User> {
     const user = await this.usersRepository.findOne({
       userName,
     })
@@ -36,12 +36,12 @@ export class AuthService {
   }
 
   async getIdToken(uid: number, userName: string, ) {
-    const JWT_SIGN = this.config.get('JWT_SIGN');
+    const JWT_SECRET_KEY = this.config.get('JWT_SECRET_KEY');
     return sign({
       uid,
       userName,
       exp: getJwtExp(),
-    }, JWT_SIGN)
+    }, JWT_SECRET_KEY)
   }
 
   async getUserRoles(userId: number) {
@@ -71,6 +71,12 @@ export class AuthService {
       .getMany();
 
     return currentAuthority.map(val => val.name);
+  }
+
+  async validateUser(payaload: any): Promise<undefined | User> {
+    return this.usersRepository.findOne({
+      userName: payaload.userName,
+    })
   }
 
 }

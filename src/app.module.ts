@@ -19,7 +19,9 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule,
+    ConfigModule.forRoot({
+      envFilePath: ['.develop.env.local', '.env.develop']
+    }),
     CasbinModule.forRootAsync(
       typeOrmConfig as ConnectionOptions,
       "src/common/authz/authz.model.conf"
