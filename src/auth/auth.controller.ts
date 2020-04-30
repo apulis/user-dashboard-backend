@@ -50,7 +50,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
     const user = (req.user as User);
-    
+    const currentAuthority = await this.authService.getUserRoles(user.id);
     if (user) {
       res.send({
         id: user,
@@ -59,7 +59,7 @@ export class AuthController {
         registerType: user.registerType,
         email: user.email,
         openId: user.openId,
-        currentAuthority: []
+        currentAuthority,
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED)
