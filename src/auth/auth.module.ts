@@ -19,7 +19,7 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role]),
     PassportModule.register({
-      defaultStrategy: 'jwt'
+      defaultStrategy: 'jwt',
     }),
     JwtModule.register({
       secret: 'hkgaje75t62843qorgbry894q2375teufhtgyi7438qwert'

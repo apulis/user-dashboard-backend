@@ -74,7 +74,10 @@ export class AuthService {
   }
 
   async validateUser(uid: number): Promise<undefined | User> {
-    const user = await this.usersRepository.findOne(uid);
+    const user = await this.usersRepository.findOne({
+      id: uid,
+      isDelete: 0,
+    });
     return user;
   }
 
