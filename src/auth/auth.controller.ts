@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Response, Request } from 'express';
+import { Response, Request, Express } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './auth.dto';
 import { UserService } from 'src/user/user.service';
-
+import { User } from 'src/user/user.entity';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -48,8 +48,22 @@ export class AuthController {
 
   @Get('/currentUser')
   @UseGuards(AuthGuard('jwt'))
-  async getCurrentUser(@Req() req: Request): Promise<any> {
-    console.log('request', req.user)
+  async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
+    const user = (req.user as User);
+    
+    if (user) {
+      res.send({
+        id: user,
+        userName: user.userName,
+        phone: user.phone,
+        registerType: user.registerType,
+        email: user.email,
+        openId: user.openId,
+      })
+    } else {
+      res.status(HttpStatus.UNAUTHORIZED)
+    }
+    
   }
 
   @Get('/microsoft')
