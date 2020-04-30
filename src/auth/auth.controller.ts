@@ -53,6 +53,7 @@ export class AuthController {
     const currentAuthority = await this.authService.getUserRoles(user.id);
     if (user) {
       res.send({
+        success: true,
         id: user,
         userName: user.userName,
         phone: user.phone,
