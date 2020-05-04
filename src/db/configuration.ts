@@ -1,17 +1,10 @@
 import 'dotenv/config';
-
+import * as dotenv from 'dotenv';
 const isTestEnvironment = process.env.NODE_ENV === 'test';
 const isProductionEnvironment = process.env.NODE_ENV === 'production';
-
+console.log()
 export default {
   environment: process.env.NODE_ENV || 'development',
-  host: process.env.APP_HOST || '127.0.0.1',
-  port:
-    (isTestEnvironment ? process.env.TEST_APP_PORT : process.env.APP_PORT) ||
-    '5001',
-  auth: {
-    secretKey: process.env.JWT_SECRET_KEY || '4C31F7EFD6857D91E729165510520424',
-  },
   typeorm: {
     db: {
       host: process.env.DB_HOST || 'localhost',
@@ -25,10 +18,5 @@ export default {
     },
     synchronize: !isProductionEnvironment,
     logging: !isProductionEnvironment,
-  },
-
-  logging: {
-    dir: process.env.LOGGING_DIR || 'logs',
-    level: process.env.LOGGING_LEVEL || 'debug',
-  },
+  }
 };
