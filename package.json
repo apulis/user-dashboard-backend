@@ -32,6 +32,7 @@
     "@types/jsonwebtoken": "^8.3.9",
     "@types/passport": "^1.0.3",
     "@types/passport-jwt": "^3.0.3",
+    "axios": "^0.19.2",
     "casbin": "^4.2.1",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
