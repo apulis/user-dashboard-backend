@@ -5,7 +5,7 @@ import { Injectable, Res } from '@nestjs/common';
 import { Brackets } from 'typeorm';
 import { IUserMessage } from './user.controller';
 
-import { RegisterTypes } from 'src/config/enums'
+import { RegisterTypes } from 'src/constants/enums'
 import { User } from './user.entity';
 import { UserRole } from 'src/user-role/user-role.entity';
 import { EditUserDto } from './user.dto';

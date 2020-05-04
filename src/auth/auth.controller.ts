@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Response, Request, Express } from 'express';
+import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './auth.dto';
 import { UserService } from 'src/user/user.service';
@@ -15,13 +15,16 @@ export class AuthController {
   }
 
   @Post('/register')
-  async register(@Body() body: RegisterDto) {
+  async register(@Body() body: RegisterDto, @Res() res: Response) {
     const { userName, password, nickName } = body;
     await this.userService.create([{
       userName,
       nickName,
       password,
-    }])
+    }]);
+    res.send({
+      success: true
+    })
   }
 
   @Post('/login')

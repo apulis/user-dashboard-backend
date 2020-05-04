@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
-import { typeOrmConfig } from './config/typeorm';
+import { typeOrmConfig } from './db/typeorm';
 import { GroupModule } from './group/group.module';
 import { PermissionModule } from './permission/permission.module';
 
