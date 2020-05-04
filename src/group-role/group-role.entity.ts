@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, OneToOne, JoinColumn, PrimaryColumn } from 'typeorm';
+import { Group } from 'src/group/group.entity';
+import { Role } from 'src/role/role.entity';
 
 
 @Entity({
@@ -10,10 +12,18 @@ export class GroupRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('int')
+  @PrimaryColumn('int')
   roleId: number;
 
-  @Column('int')
+  @PrimaryColumn('int')
   groupId: number;
+
+  @OneToOne(() => Group)
+  @JoinColumn()
+  group: Group;
+
+  @OneToOne(() => Role)
+  @JoinColumn()
+  role: Role;
 
 }
