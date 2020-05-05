@@ -29,7 +29,4 @@ export class Role {
   @Column('int', { default: 0 })
   isPreset: number;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: Date
-
 }

@@ -77,7 +77,7 @@ export class GroupService {
   async removeGroup(groupIds: number[]) {
     return await this.groupRepository
       .createQueryBuilder('group')
-      .softDelete()
+      .delete()
       .from(Group)
       .where('group.id IN (:groupIds)', {
         groupIds: groupIds

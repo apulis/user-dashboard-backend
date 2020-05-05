@@ -109,7 +109,7 @@ export class RoleService {
   public async removeRoles(roleIds: number[]) {
     return await this.roleRepository
       .createQueryBuilder('role')
-      .softDelete()
+      .delete()
       .from(Role)
       .where('role.id IN (:roleIds)', {
         roleIds: roleIds

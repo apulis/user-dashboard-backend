@@ -27,6 +27,4 @@ export class Group {
   @Column('varchar', { length: 255 })
   createTime: string;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: Date;
 }

@@ -11,6 +11,7 @@ import { GroupUser } from 'src/group-user/group-user.entity';
 import { GroupRole } from 'src/group-role/group-role.entity';
 import { UserRole } from 'src/user-role/user-role.entity';
 import { Role } from 'src/role/role.entity';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -81,4 +82,11 @@ export class AuthService {
     return user;
   }
 
+  async getMicrosoftAccountInfo() {
+    //
+  }
+
+  async getWechatMicrosoftInfo() {
+    //
+  }
 }

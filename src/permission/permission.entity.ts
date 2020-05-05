@@ -21,8 +21,8 @@ export class Permission {
   note: string;
 
   @Column('varchar', { length: 255 })
+  project: string;
+
+  @Column('varchar', { length: 255 })
   createTime: string;
-  
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: Date
 }
