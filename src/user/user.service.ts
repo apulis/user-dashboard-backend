@@ -211,4 +211,10 @@ export class UserService {
       await this.usersRepository.save(detail);
     }
   }
+
+  async getUserInfoByOpenId(openId: string) {
+    return await this.usersRepository.find({
+      openId,
+    })
+  }
 }

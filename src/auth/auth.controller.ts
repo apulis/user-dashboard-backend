@@ -8,6 +8,7 @@ import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
 import { getDomainFromUrl } from 'src/utils';
 import { apiBase } from 'src/constants/config';
+import axios from 'axios';
 
 const MS_OAUTH2_URL = `https://login.microsoftonline.com/common/oauth2/v2.0`
 
@@ -98,7 +99,7 @@ export class AuthController {
   ) {
     if (code) {
       // get info from ms
-      console.log('code')
+      const userInfo = this.authService.getMicrosoftAccountInfo(code);
     } else if (to) {
       res.redirect(getAuthenticationUrl({
         to

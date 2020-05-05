@@ -82,8 +82,8 @@ export class AuthService {
     return user;
   }
 
-  async getMicrosoftAccountInfo() {
-    //
+  async getMicrosoftAccountInfo(code: string) {
+    return await axios.post('');
   }
 
   async getWechatMicrosoftInfo() {
