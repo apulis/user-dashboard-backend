@@ -12,17 +12,11 @@ export class UserRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @PrimaryColumn('int')
+  @ManyToOne(type => User, user => user.id, { onDelete: 'CASCADE' })
+  @JoinColumn({name: 'userId'})
   userId: number;
 
-  @PrimaryColumn('int')
+  @ManyToOne(type => Role, role => role.id, { onDelete: 'CASCADE' })
+  @JoinColumn({name: 'roleId'})
   roleId: number;
-
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
-
-  @OneToOne(() => Role)
-  @JoinColumn()
-  role: Role;
 }

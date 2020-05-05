@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, OneToMany } from 'typeorm';
 import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
+import { UserRole } from 'src/user-role/user-role.entity';
 
 
 
@@ -28,5 +29,4 @@ export class Role {
 
   @Column('int', { default: 0 })
   isPreset: number;
-
 }

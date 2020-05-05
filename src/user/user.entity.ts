@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany } from 'typeorm';
 import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
+import { UserRole } from 'src/user-role/user-role.entity';
 
 
 @Entity({
@@ -54,4 +55,5 @@ export class User {
 
   @Column('int', { default: 0 })
   isDelete: number;
+
 }

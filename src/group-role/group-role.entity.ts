@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, OneToOne, JoinColumn, PrimaryColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { Group } from 'src/group/group.entity';
 import { Role } from 'src/role/role.entity';
 
@@ -12,18 +12,12 @@ export class GroupRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @PrimaryColumn('int')
+  @ManyToOne(type => Role, role => role.id, { onDelete: 'CASCADE' })
+  @JoinColumn({name: 'roleId'})
   roleId: number;
 
-  @PrimaryColumn('int')
+
+  @ManyToOne(type => Group, group => group.id, { onDelete: 'CASCADE' })
+  @JoinColumn({name: 'groupId'})
   groupId: number;
-
-  @OneToOne(() => Group)
-  @JoinColumn()
-  group: Group;
-
-  @OneToOne(() => Role)
-  @JoinColumn()
-  role: Role;
-
 }
