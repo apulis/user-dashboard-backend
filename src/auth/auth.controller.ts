@@ -1,10 +1,29 @@
-import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/camelcase */
+import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './auth.dto';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
+import { getDomainFromUrl } from 'src/utils';
+import { apiBase } from 'src/constants/config';
+
+const MS_OAUTH2_URL = `https://login.microsoftonline.com/common/oauth2/v2.0`
+
+
+const getAuthenticationUrl = (options: {to: string} )=> {
+  const params = new URLSearchParams({
+    client_id: '19441c6a-f224-41c8-ac36-82464c2d9b13',
+    response_type: 'code',
+    redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/api/microsoft',
+    response_mode: 'query',
+    scope: 'openid profile email',
+    state: options.to
+  })
+  return MS_OAUTH2_URL + '/authorize?' + params
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -72,8 +91,19 @@ export class AuthController {
   }
 
   @Get('/microsoft')
-  async loginWithMicrosoft() {
-    console.log(111)
+  async loginWithMicrosoft(
+    @Res() res: Response,
+    @Query('code') code?: string,
+    @Query('to') to?: string,
+  ) {
+    if (code) {
+      // get info from ms
+      console.log('code')
+    } else if (to) {
+      res.redirect(getAuthenticationUrl({
+        to
+      }))
+    }
   }
 
   @Get('/wechat')

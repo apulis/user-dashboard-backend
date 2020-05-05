@@ -4,4 +4,3 @@ export enum RegisterTypes {
   Wechat = 'Wechat',
   Microsoft = 'Microsoft',
 }
-

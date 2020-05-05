@@ -15,3 +15,13 @@ export const encodePassword = (password: string, SECRET_KEY: string) => {
 export const getJwtExp = () => {
   return new Date().getTime() / 1000 + 2 * 24 * 60 * 60;
 }
+
+export const getDomainFromUrl = (url: string) => {
+  const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i)
+  const domain = (matches && matches[0]) || ''
+  if (/\/$/.test(domain)) {
+    return domain
+  } else {
+    return domain + '/'
+  }
+}
