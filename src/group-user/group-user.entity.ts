@@ -14,10 +14,17 @@ export class GroupUser {
 
   @ManyToOne(type => User, user => user.id, { onDelete: 'CASCADE' })
   @JoinColumn({name: 'userId'})
-  userId: number;
+  user: number;
 
   @ManyToOne(type => Group, group => group.id, { onDelete: 'CASCADE' })
   @JoinColumn({name: 'groupId'})
+  group: number;
+
+
+  @Column()
+  userId: number;
+
+  @Column()
   groupId: number;
 
 }

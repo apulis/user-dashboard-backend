@@ -46,7 +46,7 @@ export class UserRoleService {
   async findUserRoleIdsById(userId: number) {
     return await this.userRoleRepository
       .find({
-        userId,
+        userId
       })
   }
 

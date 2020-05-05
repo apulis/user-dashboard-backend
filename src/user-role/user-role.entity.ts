@@ -3,20 +3,25 @@ import { User } from 'src/user/user.entity';
 import { Role } from 'src/role/role.entity';
 
 
-@Entity({
-  name: 'user-role'
-})
+@Entity()
 @Index(['userId', 'roleId'], { unique: true })
 export class UserRole {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => User, user => user.id, { onDelete: 'CASCADE' })
-  @JoinColumn({name: 'userId'})
+  @ManyToOne(type => User, user => user.id, { onDelete: 'CASCADE', eager: true })
+  @JoinColumn({ name: 'userId'} )
+  user: number;
+
+  @ManyToOne(type => Role, role => role.id, { onDelete: 'CASCADE', eager: true })
+  @JoinColumn({ name: 'roleId' })
+  role: number;
+
+  @Column()
+  roleId: number;
+
+  @Column()
   userId: number;
 
-  @ManyToOne(type => Role, role => role.id, { onDelete: 'CASCADE' })
-  @JoinColumn({name: 'roleId'})
-  roleId: number;
 }
