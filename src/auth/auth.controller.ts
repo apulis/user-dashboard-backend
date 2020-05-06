@@ -35,12 +35,29 @@ export class AuthController {
 
   @Post('/register')
   async register(@Body() body: RegisterDto, @Res() res: Response) {
-    const { userName, password, nickName } = body;
-    await this.userService.create([{
-      userName,
-      nickName,
-      password,
-    }]);
+    const { userName, password, nickName, microsoftId, wechatId } = body;
+    const userNameUnique = await this.userService.userNameUnique([userName]);
+    if (userNameUnique.length > 0) {
+      res.send({
+        success: false,
+        duplicate: true,
+      })
+      return;
+    }
+    if (!microsoftId && !wechatId) {
+      await this.userService.create([{
+        userName,
+        nickName,
+        password,
+      }]);
+    } else if (microsoftId) {
+      await this.userService.signUpByMicrosoftId(microsoftId, {
+        userName, password, nickName
+      })
+    } else if (wechatId) {
+      //
+    }
+    
     res.send({
       success: true
     })
@@ -76,7 +93,7 @@ export class AuthController {
     if (user) {
       res.send({
         success: true,
-        id: user,
+        id: user.id,
         userName: user.userName,
         phone: user.phone,
         registerType: user.registerType,

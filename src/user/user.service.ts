@@ -234,4 +234,29 @@ export class UserService {
       return user;
     }
   }
+
+  async signUpByMicrosoftId(microsoftId: string, userInfo: {userName: string, password: string, nickName: string}) {
+    const user = await this.usersRepository.findOne({
+      microsoftId
+    })
+    if (user) {
+      const SECRET_KEY = this.config.get('SECRET_KEY');
+      user.nickName = userInfo.nickName;
+      user.password = encodePassword(userInfo.password, SECRET_KEY);
+      user.userName = userInfo.userName;
+      await this.usersRepository.save(user);
+    }
+  }
+  async signUpByWechatId(wechatId: string, userInfo: {userName: string, password: string, nickName: string}) {
+    const user = await this.usersRepository.findOne({
+      wechatId
+    })
+    if (user) {
+      const SECRET_KEY = this.config.get('SECRET_KEY');
+      user.nickName = userInfo.nickName;
+      user.password = encodePassword(userInfo.password, SECRET_KEY);
+      user.userName = userInfo.userName;
+      await this.usersRepository.save(user);
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { IsString, IsArray } from "class-validator";
+import { IsString, IsArray, IsOptional } from "class-validator";
 
 
 
@@ -15,6 +15,14 @@ export class RegisterDto {
 
   @IsString()
   nickName: string;
+
+  @IsString()
+  @IsOptional()
+  microsoftId?: string;
+
+  @IsString()
+  @IsOptional()
+  wechatId?: string;
 }
 
 
