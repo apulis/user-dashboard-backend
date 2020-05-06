@@ -212,9 +212,25 @@ export class UserService {
     }
   }
 
-  async getUserInfoByOpenId(openId: string) {
-    return await this.usersRepository.find({
+  async getUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<void | User> {
+    const user = await this.usersRepository.findOne({
       openId,
-    })
+    });
+    if (!user) {
+      await this.usersRepository
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
+          nickName,
+          openId,
+          registerType,
+          createTime: new Date().getTime() + '',
+          microsoftId: openId,
+        })
+        .execute()
+    } else {
+      return user;
+    }
   }
 }

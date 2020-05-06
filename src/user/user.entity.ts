@@ -13,12 +13,12 @@ export class User {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255, unique: true })
+  @Column('varchar', { length: 255, unique: true, nullable: true })
   userName: string;
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   password: string;
 
   @IsString()
@@ -28,7 +28,7 @@ export class User {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, unique: true })
   openId: string;
 
   @IsString()

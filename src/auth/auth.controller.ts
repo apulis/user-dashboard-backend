@@ -7,17 +7,15 @@ import { RegisterDto, LoginDto } from './auth.dto';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
 import { getDomainFromUrl } from 'src/utils';
-import { apiBase } from 'src/constants/config';
-import axios from 'axios';
-
-const MS_OAUTH2_URL = `https://login.microsoftonline.com/common/oauth2/v2.0`
+import { apiBase, MS_OAUTH2_URL } from 'src/constants/config';
+import { ConfigService } from 'config/config.service';
 
 
-const getAuthenticationUrl = (options: {to: string} )=> {
+const getAuthenticationUrl = (options: { to: string; clientId: string }) => {
   const params = new URLSearchParams({
-    client_id: '19441c6a-f224-41c8-ac36-82464c2d9b13',
+    client_id: options.clientId,
     response_type: 'code',
-    redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/api/microsoft',
+    redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/api/auth/microsoft',
     response_mode: 'query',
     scope: 'openid profile email',
     state: options.to
@@ -30,6 +28,7 @@ export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly config: ConfigService,
   ) {
     
   }
@@ -96,14 +95,22 @@ export class AuthController {
     @Res() res: Response,
     @Query('code') code?: string,
     @Query('to') to?: string,
+    @Query('state') state?: string
   ) {
     if (code) {
-      // get info from ms
-      const userInfo = this.authService.getMicrosoftAccountInfo(code);
+      const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(state!) + apiBase+ '/api/auth/microsoft');
+      const user = await this.userService.getUserInfoByOpenId(userInfo.openId, userInfo.nickName, userInfo.registerType);
+      if (user) {
+        const token = this.authService.getIdToken(user.id, user.userName);
+        res.cookie('token', token);
+        res.redirect(state + '?token=' + token);
+      }
     } else if (to) {
-      res.redirect(getAuthenticationUrl({
-        to
-      }))
+      const redirect = getAuthenticationUrl({
+        to,
+        clientId: this.config.get('MS_CLIENT_ID')
+      });
+      res.redirect(redirect);
     }
   }
 

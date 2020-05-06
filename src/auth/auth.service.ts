@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { sign } from 'jsonwebtoken';
+import { sign, decode } from 'jsonwebtoken';
+import axios from 'axios';
 
 import { User } from 'src/user/user.entity';
 import { encodePassword } from 'src/utils';
@@ -11,7 +12,8 @@ import { GroupUser } from 'src/group-user/group-user.entity';
 import { GroupRole } from 'src/group-role/group-role.entity';
 import { UserRole } from 'src/user-role/user-role.entity';
 import { Role } from 'src/role/role.entity';
-import axios from 'axios';
+import { MS_OAUTH2_URL } from 'src/constants/config';
+import { RegisterTypes } from 'src/constants/enums';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +38,7 @@ export class AuthService {
     return false;
   }
 
-  async getIdToken(uid: number, userName: string, ) {
+  getIdToken(uid: number, userName?: string) {
     const JWT_SECRET_KEY = this.config.get('JWT_SECRET_KEY');
     return sign({
       uid,
@@ -89,9 +91,25 @@ export class AuthService {
     return user;
   }
 
-  async getMicrosoftAccountInfo(code: string) {
-    return await axios.post('');
+  async getMicrosoftAccountInfo(code: string, redirectUri: string) {
+    const res = await axios.post(MS_OAUTH2_URL + '/token', new URLSearchParams({
+      client_id: this.config.get('MS_CLIENT_ID'),
+      scope: 'openid profile email',
+      code,
+      redirect_uri: redirectUri,
+      grant_type: 'authorization_code',
+      client_secret: this.config.get('MD_CLIENT_SECRET')
+    }));
+    const data = res.data;
+    const id_token = data.id_token;
+    const userInfo = decode(id_token);
+    return {
+      openId: (userInfo as any).email,
+      nickName: (userInfo as any).name,
+      registerType: RegisterTypes.Microsoft,
+    }
   }
+
 
   async getWechatMicrosoftInfo() {
     //
