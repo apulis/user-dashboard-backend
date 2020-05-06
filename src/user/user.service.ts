@@ -259,4 +259,13 @@ export class UserService {
       await this.usersRepository.save(user);
     }
   }
+
+  async updateUserMicrosoftId(userId: number, microsoftId: string): Promise<void | User> {
+    const user = await this.usersRepository.findOne(userId);
+    if (user) {
+      user.microsoftId = microsoftId;
+      await this.usersRepository.save(user);
+      return user;
+    }
+  }
 }

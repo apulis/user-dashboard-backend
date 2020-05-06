@@ -10,15 +10,31 @@ import { getDomainFromUrl } from 'src/utils';
 import { apiBase, MS_OAUTH2_URL } from 'src/constants/config';
 import { ConfigService } from 'config/config.service';
 
+interface IState {
+  to: string;
+  userId?: number
+}
 
-const getAuthenticationUrl = (options: { to: string; clientId: string }) => {
+
+const getAuthenticationUrl = (options: { to: string; clientId: string; userId?: number }) => {
+  let state;
+  if (options.userId) {
+    state = JSON.stringify({
+      to: options.to,
+      userId: options.userId,
+    })
+  } else {
+    state = JSON.stringify({
+      userId: options.userId,
+    })
+  }
   const params = new URLSearchParams({
     client_id: options.clientId,
     response_type: 'code',
     redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/api/auth/microsoft',
     response_mode: 'query',
     scope: 'openid profile email',
-    state: options.to
+    state: state
   })
   return MS_OAUTH2_URL + '/authorize?' + params
 }
@@ -114,21 +130,49 @@ export class AuthController {
     @Res() res: Response,
     @Query('code') code?: string,
     @Query('to') to?: string,
-    @Query('state') state?: string
+    @Query('state') state?: string,
+    @Query('userId') userId?: number
   ) {
     if (code) {
-      const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(state!) + apiBase+ '/api/auth/microsoft');
-      const user = await this.userService.getUserInfoByOpenId(userInfo.openId, userInfo.nickName, userInfo.registerType);
-      if (user) {
-        const token = this.authService.getIdToken(user.id, user.userName);
-        res.cookie('token', token);
-        res.redirect(state + '?token=' + token);
+      const stateObj: IState = JSON.parse(state as string);
+      if (!stateObj.userId) {
+        // 新用户
+        const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(stateObj.to) + apiBase+ '/api/auth/microsoft');
+        const user = await this.userService.getUserInfoByOpenId(userInfo.openId, userInfo.nickName, userInfo.registerType);
+        if (user) {
+          const token = this.authService.getIdToken(user.id, user.userName);
+          res.cookie('token', token);
+          res.redirect(stateObj.to + '?token=' + token);
+        }
+      } else {
+        // 已经有账号，来绑定的用户
+        const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(stateObj.to) + apiBase+ '/api/auth/microsoft');
+        const dbUser = await this.userService.updateUserMicrosoftId(stateObj.userId, userInfo.openId);
+        if (dbUser) {
+          const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
+          res.cookie('token', token);
+          res.redirect(stateObj.to + '?token=' + token);
+        } else {
+          res.redirect(stateObj.to + '?error=no such user' );
+        }
       }
+      
     } else if (to) {
-      const redirect = getAuthenticationUrl({
-        to,
-        clientId: this.config.get('MS_CLIENT_ID')
-      });
+      let redirect: string;
+      if (userId) {
+        userId = Number(userId);
+        redirect = getAuthenticationUrl({
+          to,
+          userId,
+          clientId: this.config.get('MS_CLIENT_ID')
+        });
+      } else {
+        redirect = getAuthenticationUrl({
+          to,
+          clientId: this.config.get('MS_CLIENT_ID')
+        });
+      }
+      
       res.redirect(redirect);
     }
   }
