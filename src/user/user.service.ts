@@ -212,7 +212,7 @@ export class UserService {
     }
   }
 
-  async getUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<void | User> {
+  async getMSUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<void | User> {
     const user = await this.usersRepository.findOne({
       openId,
     });
@@ -228,6 +228,27 @@ export class UserService {
           createTime: new Date().getTime() + '',
           microsoftId: openId,
           email: openId,
+        })
+        .execute()
+    } else {
+      return user;
+    }
+  }
+  async getWXUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<void | User> {
+    const user = await this.usersRepository.findOne({
+      openId,
+    });
+    if (!user) {
+      await this.usersRepository
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
+          nickName,
+          openId,
+          registerType,
+          createTime: new Date().getTime() + '',
+          wechatId: openId,
         })
         .execute()
     } else {
