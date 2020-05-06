@@ -82,6 +82,8 @@ export class AuthController {
         registerType: user.registerType,
         email: user.email,
         openId: user.openId,
+        microsoftId: user.microsoftId,
+        nickName: user.nickName,
         currentAuthority,
       })
     } else {

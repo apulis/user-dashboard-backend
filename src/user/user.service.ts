@@ -227,6 +227,7 @@ export class UserService {
           registerType,
           createTime: new Date().getTime() + '',
           microsoftId: openId,
+          email: openId,
         })
         .execute()
     } else {
