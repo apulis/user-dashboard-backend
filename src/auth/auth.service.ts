@@ -49,28 +49,35 @@ export class AuthService {
     const groups = await this.groupUsersRepository.find({
       userId,
     });
-    if (groups.length === 0) {
-      return [];
+    let groupRolesId: number[];
+    if (groups.length !== 0) {
+      const groupIds = groups.map(val => val.id);
+      const groupRoles = await this.groupRoleRespository
+        .createQueryBuilder('group_role')
+        .select(['group_role.roleId', 'group_role.id', 'group_role.groupId'])
+        .where('groupId IN (:groupIds)', { groupIds })
+        .getMany();
+      groupRolesId = groupRoles.map(val => val.roleId);
+    } else {
+      groupRolesId = []
     }
-    const groupIds = groups.map(val => val.id);
-    const groupRoles = await this.groupRoleRespository
-      .createQueryBuilder('group-role')
-      .select(['roleId'])
-      .where('group-role.groupId IN (:groupIds)', { groupIds })
-      .getMany();
-    const groupRolesId = groupRoles.map(val => val.roleId);
     const userRoles = await this.userRoleRespository
       .find({
         userId
       });
     const userRoleId = userRoles.map(val => val.roleId);
     const currentRoleIds = [...new Set(groupRolesId.concat(userRoleId))];
-    const currentAuthority = await this.roleRespository
-      .createQueryBuilder('role')
-      .select(['name'].map(val => 'role.' + val))
-      .where('role.id IN (:roleIds)', { roleIds: currentRoleIds })
-      .getMany();
-
+    let currentAuthority: Role[];
+    if (currentRoleIds.length !== 0) {
+      currentAuthority = await this.roleRespository
+        .createQueryBuilder('role')
+        .select(['name'].map(val => 'role.' + val))
+        .where('role.id IN (:roleIds)', { roleIds: currentRoleIds })
+        .getMany();
+    } else {
+      currentAuthority = []
+    }
+    
     return currentAuthority.map(val => val.name);
   }
 
