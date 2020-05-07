@@ -95,7 +95,9 @@ export class AuthController {
         userName, password, nickName
       })
     } else if (wechatId) {
-      //
+      await this.userService.signUpByWechatId(wechatId, {
+        userName, password, nickName
+      })
     }
     
     res.send({
@@ -140,6 +142,7 @@ export class AuthController {
         email: user.email,
         openId: user.openId,
         microsoftId: user.microsoftId,
+        wechatId: user.wechatId,
         nickName: user.nickName,
         currentAuthority,
       })
