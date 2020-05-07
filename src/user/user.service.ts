@@ -214,7 +214,7 @@ export class UserService {
 
   async getMSUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<{id: number, userName: undefined} | User> {
     const user = await this.usersRepository.findOne({
-      openId,
+      microsoftId: openId,
     });
     if (!user) {
       const result = await this.usersRepository
@@ -238,7 +238,7 @@ export class UserService {
   }
   async getWXUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<{id: number, userName: undefined} | User> {
     const user = await this.usersRepository.findOne({
-      openId,
+      wechatId: openId,
     });
     if (!user) {
       const result = await this.usersRepository
