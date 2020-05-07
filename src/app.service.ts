@@ -6,7 +6,7 @@ import {CASBIN_ENFORCER, CasbinService} from 'src/common/authz/index'
 export class AppService {
   constructor(
     @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer,
-    private readonly casbinService: CasbinService
+    private readonly casbinService: CasbinService,
   ) {}
   async getHello(): Promise<object> {
     console.log(await this.enforcer.addPermissionForUser('role_hanxjz', '/abc', 'write'))

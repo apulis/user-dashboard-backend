@@ -5,7 +5,6 @@ import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, Create
 @Entity({
   name: 'permission'
 })
-@Index(['key'], {unique: true})
 export class Permission {
 
   @PrimaryGeneratedColumn()
@@ -14,15 +13,15 @@ export class Permission {
   @Column('varchar', { length: 255 })
   name: string;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, unique: true })
   key: string;
 
   @Column('varchar', { length: 255 })
-  note: string;
+  note?: string;
 
   @Column('varchar', { length: 255 })
   project: string;
 
-  @Column('varchar', { length: 255 })
-  createTime: string;
+  @CreateDateColumn({ type: 'timestamp', name: 'create_date' })
+  createTime?: string;
 }

@@ -16,6 +16,9 @@ import { GroupRoleModule } from './group-role/group-role.module';
 import { UserRoleModule } from './user-role/user-role.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
+import { PermissionService } from './permission/permission.service';
+import { PermissionController } from './permission/permission.controller';
+import { Permission } from './permission/permission.entity';
 
 
 @Module({
@@ -36,8 +39,9 @@ import { PassportModule } from '@nestjs/passport';
     GroupRoleModule,
     UserRoleModule,
     AuthModule,
+    TypeOrmModule.forFeature([Permission])
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PermissionService],
 })
 export class AppModule {}
