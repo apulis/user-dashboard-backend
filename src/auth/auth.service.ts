@@ -110,8 +110,4 @@ export class AuthService {
     }
   }
 
-
-  async getWechatMicrosoftInfo() {
-    //
-  }
 }

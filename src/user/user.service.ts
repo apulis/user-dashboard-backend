@@ -294,4 +294,13 @@ export class UserService {
       return user;
     }
   }
+
+  async updateUserWechatId(userId: number, wechatId: string): Promise<void | User> {
+    const user = await this.usersRepository.findOne(userId);
+    if (user) {
+      user.wechatId = wechatId;
+      await this.usersRepository.save(user);
+      return user;
+    }
+  }
 }

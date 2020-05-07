@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req, Query, ForbiddenException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response, Request } from 'express';
 import WechatOauth from 'wechat-oauth-ts';
@@ -62,6 +62,7 @@ const getMSAuthenticationUrl = (options: { to: string; clientId: string; userId?
   })
   return MS_OAUTH2_URL + '/authorize?' + params
 }
+
 
 @Controller('auth')
 export class AuthController {
@@ -181,7 +182,7 @@ export class AuthController {
           res.cookie('token', token);
           res.redirect(stateObj.to + '?token=' + token);
         } else {
-          res.redirect(stateObj.to + '?error=no such user' );
+          throw new ForbiddenException('no such user');
         }
       }
       
@@ -216,22 +217,22 @@ export class AuthController {
   ) {
     const WX_APP_ID = this.config.get('WX_APP_ID');
     const WX_SECRET = this.config.get('WX_SECRET');
-    const wxOauth = new WechatOauth(WX_APP_ID, WX_SECRET);
     if (code) {
       // 微信回调
+      const wxOauth = new WechatOauth(WX_APP_ID, WX_SECRET);
       const accessToken = await wxOauth.getAccessToken(code);
       const openId = accessToken.openid;
       const unionId: string = (accessToken as any).unionid;
       const { nickname } = await wxOauth.getUserByOpenId(openId);
       const stateObj: IState = JSON.parse(state as string);
+      let tempOpenId = '';
+      if (unionId) {
+        tempOpenId = 'unionId--' + unionId
+      } else {
+        tempOpenId = 'openId--' + openId;
+      }
       if (!stateObj.userId) {
         // 用户直接扫码登录
-        let tempOpenId = '';
-        if (unionId) {
-          tempOpenId = 'unionId--' + unionId
-        } else {
-          tempOpenId = 'openId--' + openId;
-        }
         const user = await this.userService.getWXUserInfoByOpenId(tempOpenId, nickname, RegisterTypes.Wechat);
         if (user) {
           const token = this.authService.getIdToken(user.id, user.userName);
@@ -239,7 +240,14 @@ export class AuthController {
           res.redirect(stateObj.to + '?token=' + token);
         }
       } else {
-        // 用户绑定微信
+        const dbUser = await this.userService.updateUserWechatId(stateObj.userId, tempOpenId);
+        if (dbUser) {
+          const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
+          res.cookie('token', token);
+          res.redirect(stateObj.to + '?token=' + token);
+        } else {
+          throw new ForbiddenException('no such user');
+        }
       }
 
     } else if (to) {
