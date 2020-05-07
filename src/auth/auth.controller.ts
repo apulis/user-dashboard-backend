@@ -220,9 +220,7 @@ export class AuthController {
       const openId = accessToken.openid;
       const unionId: string = (accessToken as any).unionid;
       const { nickname } = await wxOauth.getUserByOpenId(openId);
-      console.log(111, state)
       const stateObj: IState = JSON.parse(state as string);
-      console.log('nickName', nickname);
       if (!stateObj.userId) {
         // 用户直接扫码登录
         let tempOpenId = '';
@@ -236,8 +234,6 @@ export class AuthController {
           const token = this.authService.getIdToken(user.id, user.userName);
           res.cookie('token', token);
           res.redirect(stateObj.to + '?token=' + token);
-        } else {
-          // TODO: 用户第一次登录
         }
       } else {
         // 用户绑定微信

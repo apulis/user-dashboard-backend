@@ -236,12 +236,12 @@ export class UserService {
       return user;
     }
   }
-  async getWXUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<void | User> {
+  async getWXUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<{id: number, userName: undefined} | User> {
     const user = await this.usersRepository.findOne({
       openId,
     });
     if (!user) {
-      await this.usersRepository
+      const result = await this.usersRepository
         .createQueryBuilder()
         .insert()
         .into(User)
@@ -253,6 +253,9 @@ export class UserService {
           wechatId: openId,
         })
         .execute()
+        const id = result.generatedMaps[0].id;
+        console.log('id', id)
+        return { id, userName: undefined };
     } else {
       return user;
     }
