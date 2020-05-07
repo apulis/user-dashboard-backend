@@ -56,10 +56,10 @@ export class User {
   @Column('int', { default: 0 })
   isDelete: number;
 
-  @Column('varchar', { length: 255, default: null })
+  @Column('varchar', { length: 255, default: null, unique: true })
   microsoftId: string;
 
-  @Column('varchar', { length: 255, default: null })
+  @Column('varchar', { length: 255, default: null, unique: true })
   wechatId: string;
 
 }
