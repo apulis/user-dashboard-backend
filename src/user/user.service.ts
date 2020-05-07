@@ -254,7 +254,6 @@ export class UserService {
         })
         .execute()
         const id = result.generatedMaps[0].id;
-        console.log('id', id)
         return { id, userName: undefined };
     } else {
       return user;
