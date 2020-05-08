@@ -14,10 +14,6 @@ export class CasbinService {
   constructor(
     @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer) {}
 
-  public async reloadPolicy() {
-    await this.enforcer.loadPolicy();
-  }
-
   public async addPermissionForRole(roleId: number, permissionKey: string | string[]) {
     if (Array.isArray(permissionKey)) {
       for await (const key of permissionKey) {
@@ -32,6 +28,12 @@ export class CasbinService {
   public async hasPermissionForRole(roleId: number, permissionKey: string) {
     return await this.enforcer.hasPermissionForUser(TypesPrefix.role + roleId, permissionKey);
   }
+
+  public async getPermissionForRole(roleId: number) {
+    const rolePermissions = await this.enforcer.getPermissionsForUser(TypesPrefix.role + roleId);
+    return rolePermissions;
+  }
+
   public initRolePermissions() {
     // admin
     this.addPermissionForRole(1, initialPermissions.map(val => val.key));
@@ -41,5 +43,4 @@ export class CasbinService {
     this.addPermissionForRole(2, EnumPermissionKeys.VIEW_CLUSTER_STATUS);
     this.addPermissionForRole(2, EnumPermissionKeys.USE_VC);
   }
-
 }
