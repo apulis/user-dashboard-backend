@@ -13,7 +13,7 @@ export enum EnumPermissionKeys {
   VIEW_ALL_USER_JOB = 'VIEW_ALL_USER_JOB',
   MANAGE_ALL_USERS_JOB = 'MANAGE_ALL_USERS_JOB',
   VIEW_CLUSTER_STATUS = 'VIEW_CLUSTER_STATUS',
-  MAGAGE_USER = 'MAGAGE_USER',
+  MANAGE_USER = 'MANAGE_USER',
 }
 
 export const initialPermissions: Permission[] = [
@@ -76,7 +76,7 @@ export const initialPermissions: Permission[] = [
   {
     id: 9,
     name: 'Manage user',
-    key: EnumPermissionKeys.MAGAGE_USER,
+    key: EnumPermissionKeys.MANAGE_USER,
     note: '',
     project: ProjectTypes.DLWORKSPACE,
   },
