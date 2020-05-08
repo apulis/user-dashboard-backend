@@ -1,7 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, OneToMany } from 'typeorm';
 import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
-import { UserRole } from 'src/user-role/user-role.entity';
-
 
 
 @Entity({
@@ -25,7 +23,7 @@ export class Role {
   @IsString()
   @Length(1, 40)
   @Column('varchar', { length: 255 })
-  createTime: string;
+  createTime?: string;
 
   @Column('int', { default: 0 })
   isPreset: number;

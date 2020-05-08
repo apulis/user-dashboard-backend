@@ -15,12 +15,12 @@ import { GroupUserModule } from './group-user/group-user.module';
 import { GroupRoleModule } from './group-role/group-role.module';
 import { UserRoleModule } from './user-role/user-role.module';
 import { AuthModule } from './auth/auth.module';
-import { PassportModule } from '@nestjs/passport';
 import { PermissionService } from './permission/permission.service';
-import { PermissionController } from './permission/permission.controller';
 import { Permission } from './permission/permission.entity';
+import { RoleService } from './role/role.service';
+import { Role } from './role/role.entity';
 
-
+ 
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,9 +39,10 @@ import { Permission } from './permission/permission.entity';
     GroupRoleModule,
     UserRoleModule,
     AuthModule,
-    TypeOrmModule.forFeature([Permission])
+    TypeOrmModule.forFeature([Permission, Role])
   ],
   controllers: [AppController],
-  providers: [AppService, PermissionService],
+  providers: [AppService, PermissionService, RoleService],
 })
 export class AppModule {}
+   

@@ -109,5 +109,4 @@ export class AuthService {
       registerType: RegisterTypes.Microsoft,
     }
   }
-
 }

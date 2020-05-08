@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Brackets } from 'typeorm';
 
 import { Role } from './role.entity';
+import { initialRole } from 'mysql-init/init-role';
 
 
 interface ICreateRole {
@@ -27,6 +28,11 @@ export class RoleService {
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
   ) { }
+
+  public async initDbRoles() {
+    const roles = initialRole;
+    await this.roleRepository.save(roles);
+  }
 
   public async getRoleCount(search?: string) {
     if (!search) {
