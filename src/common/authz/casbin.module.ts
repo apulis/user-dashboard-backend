@@ -16,7 +16,7 @@ export class CasbinModule {
       useFactory: async () => {
         const adapter = await TypeORMAdapter.newAdapter(dbConnectionOptions);
         const enforcer = await new Enforcer();
-        enforcer.initWithAdapter(casbinModelPath, (adapter as any) as Adapter);
+        await enforcer.initWithAdapter(casbinModelPath, (adapter as any) as Adapter);
         await enforcer.loadPolicy();
         return enforcer;
       }
