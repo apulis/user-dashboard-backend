@@ -1,10 +1,16 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Enforcer } from "casbin";
 import { CASBIN_ENFORCER } from "./casbin.constants";
+import { initialPermissions, EnumPermissionKeys } from "mysql-init/init-permission";
+
+export enum TypesPrefix {
+  user = 'user:',
+  role = 'role:',
+  group = 'group:',
+}
 
 @Injectable()
 export class CasbinService {
-  // tslint:disable-next-line:no-empty
   constructor(
     @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer) {}
 
@@ -12,23 +18,28 @@ export class CasbinService {
     await this.enforcer.loadPolicy();
   }
 
-  public async addPolicy(...params: string[]) {
-    const added = await this.enforcer.addPolicy(...params);
-    if (added) {
-      await this.enforcer.savePolicy();
+  public async addPermissionForRole(roleId: number, permissionKey: string | string[]) {
+    if (Array.isArray(permissionKey)) {
+      for await (const key of permissionKey) {
+        await this.enforcer.addPermissionForUser(TypesPrefix.role + roleId, key);
+      }
+      return permissionKey;
+    } else {
+      return await this.enforcer.addPermissionForUser(TypesPrefix.role + roleId, permissionKey);
     }
   }
 
-  public async removePolicy(...params: string[]) {
-    const removed = await this.enforcer.removePolicy(...params);
-    if (removed) {
-      await this.enforcer.savePolicy();
-    }
+  public async hasPermissionForRole(roleId: number, permissionKey: string) {
+    return await this.enforcer.hasPermissionForUser(TypesPrefix.role + roleId, permissionKey);
+  }
+  public initRolePermissions() {
+    // admin
+    this.addPermissionForRole(1, initialPermissions.map(val => val.key));
+    // user
+    this.addPermissionForRole(2, EnumPermissionKeys.SUBMIT_TRAINING_JOB);
+    this.addPermissionForRole(2, EnumPermissionKeys.VIEW_ALL_USER_JOB);
+    this.addPermissionForRole(2, EnumPermissionKeys.VIEW_CLUSTER_STATUS);
+    this.addPermissionForRole(2, EnumPermissionKeys.USE_VC);
   }
 
-  // TODO: edit this in adapter to make it query from database
-  // the operation will look like `await this.enforcer.getAdapter().enforce()`
-  public async checkPermission(...params: any[]) {
-    return this.enforcer.enforce(params);
-  }
 }
