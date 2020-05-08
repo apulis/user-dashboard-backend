@@ -14,8 +14,8 @@ export const initialPermissions: Permission[] = [
   },
   {
     id: 2,
-    name: '',
-    key: 'Create VC',
+    name: 'Create VC',
+    key: 'CREATE_VC',
     note: '',
     project: ProjectTypes.DLWORKSPACE,
   },

@@ -26,26 +26,7 @@ export class PermissionService {
     if (this.checkPermissionKeyUnique(initialPermissions).length > 0) {
       throw new Error('permission key duplicate, please check');
     }
-    const permissions = initialPermissions.map(val => {
-      return {
-        name: val.name,
-        key: val.key,
-        note: val.note,
-        project: val.project,
-      }
-    })
-    for await (const p of permissions) {
-      const result = await this.permissionRepository.findOne({
-        key: p.key
-      })
-      if (result) {
-        // update
-        result.name = p.name;
-        result.note = p.note;
-        result.project = p.project;
-        this.permissionRepository.save(result);
-      }
-    }
+    await this.permissionRepository.save(initialPermissions);
   }
 
 }
