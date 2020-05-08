@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Provider } from "@nestjs/common";
-import { Adapter, Enforcer, DefaultRoleManager } from "casbin";
+import { Adapter, Enforcer, DefaultRoleManager, newEnforcer } from "casbin";
 import { ConnectionOptions } from "typeorm";
 import TypeORMAdapter from "typeorm-adapter";
 import { CASBIN_ENFORCER, CASBIN_ROLE_MANAGER } from "./casbin.constants";
@@ -15,9 +15,7 @@ export class CasbinModule {
       provide: CASBIN_ENFORCER,
       useFactory: async () => {
         const adapter = await TypeORMAdapter.newAdapter(dbConnectionOptions);
-        const enforcer = await new Enforcer();
-        await enforcer.initWithAdapter(casbinModelPath, (adapter as any) as Adapter);
-        await enforcer.loadPolicy();
+        const enforcer = await newEnforcer(casbinModelPath, (adapter as any) as Adapter);
         return enforcer;
       }
     };
