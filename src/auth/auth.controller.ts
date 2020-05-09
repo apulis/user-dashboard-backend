@@ -12,6 +12,7 @@ import { getDomainFromUrl } from 'src/utils';
 import { apiBase, MS_OAUTH2_URL, WX_OAUTH2_URL } from 'src/constants/config';
 import { ConfigService } from 'config/config.service';
 import { RegisterTypes } from 'src/constants/enums';
+import { ApiTags } from '@nestjs/swagger';
 
 interface IState {
   to: string;
@@ -65,6 +66,7 @@ const getMSAuthenticationUrl = (options: { to: string; clientId: string; userId?
 
 
 @Controller('auth')
+@ApiTags('用户认证相关')
 export class AuthController {
   constructor(
     private readonly userService: UserService,
