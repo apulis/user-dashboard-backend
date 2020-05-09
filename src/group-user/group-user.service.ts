@@ -17,15 +17,30 @@ const mapUserIdsAndGroupIds = (userIds: number[], groupIds: number[]) => {
   return groupUser;
 }
 
+interface IUserGroup {
+  userId: number;
+  groupId: number;
+}
+
 @Injectable()
 export class GroupUserService {
   constructor(
     @InjectRepository(GroupUser)
     private readonly groupUserRepository: Repository<GroupUser>,
   ) { }
+  
+  private removeDuplicatedItem(groupUser: IUserGroup[], duplicatedItem: IUserGroup[]) {
+    const result = groupUser.filter(val => {
+      if (!duplicatedItem.some(dup => dup.groupId === val.groupId && dup.userId === val.userId)) {
+        return val;
+      }
 
-  async checkDuplicateItems(userIds: number[], groupIds: number[]) {
-    const groupUser = mapUserIdsAndGroupIds(userIds, groupIds);
+      return undefined
+    })
+    return result;
+  }
+
+  private async checkDuplicateItems(groupUser: IUserGroup[]) {
     const result = await this.groupUserRepository
       .find({
         where: groupUser
@@ -34,7 +49,14 @@ export class GroupUserService {
   }
    
   async addUsersToGroups(userIds: number[], groupIds: number[]) {
-    const groupUser = mapUserIdsAndGroupIds(userIds, groupIds);
+    let groupUser = mapUserIdsAndGroupIds(userIds, groupIds);
+    const duplicatedItem = await this.checkDuplicateItems(groupUser);
+    if (duplicatedItem.length > 0) {
+      groupUser = this.removeDuplicatedItem(groupUser, duplicatedItem);
+    }
+    if (groupUser.length === 0) {
+      return true;
+    }
     return await this.groupUserRepository
       .createQueryBuilder()
       .insert()
