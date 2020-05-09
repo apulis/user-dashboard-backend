@@ -193,12 +193,9 @@ export class UserService {
   }
 
   async getUserById(id: number) {
-    return await this.usersRepository
-    .createQueryBuilder('user')
-    .select(['userName', 'id', 'nickName', 'email', 'openId', 'note', 'phone'])
-    .where('id = ' + id)
-    .take(1)
-    .execute()
+    return await this.usersRepository.find({
+      id
+    })
   }
 
   async editUserDetail(id: number, email: string, phone: string, note: string, nickName: string) {
