@@ -16,6 +16,11 @@ const mapUserIdsAndRoleIds = (userIds: number[], roleIds: number[]) => {
   return userRole;
 }
 
+interface IUserRole {
+  userId: number;
+  roleId: number;
+}
+
 
 @Injectable()
 export class UserRoleService {
@@ -24,8 +29,17 @@ export class UserRoleService {
     private readonly userRoleRepository: Repository<UserRole>,
   ) { }
 
-  async checkDuplicateItems(userNames: number[], roleNames: number[]) {
-    const userRole = mapUserIdsAndRoleIds(userNames, roleNames);
+  private removeDuplicatedItems(userRole: IUserRole[], duplicatedItem: IUserRole[]) {
+    const result = userRole.filter(val => {
+      if (!duplicatedItem.some(dup => dup.userId === val.userId && dup.roleId === val.roleId)) {
+        return val;
+      }
+      return undefined
+    })
+    return result;
+  }
+
+  async checkDuplicateItems(userRole: IUserRole[]) {
     const result = await this.userRoleRepository
       .find({
         where: userRole
@@ -34,7 +48,14 @@ export class UserRoleService {
   }
 
   async addRoleToUser(userIds: number[], roleIds: number[]) {
-    const userRole = mapUserIdsAndRoleIds(userIds, roleIds);
+    let userRole = mapUserIdsAndRoleIds(userIds, roleIds);
+    const duplicatedItem = await this.checkDuplicateItems(userRole);
+    if (duplicatedItem.length > 0) {
+      userRole = this.removeDuplicatedItems(userRole, duplicatedItem);
+    }
+    if (userRole.length === 0) {
+      return true
+    }
     return await this.userRoleRepository
       .createQueryBuilder()
       .insert()

@@ -22,19 +22,11 @@ export class UserRoleController {
   })
   async addRoleToUsers(@Body() body: AddRoleToUserDto, @Res() res: Response) {
     const { userIds, roleIds } = body;
-    const duplicate = await this.userRoleService.checkDuplicateItems(userIds, roleIds);
-    if (duplicate.length === 0) {
-      await this.userRoleService.addRoleToUser(userIds, roleIds)
-      res.status(HttpStatus.CREATED).json({
-        success: true,
-        message: 'ok'
-      })
-    } else {
-      res.status(HttpStatus.OK).json({
-        success: false,
-        duplicate
-      })
-    }
+    await this.userRoleService.addRoleToUser(userIds, roleIds)
+    res.status(HttpStatus.CREATED).json({
+      success: true,
+      message: 'ok'
+    })
   }
 
   @Patch()
