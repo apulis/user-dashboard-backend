@@ -23,19 +23,11 @@ export class GroupRoleController {
   })
   async addRoleToGroup(@Body() body: AddRoleToGroupDto, @Res() res: Response ) {
     const { roleIds, groupIds } = body;
-    const duplicate = await this.groupRoleService.checkDuplicateItems(roleIds, groupIds);
-    if (duplicate.length === 0) {
-      await this.groupRoleService.addRoleToGroup(roleIds, groupIds);
-      res.status(HttpStatus.CREATED).json({
-        success: true,
-        message: 'ok'
-      })
-    } else {
-      res.status(HttpStatus.OK).json({
-        success: false,
-        duplicate,
-      })
-    }
+    await this.groupRoleService.addRoleToGroup(roleIds, groupIds);
+    res.status(HttpStatus.CREATED).json({
+      success: true,
+      message: 'ok'
+    })
   }
 
   @Get('/roles')

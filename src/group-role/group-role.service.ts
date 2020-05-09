@@ -16,6 +16,10 @@ const mapUserIdsAndGroupIds = (roleNames: number[], groupNames: number[]) => {
   return groupRole;
 }
 
+interface IGroupRole {
+  roleId: number;
+  groupId: number;
+}
 
 @Injectable()
 export class GroupRoleService {
@@ -24,8 +28,7 @@ export class GroupRoleService {
     private readonly groupRoleRepository: Repository<GroupRole>,
   ) { }
 
-  async checkDuplicateItems(roleIds: number[], groupIds: number[]) {
-    const groupRole = mapUserIdsAndGroupIds(roleIds, groupIds);
+  async checkDuplicateItems(groupRole: IGroupRole[]) {
     const result = await this.groupRoleRepository
       .find({
         where: groupRole
@@ -33,8 +36,22 @@ export class GroupRoleService {
     return result;
   }
 
+  private removeDuplicatedItem(groupRole: IGroupRole[], duplicatedItem: IGroupRole[]): IGroupRole[] {
+    const result = groupRole.filter(val => {
+      if (!duplicatedItem.some(dup => dup.groupId === val.groupId && dup.roleId === val.roleId)) {
+        return val;
+      }
+      return undefined
+    })
+    return result;
+  }
+
   async addRoleToGroup(roleIds: number[], groupIds: number[]) {
-    const groupRole = mapUserIdsAndGroupIds(roleIds, groupIds);
+    let groupRole = mapUserIdsAndGroupIds(roleIds, groupIds);
+    const duplicateItem = await this.checkDuplicateItems(groupRole);
+    if (duplicateItem.length > 0) {
+      groupRole = this.removeDuplicatedItem(groupRole, duplicateItem);
+    }
     return await this.groupRoleRepository
       .createQueryBuilder()
       .insert()
