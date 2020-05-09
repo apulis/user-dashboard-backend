@@ -17,14 +17,10 @@ export class AppController {
       permissionService.initPermissions(),
       roleService.initDbRoles(),
     ])
-    .then(() => {
+    .then(async() => {
       casbinService.initRolePermissions();
+      console.log(await casbinService.getPermissionForRole(1))
     })
-  }
-
-  @Get('/')
-  getHello(): object {
-    return this.appService.getHello();
   }
 
 }
