@@ -29,4 +29,7 @@ export class PermissionService {
     await this.permissionRepository.save(initialPermissions);
   }
 
+  public async getAppPermissions() {
+    return await this.permissionRepository.find()
+  }
 }
