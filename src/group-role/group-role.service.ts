@@ -52,6 +52,9 @@ export class GroupRoleService {
     if (duplicateItem.length > 0) {
       groupRole = this.removeDuplicatedItem(groupRole, duplicateItem);
     }
+    if (groupRole.length === 0) {
+      return true;
+    }
     return await this.groupRoleRepository
       .createQueryBuilder()
       .insert()
