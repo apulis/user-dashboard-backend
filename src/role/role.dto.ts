@@ -1,10 +1,10 @@
-import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { IsNotEmpty , Length, ArrayNotEmpty, IsArray} from 'class-validator';
 
 export class CreateRoleDto {
   
-  @ApiProperty({ description: '角色名称，不能与其他角色冲突' })
+  @ApiProperty({ description: '角色名称' })
   @IsNotEmpty()
   @Length(1, 15)
   name: string;
@@ -13,6 +13,10 @@ export class CreateRoleDto {
   @IsNotEmpty()
   @Length(1, 50)
   note: string
+
+  @ApiProperty({ description: '权限列表' })
+  @IsArray()
+  permissions: string[]
   
 }
 

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Scope } from "@nestjs/common";
 import { Enforcer } from "casbin";
 import { CASBIN_ENFORCER } from "./casbin.constants";
 import { initialPermissions, EnumPermissionKeys } from "mysql-init/init-permission";

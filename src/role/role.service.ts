@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Brackets } from 'typeorm';
+import { Repository, Brackets, InsertResult } from 'typeorm';
 
 import { Role } from './role.entity';
 import { initialRole } from 'mysql-init/init-role';
+import { CasbinService, CASBIN_ENFORCER } from 'src/common/authz';
+import { Enforcer } from 'casbin';
 
 
 interface ICreateRole {
@@ -27,6 +29,7 @@ export class RoleService {
   constructor(
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    private readonly casbinService: CasbinService,
   ) { }
 
   public async initDbRoles() {
@@ -92,24 +95,19 @@ export class RoleService {
     }
   }
 
-  public async createRole(role: ICreateRole): Promise<boolean> {
+  public async createRole(role: ICreateRole): Promise<any> {
+    role.createTime = new Date().getTime() + '';
     const result = await this.roleRepository
-      .findOne({
-        name: role.name,
-      })
-    if (result) {
-      return false;
-    } else {
-      role.createTime = new Date().getTime() + '';
-      await this.roleRepository
-        .createQueryBuilder()
-        .insert()
-        .into(Role)
-        .values(role)
-        .execute()
-      return true;
+      .createQueryBuilder()
+      .insert()
+      .into(Role)
+      .values(role)
+      .execute();
+    console.log('resilt', result)
+    const roleId = result.identifiers[0].id;
+    if (role.permissions) {
+      await this.casbinService.addPermissionForRole(roleId, role.permissions);
     }
-    
   }
 
   public async removeRoles(roleIds: number[]) {

@@ -6,12 +6,15 @@ import { Response }  from 'express'
 import { CreateRoleDto, RemoveRoleDto } from './role.dto'
 import { RoleService } from './role.service';
 import { AuthGuard } from '@nestjs/passport';
+import { CasbinService } from 'src/common/authz';
 
 @Controller('role')
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('角色')
 export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+  constructor(
+    private readonly roleService: RoleService,
+  ) {}
 
   @Get()
   @ApiOperation({ description: '分页查询角色列表'})
@@ -36,9 +39,9 @@ export class RoleController {
     @Body() body: CreateRoleDto,
     @Res() res: Response
   ) {
-    const duplicate = await this.roleService.createRole(body)
+    await this.roleService.createRole(body)
     res.status(HttpStatus.CREATED).json({
-      success: duplicate,
+      success: true,
       message: 'suucess',
     })
   }
