@@ -20,6 +20,11 @@ interface IState {
   userId?: number
 }
 
+export interface IRequestUser extends User {
+  currentAuthority: string[];
+  permissionList: string[];
+}
+
 const getWXAuthenticationUrl = (options: { to: string; clientId: string; userId?: number }) => {
   let state;
   if (options.userId) {
@@ -135,14 +140,8 @@ export class AuthController {
   @Get('/currentUser')
   @UseGuards(AuthGuard('jwt'))
   async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
-    const user = (req.user as User);
-    const currentAuthority = await this.authService.getUserRoles(user.id);
-    let permissionList: string[] = [];
-    for await(const role of currentAuthority) {
-      console.log(role, role.id)
-      permissionList = permissionList.concat(await this.casbinService.getPermissionForRole(role.id))
-    }
-    permissionList = [...new Set(permissionList)];
+    const user = (req.user as IRequestUser);
+    console.log('user', user)
     if (user) {
       res.send({
         success: true,
@@ -155,8 +154,8 @@ export class AuthController {
         microsoftId: user.microsoftId,
         wechatId: user.wechatId,
         nickName: user.nickName,
-        currentAuthority: currentAuthority.map(val => val.id),
-        permissionList
+        currentAuthority: user.currentAuthority,
+        permissionList: user.permissionList
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED)

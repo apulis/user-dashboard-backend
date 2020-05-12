@@ -14,6 +14,8 @@ import { UserRole } from 'src/user-role/user-role.entity';
 import { Role } from 'src/role/role.entity';
 import { MS_OAUTH2_URL } from 'src/constants/config';
 import { RegisterTypes } from 'src/constants/enums';
+import { CasbinService } from 'src/common/authz';
+import { UserRoleService } from 'src/user-role/user-role.service';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +26,7 @@ export class AuthService {
     @InjectRepository(UserRole) private readonly userRoleRespository: Repository<UserRole>,
     @InjectRepository(Role) private readonly roleRespository: Repository<Role>,
     private readonly config: ConfigService,
+    private readonly casbinService: CasbinService,
   ) {
   }
   
@@ -83,12 +86,31 @@ export class AuthService {
     return currentAuthority.map(val => ({name: val.name, id: val.id}));
   }
 
-  async validateUser(uid: number): Promise<undefined | User> {
+  async validateUser(uid: number) {
     const user = await this.usersRepository.findOne({
       id: uid,
       isDelete: 0,
     });
+    if (user) {
+      const currentAuthority = await this.getUserRoles(user.id);
+      const permissionList = await this.getUserPermissionList(user.id);
+      return {
+        ...user,
+        permissionList,
+        currentAuthority: currentAuthority.map(val => val.name),
+      }
+    }
     return user;
+  }
+
+  async getUserPermissionList(userId: number) {
+    const currentAuthority = await this.getUserRoles(userId);
+    let permissionList: string[] = [];
+    for await(const role of currentAuthority) {
+      permissionList = permissionList.concat(await this.casbinService.getPermissionForRole(role.id))
+    }
+    permissionList = [...new Set(permissionList)];
+    return permissionList;
   }
 
   async getMicrosoftAccountInfo(code: string, redirectUri: string) {
