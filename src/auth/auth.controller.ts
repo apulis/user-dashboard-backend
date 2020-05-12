@@ -15,6 +15,8 @@ import { RegisterTypes } from 'src/constants/enums';
 import { ApiTags } from '@nestjs/swagger';
 import { CasbinService } from 'src/common/authz';
 
+import { getJwtExp }  from 'src/utils';
+
 interface IState {
   to: string;
   userId?: number
@@ -122,7 +124,10 @@ export class AuthController {
     if (validatedUser) {
       const token = await this.authService.getIdToken(validatedUser.id, validatedUser.userName);
       const currentAuthority = await this.authService.getUserRoles(validatedUser.id);
-      res.cookie('token', token);
+      res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: getJwtExp()
+      });
       res.send({
         success: true,
         token,
@@ -179,7 +184,10 @@ export class AuthController {
         const user = await this.userService.getMSUserInfoByOpenId(userInfo.openId, userInfo.nickName, userInfo.registerType);
         if (user) {
           const token = this.authService.getIdToken(user.id, user.userName);
-          res.cookie('token', token);
+          res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: getJwtExp()
+          });
           res.redirect(stateObj.to + '?token=' + token);
         }
       } else {
@@ -188,7 +196,10 @@ export class AuthController {
         const dbUser = await this.userService.updateUserMicrosoftId(stateObj.userId, userInfo.openId);
         if (dbUser) {
           const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
-          res.cookie('token', token);
+          res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: getJwtExp()
+          });
           res.redirect(stateObj.to + '?token=' + token);
         } else {
           throw new ForbiddenException('no such user');
@@ -245,14 +256,20 @@ export class AuthController {
         const user = await this.userService.getWXUserInfoByOpenId(tempOpenId, nickname, RegisterTypes.Wechat);
         if (user) {
           const token = this.authService.getIdToken(user.id, user.userName);
-          res.cookie('token', token);
+          res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: getJwtExp()
+          });
           res.redirect(stateObj.to + '?token=' + token);
         }
       } else {
         const dbUser = await this.userService.updateUserWechatId(stateObj.userId, tempOpenId);
         if (dbUser) {
           const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
-          res.cookie('token', token);
+          res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: getJwtExp()
+          });
           res.redirect(stateObj.to + '?token=' + token);
         } else {
           throw new ForbiddenException('no such user');
