@@ -13,6 +13,7 @@ import { apiBase, MS_OAUTH2_URL, WX_OAUTH2_URL } from 'src/constants/config';
 import { ConfigService } from 'config/config.service';
 import { RegisterTypes } from 'src/constants/enums';
 import { ApiTags } from '@nestjs/swagger';
+import { CasbinService } from 'src/common/authz';
 
 interface IState {
   to: string;
@@ -72,6 +73,7 @@ export class AuthController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly config: ConfigService,
+    private readonly casbinService: CasbinService
   ) {
     
   }
@@ -135,6 +137,12 @@ export class AuthController {
   async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
     const user = (req.user as User);
     const currentAuthority = await this.authService.getUserRoles(user.id);
+    let permissionList: string[] = [];
+    for await(const role of currentAuthority) {
+      console.log(role, role.id)
+      permissionList = permissionList.concat(await this.casbinService.getPermissionForRole(role.id))
+    }
+    permissionList = [...new Set(permissionList)];
     if (user) {
       res.send({
         success: true,
@@ -147,7 +155,8 @@ export class AuthController {
         microsoftId: user.microsoftId,
         wechatId: user.wechatId,
         nickName: user.nickName,
-        currentAuthority,
+        currentAuthority: currentAuthority.map(val => val.id),
+        permissionList
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED)

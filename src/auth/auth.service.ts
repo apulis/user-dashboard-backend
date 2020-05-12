@@ -73,14 +73,14 @@ export class AuthService {
     if (currentRoleIds.length !== 0) {
       currentAuthority = await this.roleRespository
         .createQueryBuilder('role')
-        .select(['name'].map(val => 'role.' + val))
+        .select(['name', 'id'].map(val => 'role.' + val))
         .where('role.id IN (:roleIds)', { roleIds: currentRoleIds })
         .getMany();
     } else {
       currentAuthority = []
     }
     
-    return currentAuthority.map(val => val.name);
+    return currentAuthority.map(val => ({name: val.name, id: val.id}));
   }
 
   async validateUser(uid: number): Promise<undefined | User> {

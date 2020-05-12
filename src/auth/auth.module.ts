@@ -13,19 +13,16 @@ import { GroupRole } from 'src/group-role/group-role.entity';
 import { UserRole } from 'src/user-role/user-role.entity';
 import { Role } from 'src/role/role.entity';
 import { JwtStrategy } from './jwt.strategy';
+import { CasbinService } from 'src/common/authz';
+import { InitCasbin } from 'src/common/authz/init-casbin';
 
 @Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role]),
-    PassportModule.register({
-      defaultStrategy: 'jwt',
-    }),
-    JwtModule.register({
-      secret: 'hkgaje75t62843qorgbry894q2375teufhtgyi7438qwert'
-    })
+    InitCasbin
   ],
-  providers: [AuthService, UserService, ConfigService, JwtStrategy],
+  providers: [AuthService, UserService, ConfigService, JwtStrategy, CasbinService],
   controllers: [AuthController],
 })
 export class AuthModule {}

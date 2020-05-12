@@ -31,7 +31,7 @@ export class CasbinService {
 
   public async getPermissionForRole(roleId: number) {
     const rolePermissions = await this.enforcer.getPermissionsForUser(TypesPrefix.role + roleId);
-    return rolePermissions;
+    return rolePermissions.map(val => val[1]);
   }
 
   public initRolePermissions() {
