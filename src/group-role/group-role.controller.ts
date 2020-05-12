@@ -7,9 +7,10 @@ import { AddRoleToGroupDto } from './group-role.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthzGuard } from 'src/guards/authz.guard';
 
 @Controller('group-role')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
 @ApiTags('用户组和角色关联')
 export class GroupRoleController {
   constructor(

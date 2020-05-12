@@ -6,9 +6,10 @@ import { Response } from 'express';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthzGuard } from 'src/guards/authz.guard';
 
 @Controller('user-role')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
 @ApiTags('关联角色和用户')
 export class UserRoleController {
   constructor(

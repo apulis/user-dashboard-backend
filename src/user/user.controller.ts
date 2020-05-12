@@ -8,6 +8,7 @@ import { CreateUserDto, EditUserDto } from './user.dto'
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { AuthzGuard } from 'src/guards/authz.guard';
 
 export interface IUserMessage {
   userName: string;
@@ -27,7 +28,7 @@ export interface ICreateUser {
 }
 
 @Controller('/users')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
 @UseGuards(RolesGuard)
 @ApiTags('用户')
 export class UserController {

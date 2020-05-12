@@ -8,6 +8,7 @@ import { GroupService } from './group.service';
 import { CreateGroupDto, EditGroupDto, RemoveGroupDto } from './group.dto';
 import { GroupRoleService } from 'src/group-role/group-role.service';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthzGuard } from 'src/guards/authz.guard';
 
 export interface ICreateGroup {
   name: string;
@@ -18,7 +19,7 @@ export interface ICreateGroup {
 
 
 @Controller('group')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
 @ApiTags('用户组相关')
 export class GroupController {
 

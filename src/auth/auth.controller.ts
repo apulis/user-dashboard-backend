@@ -141,7 +141,6 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
     const user = (req.user as IRequestUser);
-    console.log('user', user)
     if (user) {
       res.send({
         success: true,

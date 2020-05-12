@@ -7,9 +7,10 @@ import { CreateRoleDto, RemoveRoleDto } from './role.dto'
 import { RoleService } from './role.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CasbinService } from 'src/common/authz';
+import { AuthzGuard } from 'src/guards/authz.guard';
 
 @Controller('role')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
 @ApiTags('角色')
 export class RoleController {
   constructor(
