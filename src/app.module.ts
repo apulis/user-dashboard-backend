@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { typeOrmConfig } from './db/typeorm';
 import { GroupModule } from './group/group.module';
@@ -24,9 +23,6 @@ import { OpenModule } from './open/open.module';
  
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: ['.develop.env.local', '.env.develop']
-    }),
     CasbinModule.forRootAsync(
       typeOrmConfig as ConnectionOptions,
       "src/common/authz/authz.model.conf"
