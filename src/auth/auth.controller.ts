@@ -296,4 +296,19 @@ export class AuthController {
       res.redirect(redirect);
     }
   }
+
+  @Get('/oauth2-methods')
+  getAuthMethod(@Res() res: Response) {
+    const methods = [];
+    if (this.config.get('WX_APP_ID')) {
+      methods.push('wechat');
+    }
+    if (this.config.get('MS_CLIENT_ID')) {
+      methods.push('microsoft');
+    }
+    res.send({
+      success: true,
+      methods
+    })
+  }
 }
