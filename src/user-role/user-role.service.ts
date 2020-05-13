@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRole } from './user-role.entity';
 import { Repository } from 'typeorm';
+import { ConfigService } from 'config/config.service';
 
 const mapUserIdsAndRoleIds = (userIds: number[], roleIds: number[]) => {
   const userRole: {userId: number; roleId: number}[] = [];
@@ -27,6 +28,7 @@ export class UserRoleService {
   constructor(
     @InjectRepository(UserRole)
     private readonly userRoleRepository: Repository<UserRole>,
+    private readonly configService: ConfigService
   ) { }
 
   private removeDuplicatedItems(userRole: IUserRole[], duplicatedItem: IUserRole[]) {
@@ -37,6 +39,11 @@ export class UserRoleService {
       return undefined
     })
     return result;
+  }
+
+  async initFirstUserRole() {
+    const FIRST_USER_ROLE = JSON.parse(this.configService.get('FIRST_USER_ROLE'));
+    return await this.addRoleToUser([FIRST_USER_ROLE.userId], [FIRST_USER_ROLE.roleId]);
   }
 
   async checkDuplicateItems(userRole: IUserRole[]) {

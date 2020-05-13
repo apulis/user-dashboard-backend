@@ -22,6 +22,8 @@ import { OpenModule } from './open/open.module';
 import { UserService } from './user/user.service';
 import { User } from './user/user.entity';
 import { ConfigService } from 'config/config.service';
+import { UserRoleService } from './user-role/user-role.service';
+import { UserRole } from './user-role/user-role.entity';
 
  
 @Module({
@@ -39,11 +41,11 @@ import { ConfigService } from 'config/config.service';
     GroupRoleModule,
     UserRoleModule,
     AuthModule,
-    TypeOrmModule.forFeature([Permission, Role, User]),
+    TypeOrmModule.forFeature([Permission, Role, User, UserRole]),
     OpenModule
   ],
   controllers: [AppController],
-  providers: [AppService, PermissionService, RoleService, UserService, ConfigService],
+  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService],
 })
 export class AppModule {}
    
