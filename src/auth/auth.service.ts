@@ -92,21 +92,21 @@ export class AuthService {
       isDelete: 0,
     });
     if (user) {
-      const currentRoles = await this.getUserRoles(user.id);
+      const currentRole = await this.getUserRoles(user.id);
       const permissionList = await this.getUserPermissionList(user.id);
       return {
         ...user,
         permissionList,
-        currentRoles: currentRoles.map(val => val.name),
+        currentRole: currentRole.map(val => val.name),
       }
     }
     return user;
   }
 
   async getUserPermissionList(userId: number) {
-    const currentRoles = await this.getUserRoles(userId);
+    const currentRole = await this.getUserRoles(userId);
     let permissionList: string[] = [];
-    for await(const role of currentRoles) {
+    for await(const role of currentRole) {
       permissionList = permissionList.concat(await this.casbinService.getPermissionForRole(role.id))
     }
     permissionList = [...new Set(permissionList)];
