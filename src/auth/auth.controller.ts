@@ -23,7 +23,7 @@ interface IState {
 }
 
 export interface IRequestUser extends User {
-  currentAuthority: string[];
+  currentRole: string[];
   permissionList: string[];
 }
 
@@ -123,7 +123,7 @@ export class AuthController {
     const validatedUser = await this.authService.validateUserAccount(userName, password);
     if (validatedUser) {
       const token = await this.authService.getIdToken(validatedUser.id, validatedUser.userName);
-      const currentAuthority = await this.authService.getUserRoles(validatedUser.id);
+      const currentRole = await this.authService.getUserRoles(validatedUser.id);
       res.cookie('token', token, {
         httpOnly: true,
         maxAge: getJwtExp()
@@ -131,7 +131,7 @@ export class AuthController {
       res.send({
         success: true,
         token,
-        currentAuthority,
+        currentRole,
         currentPermission: [],
       })
     } else {
@@ -158,7 +158,7 @@ export class AuthController {
         microsoftId: user.microsoftId,
         wechatId: user.wechatId,
         nickName: user.nickName,
-        currentAuthority: user.currentAuthority,
+        currentRole: user.currentRole,
         permissionList: user.permissionList
       })
     } else {

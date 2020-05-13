@@ -72,18 +72,18 @@ export class AuthService {
       });
     const userRoleId = userRoles.map(val => val.roleId);
     const currentRoleIds = [...new Set(groupRolesId.concat(userRoleId))];
-    let currentAuthority: Role[];
+    let currentUserRoles: Role[];
     if (currentRoleIds.length !== 0) {
-      currentAuthority = await this.roleRespository
+      currentUserRoles = await this.roleRespository
         .createQueryBuilder('role')
         .select(['name', 'id'].map(val => 'role.' + val))
         .where('role.id IN (:roleIds)', { roleIds: currentRoleIds })
         .getMany();
     } else {
-      currentAuthority = []
+      currentUserRoles = []
     }
     
-    return currentAuthority.map(val => ({name: val.name, id: val.id}));
+    return currentUserRoles.map(val => ({name: val.name, id: val.id}));
   }
 
   async validateUser(uid: number) {
@@ -92,21 +92,21 @@ export class AuthService {
       isDelete: 0,
     });
     if (user) {
-      const currentAuthority = await this.getUserRoles(user.id);
+      const currentRoles = await this.getUserRoles(user.id);
       const permissionList = await this.getUserPermissionList(user.id);
       return {
         ...user,
         permissionList,
-        currentAuthority: currentAuthority.map(val => val.name),
+        currentRoles: currentRoles.map(val => val.name),
       }
     }
     return user;
   }
 
   async getUserPermissionList(userId: number) {
-    const currentAuthority = await this.getUserRoles(userId);
+    const currentRoles = await this.getUserRoles(userId);
     let permissionList: string[] = [];
-    for await(const role of currentAuthority) {
+    for await(const role of currentRoles) {
       permissionList = permissionList.concat(await this.casbinService.getPermissionForRole(role.id))
     }
     permissionList = [...new Set(permissionList)];
