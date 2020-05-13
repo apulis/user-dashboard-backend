@@ -7,6 +7,7 @@
 
 在项目根目录下，需要有一个生成一个名称为 production.env 的文件，里面记录了项目相关的配置信息
 文件内容示例如下：
+
 ```
 # Log
 LOGGING_DIR=logs
@@ -26,16 +27,17 @@ WX_SECRET=dc8cb2946b1d8fe6256d49d63cd776d0
 # Server
 APP_HOST=localhost
 APP_PORT=5001
-TEST_APP_PORT=5002
 
 # Database
 DB_HOST=localhost
 DB_TYPE=mysql
 DB_PORT=3306
 DB_USERNAME=root
-DB_PASSWORD=Qwert123456&
+DB_PASSWORD=123456
 DB_NAME=user_group
-TEST_DB_NAME=nestjstest
+
+FIRST_USER="{"userName":"xianjie.han","password":"123456"}"
+FIRST_USER_ROLE="{"userId":1,"roleId":1}"
 ```
 
 ### 2. 编译
@@ -49,6 +51,12 @@ yarn build
 ### 3. 运行项目命令
 
 ```
-yarn start:pro
+yarn start:prod
+```
 
-### 4. 其他说明
+
+
+### 4. 初始化数据库
+
+1. 数据库内的表结构，一部分初始角色，权限会在应用程序内初始化好
+2. 在部署时需要初始化第一个身份为管理员的用户，以及 
