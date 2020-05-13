@@ -19,6 +19,8 @@ import { PermissionService } from './permission/permission.service';
 import { Permission } from './permission/permission.entity';
 import { RoleService } from './role/role.service';
 import { Role } from './role/role.entity';
+import { OpenController } from './open/open.controller';
+import { OpenModule } from './open/open.module';
 
  
 @Module({
@@ -39,7 +41,8 @@ import { Role } from './role/role.entity';
     GroupRoleModule,
     UserRoleModule,
     AuthModule,
-    TypeOrmModule.forFeature([Permission, Role])
+    TypeOrmModule.forFeature([Permission, Role]),
+    OpenModule
   ],
   controllers: [AppController],
   providers: [AppService, PermissionService, RoleService],

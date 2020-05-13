@@ -16,7 +16,6 @@ import { JwtStrategy } from './jwt.strategy';
 import { CasbinService } from 'src/common/authz';
 import { InitCasbin } from 'src/common/authz/init-casbin';
 
-@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role]),
