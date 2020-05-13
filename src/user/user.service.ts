@@ -38,8 +38,9 @@ export class UserService {
   async initFirstUser() {
     const firstUserExist = await this.usersRepository.findOne(1);
     if (!firstUserExist) {
-      const firstUser = this.config.get('FIRST_USER');
-      await this.usersRepository.insert(JSON.parse(firstUser));
+      const firstUser = JSON.parse(this.config.get('FIRST_USER'));
+      firstUser.password = encodePassword(firstUser.password, this.config.get('SECRET_KEY'));
+      await this.usersRepository.insert(firstUser);
     }
   }
 
