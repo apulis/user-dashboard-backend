@@ -28,12 +28,12 @@ export class User {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255, unique: true })
+  @Column('varchar', { length: 255, unique: true, nullable: true })
   openId: string;
 
   @IsString()
   @Length(1, 18)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, default: 'Account' })
   registerType: string;
 
   @IsEmail()
@@ -50,7 +50,7 @@ export class User {
   @Column('varchar', { length: 255, nullable: true })
   note: string;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, default: new Date().getTime() + '' })
   createTime: string;
 
   @Column('int', { default: 0 })

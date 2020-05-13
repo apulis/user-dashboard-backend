@@ -35,6 +35,14 @@ export class UserService {
       .getCount();
   }
 
+  async initFirstUser() {
+    const firstUserExist = await this.usersRepository.findOne(1);
+    if (!firstUserExist) {
+      const firstUser = this.config.get('FIRST_USER');
+      await this.usersRepository.insert(JSON.parse(firstUser));
+    }
+  }
+
   async find(pageNo: number, pageSize: number): Promise<{list: User[], total: number}> {
     const total = await this.getUserCount();
     const list = await this.usersRepository
