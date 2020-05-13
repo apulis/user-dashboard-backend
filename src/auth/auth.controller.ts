@@ -130,6 +130,7 @@ export class AuthController {
     if (validatedUser) {
       const token = await this.authService.getIdToken(validatedUser.id, validatedUser.userName);
       const currentRole = await this.authService.getUserRoles(validatedUser.id);
+      const permissionList = await this.authService.getUserPermissionList(validatedUser.id)
       res.cookie('token', token, {
         httpOnly: true,
         maxAge: getJwtExp()
@@ -138,7 +139,7 @@ export class AuthController {
         success: true,
         token,
         currentRole,
-        currentPermission: [],
+        permissionList: permissionList,
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED).send({
