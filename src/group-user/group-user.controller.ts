@@ -81,6 +81,9 @@ export class GroupUserController {
   }
 
   @Delete('/:groupId')
+  @ApiOperation({
+    description: '将用户移除出用户组'
+  })
   async removeGroupForUser(@Param('groupId') groupId: number, @Query('userId') userId: number, @Res() res: Response) {
     groupId = Number(groupId);
     userId = Number(userId);

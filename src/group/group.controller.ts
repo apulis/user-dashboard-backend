@@ -44,6 +44,9 @@ export class GroupController {
   }
 
   @Post('/')
+  @ApiOperation({
+    description: '新建用户组'
+  })
   async createGroup(@Body() body: CreateGroupDto, @Res() res: Response) {
     const result = await this.groupService.createGroup(body);
     if (result) {
@@ -57,6 +60,9 @@ export class GroupController {
   }
 
   @Delete('/')
+  @ApiOperation({
+    description: '批量删除用户组'
+  })
   async removeGroup(@Body() body: RemoveGroupDto, @Res() res: Response) {
     await this.groupService.removeGroup(body.groupIds);
     res.json({
@@ -66,6 +72,9 @@ export class GroupController {
   }
 
   @Get('/detail/:id')
+  @ApiOperation({
+    description: '根据id获取用户组详情'
+  })
   async getGroupDetail(@Param('id') id: number, @Res() res: Response) {
     id = Number(id);
     const result = await this.groupService.getGroupDetail(id);
@@ -76,6 +85,9 @@ export class GroupController {
   }
 
   @Patch('/:id')
+  @ApiOperation({
+    description: '修改用户组信息'
+  })
   async editGroupDetail(@Param('id') id: number, @Res() res: Response, @Body() body: EditGroupDto) {
     id = Number(id);
     const { name, note} = body;
@@ -87,6 +99,9 @@ export class GroupController {
   }
 
   @Get('/count')
+  @ApiOperation({
+    description: '获取用户组总数'
+  })
   async getGroupTotalCount(@Res() res: Response) {
     const count = await this.groupService.getAllGroupCount();
     res.send({

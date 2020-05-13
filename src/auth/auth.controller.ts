@@ -12,7 +12,7 @@ import { getDomainFromUrl } from 'src/utils';
 import { apiBase, MS_OAUTH2_URL, WX_OAUTH2_URL } from 'src/constants/config';
 import { ConfigService } from 'config/config.service';
 import { RegisterTypes } from 'src/constants/enums';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CasbinService } from 'src/common/authz';
 
 import { getJwtExp }  from 'src/utils';
@@ -86,6 +86,9 @@ export class AuthController {
   }
 
   @Post('/register')
+  @ApiOperation({
+    description: '注册账号密码'
+  })
   async register(@Body() body: RegisterDto, @Res() res: Response) {
     const { userName, password, nickName, microsoftId, wechatId } = body;
     const userNameUnique = await this.userService.userNameUnique([userName]);
@@ -118,6 +121,9 @@ export class AuthController {
   }
 
   @Post('/login')
+  @ApiOperation({
+    description: '账号密码登录'
+  })
   async login(@Body() body: LoginDto, @Res() res: Response) {
     const { userName, password } = body;
     const validatedUser = await this.authService.validateUserAccount(userName, password);
@@ -143,6 +149,9 @@ export class AuthController {
   }
 
   @Get('/currentUser')
+  @ApiOperation({
+    description: '获取当前用户权限角色信息'
+  })
   @UseGuards(AuthGuard('jwt'))
   async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
     const user = (req.user as IRequestUser);
@@ -168,6 +177,9 @@ export class AuthController {
   }
 
   @Get('/microsoft')
+  @ApiOperation({
+    description: '使用微软账号认证，直接跳转'
+  })
   async loginWithMicrosoft(
     @Res() res: Response,
     @Query('code') code?: string,
@@ -228,6 +240,9 @@ export class AuthController {
   }
 
   @Get('/wechat')
+  @ApiOperation({
+    description: '使用微信登录认证，直接跳转'
+  })
   async loginWithWechat(
     @Res() res: Response,
     @Query('code') code?: string,
@@ -298,6 +313,9 @@ export class AuthController {
   }
 
   @Get('/oauth2-methods')
+  @ApiOperation({
+    description: '获取当前第三方认证的方式'
+  })
   getAuthMethod(@Res() res: Response) {
     const methods = [];
     if (this.config.get('WX_APP_ID')) {
