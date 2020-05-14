@@ -18,7 +18,9 @@ import 'initial/init-request';
 
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: ['error', 'warn']
+  });
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
