@@ -9,6 +9,7 @@
 文件内容示例如下：
 
 ```
+
 # Log
 LOGGING_DIR=logs
 LOGGING_LEVEL=debug
@@ -36,16 +37,34 @@ DB_USERNAME=root
 DB_PASSWORD=123456
 DB_NAME=user_group
 
-FIRST_USER="{"userName":"xianjie.han","password":"123456"}"
+FIRST_USER="{"userName":"xianjie.han","password":"123456","id":1}"
 FIRST_USER_ROLE="{"userId":1,"roleId":1}"
 ```
 
 ### 2. 编译
 
-依次运行以下命令
+设置淘宝源
+
+```
+yarn config set registry 'https://registry.npm.taobao.org'
+```
+
+安装依赖
+
 ```
 yarn
-yarn build 
+```
+
+编译
+
+```
+yarn build
+```
+
+初始化数据库（如果没有，则新建一个数据库）
+
+```
+yarn run database-init
 ```
 
 ### 3. 运行项目命令
@@ -56,7 +75,7 @@ yarn start:prod
 
 
 
-### 4. 初始化数据库
+### 4. 初始化数据库 Table 和数据
 
-1. 数据库内的表结构，一部分初始角色，权限会在应用程序内初始化好
-2. 在部署时需要初始化第一个身份为管理员的用户，以及 
+项目使用的 typeorm 会自带新建数据库的 Table，建立  table 后会生成默认数据到 Table 中
+
