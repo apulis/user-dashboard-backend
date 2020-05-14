@@ -22,7 +22,7 @@ export class Role {
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, default: new Date().getTime() + '' })
   createTime?: string;
 
   @Column('int', { default: 0 })

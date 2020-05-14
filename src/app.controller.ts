@@ -20,9 +20,9 @@ export class AppController {
       permissionService.initPermissions(),
       roleService.initDbRoles(),
       userService.initFirstUser(),
-      userRoleService.initFirstUserRole()
     ])
     .then(async() => {
+      userRoleService.initFirstUserRole();
       casbinService.initRolePermissions();
     })
   }

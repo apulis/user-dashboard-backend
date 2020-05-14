@@ -40,6 +40,7 @@ export class UserService {
     if (!firstUserExist) {
       const firstUser = JSON.parse(this.config.get('FIRST_USER'));
       firstUser.password = encodePassword(firstUser.password, this.config.get('SECRET_KEY'));
+      firstUser.createTime = new Date().getTime() + '';
       await this.usersRepository.insert(firstUser);
     }
   }
