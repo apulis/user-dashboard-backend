@@ -206,6 +206,10 @@ export class AuthController {
       } else {
         // 已经有账号，来绑定的用户
         const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(stateObj.to) + apiBase+ '/api/auth/microsoft');
+        if (await this.authService.getUserByMicrosoftId(userInfo.openId)) {
+          res.redirect(stateObj.to + '?error=' + 'current microsoft account has been used');
+          return;
+        }
         const dbUser = await this.userService.updateUserMicrosoftId(stateObj.userId, userInfo.openId);
         if (dbUser) {
           const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
@@ -279,7 +283,12 @@ export class AuthController {
           res.redirect(stateObj.to + '?token=' + token);
         }
       } else {
+        if (await this.authService.getUserByWechatId(tempOpenId)) {
+          res.redirect(stateObj.to + '?error=' + 'current wechat account has been used');
+          return;
+        }
         const dbUser = await this.userService.updateUserWechatId(stateObj.userId, tempOpenId);
+        
         if (dbUser) {
           const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
           res.cookie('token', token, {

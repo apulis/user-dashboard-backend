@@ -131,4 +131,16 @@ export class AuthService {
       registerType: RegisterTypes.Microsoft,
     }
   }
+
+  async getUserByMicrosoftId(microsoftId: string) {
+    return await this.usersRepository.findOne({
+      microsoftId
+    })
+  }
+
+  async getUserByWechatId(wechatId: string) {
+    return await this.usersRepository.findOne({
+      wechatId
+    })
+  }
 }
