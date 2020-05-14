@@ -4,7 +4,6 @@ import * as fs from 'fs';
 
 const isProductionEnvironment = process.env.NODE_ENV === 'production';
 
-console.log('process.env', process.env.DB_HOST)
 
 const envConfig = dotenv.parse(fs.readFileSync(process.env.NODE_ENV + '.env'));
 

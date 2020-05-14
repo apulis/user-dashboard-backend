@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as rateLimit from 'express-rate-limit';
@@ -7,15 +8,21 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import * as helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as dotenv from 'dotenv';
+
+const envConfig = dotenv.parse(fs.readFileSync(process.env.NODE_ENV + '.env'));
+
+const { APP_PORT } = envConfig;
 
 import 'initial/init-request';
+
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 1000, // limit each IP to 100 requests per windowMs
     }),
   );
   app.useGlobalPipes(new ValidationPipe());
@@ -32,6 +39,6 @@ async function bootstrap() {
   app.use(helmet());
   app.use(cookieParser());
   app.disable('x-powered-by');
-  await app.listen(5001);
+  await app.listen(APP_PORT || 5001);
 }
 bootstrap();
