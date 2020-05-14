@@ -48,16 +48,10 @@ export class GroupRoleService {
 
   async addRoleToGroup(roleIds: number[], groupIds: number[]) {
     let groupRole = mapUserIdsAndGroupIds(roleIds, groupIds);
-    const duplicateItem = await this.checkDuplicateItems(groupRole);
-    if (duplicateItem.length > 0) {
-      groupRole = this.removeDuplicatedItem(groupRole, duplicateItem);
-    }
-    if (groupRole.length === 0) {
-      return true;
-    }
     return await this.groupRoleRepository
       .createQueryBuilder()
       .insert()
+      .orIgnore()
       .into(GroupRole)
       .values(groupRole)
       .execute()

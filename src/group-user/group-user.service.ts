@@ -50,16 +50,10 @@ export class GroupUserService {
    
   async addUsersToGroups(userIds: number[], groupIds: number[]) {
     let groupUser = mapUserIdsAndGroupIds(userIds, groupIds);
-    const duplicatedItem = await this.checkDuplicateItems(groupUser);
-    if (duplicatedItem.length > 0) {
-      groupUser = this.removeDuplicatedItem(groupUser, duplicatedItem);
-    }
-    if (groupUser.length === 0) {
-      return true;
-    }
     return await this.groupUserRepository
       .createQueryBuilder()
       .insert()
+      .orIgnore()
       .into(GroupUser)
       .values(groupUser)
       .execute()

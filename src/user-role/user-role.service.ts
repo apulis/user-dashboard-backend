@@ -56,16 +56,10 @@ export class UserRoleService {
 
   async addRoleToUser(userIds: number[], roleIds: number[]) {
     let userRole = mapUserIdsAndRoleIds(userIds, roleIds);
-    const duplicatedItem = await this.checkDuplicateItems(userRole);
-    if (duplicatedItem.length > 0) {
-      userRole = this.removeDuplicatedItems(userRole, duplicatedItem);
-    }
-    if (userRole.length === 0) {
-      return true
-    }
     return await this.userRoleRepository
       .createQueryBuilder()
       .insert()
+      .orIgnore()
       .into(UserRole)
       .values(userRole)
       .execute()
