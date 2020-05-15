@@ -15,6 +15,8 @@ const connection = mysql.createConnection({
   password: DB_PASSWORD,
 })
 
+console.log('env-------------', process.env)
+
 connection.connect((err) => {
   if (err) throw err;
   connection.query(`CREATE DATABASE IF NOT EXISTS ${DB_NAME} DEFAULT CHARACTER SET 'utf8mb4'`, (err) => {
