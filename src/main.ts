@@ -10,7 +10,7 @@ import * as cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
 
-const envConfig = dotenv.parse(fs.readFileSync(process.env.NODE_ENV + '.env'));
+const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_FILE || 'develop.env'));
 
 const { APP_PORT } = envConfig;
 

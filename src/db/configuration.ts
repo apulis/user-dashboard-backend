@@ -5,7 +5,7 @@ import * as fs from 'fs';
 const isProductionEnvironment = process.env.NODE_ENV === 'production';
 
 
-const envConfig = dotenv.parse(fs.readFileSync(process.env.NODE_ENV + '.env'));
+const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_FILE || 'develop.env'));
 
 export default {
   environment: process.env.NODE_ENV || 'development',
