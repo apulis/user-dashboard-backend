@@ -120,7 +120,7 @@ export class AuthService {
       code,
       redirect_uri: redirectUri,
       grant_type: 'authorization_code',
-      client_secret: this.config.get('MD_CLIENT_SECRET')
+      client_secret: this.config.get('MS_CLIENT_SECRET')
     }));
     const data = res.data;
     const id_token = data.id_token;
