@@ -8,8 +8,6 @@ COPY . /home/addon_custom_user_dasboard_backend
 RUN yarn config set registry 'https://registry.npm.taobao.org'
 RUN yarn
 RUN yarn build
-RUN yarn run database-init
-
 
 EXPOSE 5002
 

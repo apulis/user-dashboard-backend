@@ -9,6 +9,7 @@ import * as helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
+import { initDataBase } from 'mysql-init/init-database';
 
 const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_FILE || 'develop.env'));
 
@@ -18,6 +19,7 @@ import 'initial/init-request';
 
 
 async function bootstrap() {
+  await initDataBase();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['error', 'warn']
   });
