@@ -43,6 +43,6 @@ async function bootstrap() {
   app.use(helmet());
   app.use(cookieParser());
   app.disable('x-powered-by');
-  await app.listen(APP_PORT || 5001);
+  await app.listen(APP_PORT || 5002);
 }
 bootstrap();
