@@ -11,7 +11,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
 import { initDataBase } from 'mysql-init/init-database';
 
-const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_FILE || 'develop.env'));
+const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));
 
 const { APP_PORT } = envConfig;
 
