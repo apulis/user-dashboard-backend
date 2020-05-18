@@ -9,6 +9,6 @@ RUN yarn config set registry 'https://registry.npm.taobao.org'
 RUN yarn
 RUN yarn build
 
-EXPOSE 5002
+EXPOSE 5001
 
 CMD ["yarn", "start:prod"]
