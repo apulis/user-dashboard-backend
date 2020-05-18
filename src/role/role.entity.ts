@@ -12,17 +12,17 @@ export class Role {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 191 })
   name: string;
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 191 })
   note: string;
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 255, default: new Date().getTime() + '' })
+  @Column('varchar', { length: 191, default: new Date().getTime() + '' })
   createTime?: string;
 
   @Column('int', { default: 0 })

@@ -14,17 +14,17 @@ export class Group {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 191 })
   name: string;
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 255, default: '' })
+  @Column('varchar', { length: 191, default: '' })
   note: string;
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 191 })
   createTime: string;
 
 }
