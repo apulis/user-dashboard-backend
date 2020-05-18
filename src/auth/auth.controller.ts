@@ -42,7 +42,7 @@ const getWXAuthenticationUrl = (options: { to: string; clientId: string; userId?
   const params = new URLSearchParams({
     appid: options.clientId,
     response_type: 'code',
-    redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/api/auth/wechat',
+    redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/auth/wechat',
     scope: 'snsapi_userinfo,snsapi_login',
     state: encodeURIComponent(state)
   })
@@ -64,7 +64,7 @@ const getMSAuthenticationUrl = (options: { to: string; clientId: string; userId?
   const params = new URLSearchParams({
     client_id: options.clientId,
     response_type: 'code',
-    redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/api/auth/microsoft',
+    redirect_uri: getDomainFromUrl(options.to) + apiBase+ '/auth/microsoft',
     response_mode: 'query',
     scope: 'openid profile email',
     state: state
@@ -193,7 +193,7 @@ export class AuthController {
       const stateObj: IState = JSON.parse(state as string);
       if (!stateObj.userId) {
         // 用户直接登录
-        const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(stateObj.to) + apiBase+ '/api/auth/microsoft');
+        const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(stateObj.to) + apiBase+ '/auth/microsoft');
         const user = await this.userService.getMSUserInfoByOpenId(userInfo.openId, userInfo.nickName, userInfo.registerType);
         if (user) {
           const token = this.authService.getIdToken(user.id, user.userName);
@@ -205,7 +205,7 @@ export class AuthController {
         }
       } else {
         // 已经有账号，来绑定的用户
-        const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(stateObj.to) + apiBase+ '/api/auth/microsoft');
+        const userInfo = await this.authService.getMicrosoftAccountInfo(code, getDomainFromUrl(stateObj.to) + apiBase+ '/auth/microsoft');
         if (await this.authService.getUserByMicrosoftId(userInfo.openId)) {
           res.redirect(stateObj.to + '?error=' + 'current microsoft account has been used');
           return;
