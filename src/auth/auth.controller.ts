@@ -339,4 +339,18 @@ export class AuthController {
       methods
     })
   }
+
+  @Get('logout')
+  @ApiOperation({
+    description: '注销登录'
+  })
+  async logout(@Res() res: Response) {
+    res.cookie('token', '', {
+      httpOnly: true,
+      maxAge: getJwtExp()
+    });
+    res.send({
+      success: true
+    })
+  }
 }
