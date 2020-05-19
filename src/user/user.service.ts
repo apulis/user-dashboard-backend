@@ -150,7 +150,7 @@ export class UserService {
     return await this.usersRepository
       .createQueryBuilder()
       .select('userName')
-      .where("user.userName IN (:...names)", { names: userName })
+      .where("userName IN (:...names)", { names: userName })
       .execute()
   }
 
