@@ -2,7 +2,7 @@ import 'dotenv/config';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
-const isProductionEnvironment = process.env.NODE_ENV === 'production';
+const isProductionEnvironment = process.env.NODE_ENV === 'prod';
 
 
 const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));
@@ -18,7 +18,7 @@ export default {
       password: envConfig.DB_PASSWORD || '123456',
       database: envConfig.DB_NAME || 'user_group'
     },
-    synchronize: true,
+    synchronize: !isProductionEnvironment,
     logging: !isProductionEnvironment,
   }
 };
