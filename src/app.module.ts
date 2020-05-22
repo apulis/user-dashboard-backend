@@ -48,4 +48,3 @@ import { UserRole } from './user-role/user-role.entity';
   providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService],
 })
 export class AppModule {}
-   
