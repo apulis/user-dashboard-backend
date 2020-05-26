@@ -18,7 +18,7 @@ export default {
       password: envConfig.DB_PASSWORD || '123456',
       database: envConfig.DB_NAME || 'user_group'
     },
-    synchronize: !isProductionEnvironment || global.firstInitingDataBase,
+    synchronize: true,
     logging: !isProductionEnvironment,
   }
 };

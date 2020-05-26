@@ -2,7 +2,6 @@
 
 import * as fs from 'fs';
 import * as mysql from 'mysql';
-import { createConnection } from 'typeorm';
 import * as dotenv from 'dotenv';
 
 
@@ -23,23 +22,13 @@ const connection = mysql.createConnection({
 export async function initDataBase() {
   return new Promise((resolve, reject) => {
     connection.connect((err: any) => {
-      let count = 0
       if (err) throw reject(err);
-      connection.query(`SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '${DB_NAME}'`, (err: any, result: any) => {
+      connection.query(`CREATE DATABASE IF NOT EXISTS ${DB_NAME} DEFAULT CHARACTER SET 'utf8mb4'`, (err: any) => {
         if (err) throw err;
-        if (result.length === 0) {
-          global.firstInitingDataBase = true;
-        }
-        connection.query(`CREATE DATABASE IF NOT EXISTS ${DB_NAME} DEFAULT CHARACTER SET 'utf8mb4'`, (err: any, result: any) => {
-          if (err) throw reject(err);
-          console.log(`success init database ${DB_NAME}`);
-          connection.end();
-          resolve();
-        });
-      })
-      
+        console.log(`success init database ${DB_NAME}`);
+        connection.end();
+        resolve();
+      });
     });
   })
 }
-
-

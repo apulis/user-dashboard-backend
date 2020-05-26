@@ -29,7 +29,7 @@ import { UserRole } from './user-role/user-role.entity';
 @Module({
   imports: [
     CasbinModule.forRootAsync(
-      {...typeOrmConfig, synchronize: true} as ConnectionOptions,
+      { ...typeOrmConfig } as ConnectionOptions,
       "src/common/authz/authz.model.conf"
     ),
     TypeOrmModule.forRoot(typeOrmConfig as TypeOrmModuleOptions),
