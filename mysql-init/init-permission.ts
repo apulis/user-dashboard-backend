@@ -31,7 +31,7 @@ export const initialPermissions: Permission[] = [
   },
   {
     id: 3,
-    name: 'Use VC',
+    name: 'View VC',
     key: EnumPermissionKeys.VIEW_VC,
     note: '',
     project: ProjectTypes.DLWORKSPACE,
