@@ -15,8 +15,8 @@ LOGGING_DIR=logs
 LOGGING_LEVEL=debug
 
 # Auth
-JWT_SECRET_KEY=4C31F7EFD6857D91E729165510520424
-SECRET_KEY='WJiol_8776#'
+JWT_SECRET_KEY=Sign key for JWT
+SECRET_KEY=Sign key for Password
 
 # OAuth
 MS_CLIENT_ID=6d93837b-d8ce-48b9-868a-39a9d843dc57
@@ -34,12 +34,18 @@ DB_HOST=localhost
 DB_TYPE=mysql
 DB_PORT=3306
 DB_USERNAME=root
-DB_PASSWORD=123456
+DB_PASSWORD=password
 DB_NAME=user_group
 
-FIRST_USER="{"userName":"xianjie.han","password":"123456","id":1}"
+FIRST_USER="{"userName":"xianjie.han","password":"password","id":1}"
 FIRST_USER_ROLE="{"userId":1,"roleId":1}"
 ```
+
+部分配置项说明：
+JWT_SECRET_KEY： JWT 的签名 key
+SECRET_KEY：加密用户密码的盐
+FIRST_USER：具有 admin 权限的用户信息，是 json 的格式
+
 
 ### 2. 编译
 
