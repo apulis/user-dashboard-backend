@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
+import { RateLimiterModule, RateLimiterInterceptor } from 'nestjs-rate-limiter';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { typeOrmConfig } from './db/typeorm';
 import { GroupModule } from './group/group.module';
@@ -42,9 +45,13 @@ import { UserRole } from './user-role/user-role.entity';
     UserRoleModule,
     AuthModule,
     TypeOrmModule.forFeature([Permission, Role, User, UserRole]),
-    OpenModule
+    OpenModule,
+    RateLimiterModule
   ],
   controllers: [AppController],
-  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService],
+  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService, {
+    provide: APP_INTERCEPTOR,
+    useClass: RateLimiterInterceptor,
+},],
 })
 export class AppModule {}

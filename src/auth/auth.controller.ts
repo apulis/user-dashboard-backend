@@ -16,6 +16,7 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CasbinService } from 'src/common/authz';
 
 import { getJwtExp }  from 'src/utils';
+import { RateLimit } from 'nestjs-rate-limiter';
 
 interface IState {
   to: string;
@@ -86,6 +87,7 @@ export class AuthController {
   }
 
   @Post('/register')
+  @RateLimit({ points: 10, duration: 600 })
   @ApiOperation({
     description: '注册账号密码'
   })
@@ -121,6 +123,7 @@ export class AuthController {
   }
 
   @Post('/login')
+  @RateLimit({ points: 10, duration: 600 })
   @ApiOperation({
     description: '账号密码登录'
   })
