@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsString, IsEmail,  } from "class-validator";
+import { ArrayNotEmpty, IsString, IsEmail, IsArray,  } from "class-validator";
 import { ApiProperty, ApiTags, ApiMovedPermanentlyResponse } from "@nestjs/swagger";
 
 
@@ -24,7 +24,7 @@ export class CreateUserDto {
     note?: string;
   }[];
 
-  @ArrayNotEmpty()
+  @IsArray()
   @ApiProperty({
     description: '用户角色id数组',
     example: [
