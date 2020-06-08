@@ -48,6 +48,13 @@ export class GroupController {
     description: '新建用户组'
   })
   async createGroup(@Body() body: CreateGroupDto, @Res() res: Response) {
+    const group = await this.groupService.checkDupGroup(body.name);
+    if (group) {
+      res.send({
+        success: false,
+      });
+      return;
+    }
     const result = await this.groupService.createGroup(body);
     if (result) {
       const { id } = result;

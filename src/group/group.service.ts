@@ -108,4 +108,10 @@ export class GroupService {
       .where("group.id IN (:groupIds)", { groupIds: groupIds })
       .execute()
   }
+
+  async checkDupGroup(groupName: string) {
+    return this.groupRepository.findOne({
+      name: groupName
+    })
+  }
 }
