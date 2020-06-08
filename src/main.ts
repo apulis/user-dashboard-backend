@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-// import * as rateLimit from 'express-rate-limit';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -23,12 +22,6 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['error', 'warn']
   });
-  // app.use(
-  //   rateLimit({
-  //     windowMs: 15 * 60 * 1000, // 15 minutes
-  //     max: 1000, // limit each IP to 100 requests per windowMs
-  //   }),
-  // );
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   const options = new DocumentBuilder()
