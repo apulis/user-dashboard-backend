@@ -37,6 +37,13 @@ export class RoleService {
     await this.roleRepository.save(roles);
   }
 
+  public async checkDupItem(roleName: string) {
+    const role = this.roleRepository.findOne({
+      name: roleName
+    })
+    return role;
+  }
+
   public async getRoleCount(search?: string) {
     if (!search) {
       return await this.roleRepository

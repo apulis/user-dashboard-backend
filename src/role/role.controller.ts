@@ -40,6 +40,13 @@ export class RoleController {
     @Body() body: CreateRoleDto,
     @Res() res: Response
   ) {
+    const role = this.roleService.checkDupItem(body.name);
+    if (role) {
+      res.send({
+        success: false,
+      });
+      return;
+    }
     await this.roleService.createRole(body)
     res.status(HttpStatus.CREATED).json({
       success: true,
