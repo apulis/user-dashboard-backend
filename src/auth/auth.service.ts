@@ -56,7 +56,7 @@ export class AuthService {
     });
     let groupRolesId: number[];
     if (groups.length !== 0) {
-      const groupIds = groups.map(val => val.id);
+      const groupIds = groups.map(val => val.groupId);
       const groupRoles = await this.groupRoleRespository
         .createQueryBuilder('group_role')
         .select(['group_role.roleId', 'group_role.id', 'group_role.groupId'])
