@@ -131,7 +131,7 @@ export class RoleService {
   public async getRolesByRoleIds(roleIds: number[]) {
     return await this.roleRepository
       .createQueryBuilder('role')
-      .select(['name', 'id', 'note'])
+      .select(['name', 'id', 'note', 'isPreset'])
       .where("role.id IN (:roleIds)", { roleIds: roleIds })
       .execute()
   }
