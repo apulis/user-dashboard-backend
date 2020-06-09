@@ -17,7 +17,7 @@ export class CreateGroupDto {
   })
   note: string;
 
-  @ArrayNotEmpty()
+  @IsArray()
   @ApiProperty({
     description: '用户组的角色ID数组',
     example: [1, 2, 3]
