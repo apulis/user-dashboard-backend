@@ -97,7 +97,15 @@ export class GroupController {
   })
   async editGroupDetail(@Param('id') id: number, @Res() res: Response, @Body() body: EditGroupDto) {
     id = Number(id);
-    const { name, note} = body;
+    const { name, note } = body;
+    const dup = await this.groupService.checkDupGroup(name);
+    if (dup) {
+      res.send({
+        success: false,
+        message: `Groupname ${name} duplicated!`
+      });
+      return;
+    }
     await this.groupService.editGroupDetail(id, note, name);
     res.send({
       success: true,
