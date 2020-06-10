@@ -19,10 +19,10 @@ export class AppController {
     Promise.all([
       permissionService.initPermissions(),
       roleService.initDbRoles(),
-      userService.initFirstUser(),
+      userService.initAdminUser(),
     ])
     .then(async() => {
-      userRoleService.initFirstUserRole();
+      userRoleService.initAdminUserRole();
       casbinService.initRolePermissions();
     })
   }

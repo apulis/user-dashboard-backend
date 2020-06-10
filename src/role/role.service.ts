@@ -135,4 +135,12 @@ export class RoleService {
       .where("role.id IN (:roleIds)", { roleIds: roleIds })
       .execute()
   }
+
+  public async getRoleByRoleName(roleName: string) {
+    return await this.roleRepository
+      .findOne({
+        name: roleName
+      });
+    }
+
 }

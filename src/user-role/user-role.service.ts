@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRole } from './user-role.entity';
 import { Repository } from 'typeorm';
 import { ConfigService } from 'config/config.service';
+import { User } from 'src/user/user.entity';
+import { UserService } from 'src/user/user.service';
+import { RoleService } from 'src/role/role.service';
 
 const mapUserIdsAndRoleIds = (userIds: number[], roleIds: number[]) => {
   const userRole: {userId: number; roleId: number}[] = [];
@@ -28,6 +31,8 @@ export class UserRoleService {
   constructor(
     @InjectRepository(UserRole)
     private readonly userRoleRepository: Repository<UserRole>,
+    private readonly userService: UserService,
+    private readonly roleService: RoleService,
     private readonly configService: ConfigService
   ) { }
 
@@ -41,9 +46,14 @@ export class UserRoleService {
     return result;
   }
 
-  async initFirstUserRole() {
-    const FIRST_USER_ROLE = JSON.parse(this.configService.get('FIRST_USER_ROLE'));
-    return await this.addRoleToUser([FIRST_USER_ROLE.userId], [FIRST_USER_ROLE.roleId]);
+  async initAdminUserRole() {
+    const adminUserNames: string[] = JSON.parse(this.configService.get('ADMINISTRATOR_USER_NAME'));
+    const adminUserIds = await this.userService.getUserIdsByUserNames(adminUserNames);
+    const adminRole = await this.roleService.getRoleByRoleName('System Admin');
+    if (adminRole) {
+      return await this.addRoleToUser(adminUserIds, [adminRole.id]);
+    }
+    return true;
   }
 
   async checkDuplicateItems(userRole: IUserRole[]) {

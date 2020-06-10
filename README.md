@@ -34,17 +34,17 @@ DB_HOST=localhost
 DB_TYPE=mysql
 DB_PORT=3306
 DB_USERNAME=root
-DB_PASSWORD=password
+DB_PASSWORD=123456
 DB_NAME=user_group
 
-FIRST_USER="{"userName":"xianjie.han","password":"password","id":1}"
-FIRST_USER_ROLE="{"userId":1,"roleId":1}"
+ADMINISTRATOR_USER_NAME="["xianjie.han", "ADMIN"]"
+ADMINISTRATOR_PASSWORD=123456
 ```
 
 部分配置项说明：
 JWT_SECRET_KEY： JWT 的签名 key
 SECRET_KEY：加密用户密码的盐
-FIRST_USER：具有 admin 权限的用户信息，是 json 的格式
+ADMINISTRATOR_USER_NAME:  admin 权限的用户信息，是 Array 的格式
 
 
 ### 2. 编译

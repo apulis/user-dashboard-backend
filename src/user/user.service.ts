@@ -8,7 +8,7 @@ import { IUserMessage } from './user.controller';
 import { RegisterTypes } from 'src/constants/enums'
 import { User } from './user.entity';
 import { ConfigService } from 'config/config.service';
-import { encodePassword } from 'src/utils';
+import { encodePassword, md5 } from 'src/utils';
 
 interface ICreateUser extends IUserMessage {
   createTime: string;
@@ -35,14 +35,31 @@ export class UserService {
       .getCount();
   }
 
-  async initFirstUser() {
-    const firstUserExist = await this.usersRepository.findOne(1);
-    if (!firstUserExist) {
-      const firstUser = JSON.parse(this.config.get('FIRST_USER'));
-      firstUser.password = encodePassword(firstUser.password, this.config.get('SECRET_KEY'));
-      firstUser.createTime = new Date().getTime() + '';
-      await this.usersRepository.insert(firstUser);
-    }
+  async initAdminUser() {
+    const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+    const adminPassword = this.config.get('ADMINISTRATOR_PASSWORD');
+    const adminUsers: {
+      userName: string,
+      password: string,
+      createTime: string,
+    }[] = [];
+    // 先 md5 一次，模拟客户端加密过程
+    const encodedPassword = encodePassword(md5(adminPassword), this.config.get('SECRET_KEY'));
+    adminUserNames.forEach(u => {
+      adminUsers.push({
+        userName: u,
+        password: encodedPassword,
+        createTime: new Date().getTime() + '',
+      });
+    });
+    const result = await this.usersRepository
+      .createQueryBuilder()
+      .insert()
+      .orIgnore()
+      .into(User)
+      .values(adminUsers)
+      .execute();
+    return result;
   }
 
   async find(pageNo: number, pageSize: number): Promise<{list: User[], total: number}> {
@@ -307,5 +324,13 @@ export class UserService {
       await this.usersRepository.save(user);
       return user;
     }
+  }
+
+  async getUserIdsByUserNames(userNames: string[]): Promise<number[]> {
+    return await this.usersRepository
+      .createQueryBuilder()
+      .select('id')
+      .where("userName IN (:...names)", { names: userNames })
+      .execute()
   }
 }
