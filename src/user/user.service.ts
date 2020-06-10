@@ -42,6 +42,7 @@ export class UserService {
       userName: string,
       password: string,
       createTime: string,
+      id?: number;
     }[] = [];
     // 先 md5 一次，模拟客户端加密过程
     const encodedPassword = encodePassword(md5(adminPassword), this.config.get('SECRET_KEY'));
@@ -52,6 +53,7 @@ export class UserService {
         createTime: new Date().getTime() + '',
       });
     });
+    adminUsers[0].id = 30001;
     const result = await this.usersRepository
       .createQueryBuilder()
       .insert()
