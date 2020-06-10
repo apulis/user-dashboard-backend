@@ -1,9 +1,10 @@
-import { Controller, Get, Req, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, HttpStatus, UseGuards, Query, Param } from '@nestjs/common';
 import { IRequestUser } from 'src/auth/auth.controller';
 import { Request, Response } from 'express';
 import { CookieGuard } from 'src/guards/cookie.guard';
 import { ConfigService } from 'config/config.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { UserService } from 'src/user/user.service';
 
 @ApiTags('给其他平台使用的 api')
 @Controller('open')
@@ -11,6 +12,7 @@ export class OpenController {
 
   constructor(
     private readonly config: ConfigService,
+    private readonly userService: UserService
   ) {
     
   }
@@ -41,5 +43,15 @@ export class OpenController {
       res.status(HttpStatus.UNAUTHORIZED)
     }
     
+  }
+
+  @Get('/getUserIdByUserName/:userName')
+  async getUIdByUserName(@Param('userName') userName: string, @Res() res: Response) {
+    const userId = await this.userService.getUserIdsByUserNames([userName]);
+    console.log('userId', userId);
+    res.send({
+      success: true,
+      uid: userId[0].id,
+    });
   }
 }

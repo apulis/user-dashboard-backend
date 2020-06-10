@@ -328,7 +328,7 @@ export class UserService {
     }
   }
 
-  async getUserIdsByUserNames(userNames: string[]): Promise<number[]> {
+  async getUserIdsByUserNames(userNames: string[]): Promise<{id: number}[]> {
     return await this.usersRepository
       .createQueryBuilder()
       .select('id')

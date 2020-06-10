@@ -10,11 +10,12 @@ import { GroupRole } from 'src/group-role/group-role.entity';
 import { UserRole } from 'src/user-role/user-role.entity';
 import { Role } from 'src/role/role.entity';
 import { InitCasbin } from 'src/common/authz/init-casbin';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role]), InitCasbin],
   controllers: [OpenController],
-  providers: [OpenService, ConfigService, AuthService],
+  providers: [OpenService, ConfigService, AuthService, UserService],
 })
 export class OpenModule {
 }

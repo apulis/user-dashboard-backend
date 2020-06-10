@@ -51,7 +51,7 @@ export class UserRoleService {
     const adminUserIds = await this.userService.getUserIdsByUserNames(adminUserNames);
     const adminRole = await this.roleService.getRoleByRoleName('System Admin');
     if (adminRole) {
-      return await this.addRoleToUser(adminUserIds, [adminRole.id]);
+      return await this.addRoleToUser(adminUserIds.map(val => val.id), [adminRole.id]);
     }
     return true;
   }
