@@ -38,7 +38,7 @@ export const initialPermissions: Permission[] = [
   },
   {
     id: 4,
-    name: 'View all user jobs',
+    name: 'View all users jobs',
     key: EnumPermissionKeys.VIEW_ALL_USER_JOB,
     note: '',
     project: ProjectTypes.DLWORKSPACE,
