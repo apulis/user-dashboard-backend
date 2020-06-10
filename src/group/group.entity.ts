@@ -14,7 +14,7 @@ export class Group {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 191, unique: true })
+  @Column('varchar', { length: 191 })
   name: string;
 
   @IsString()
