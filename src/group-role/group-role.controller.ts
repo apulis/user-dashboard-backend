@@ -70,4 +70,17 @@ export class GroupRoleController {
       message: 'ok'
     })
   }
+
+  @Get('/role/:roleId/group')
+  @ApiOperation({
+    description: '获取一个角色所在的组'
+  })
+  async getRoleGroup(@Param('roleId') roleId: number, @Res() res: Response) {
+    roleId = Number(roleId);
+    const groupIds = await this.groupRoleService.getGroupIdByRoleId(roleId);
+    res.send({
+      success: true,
+      list: groupIds,
+    })
+  }
 }

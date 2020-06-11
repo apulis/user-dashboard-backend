@@ -9,6 +9,7 @@ import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthzGuard } from 'src/guards/authz.guard';
+import { ConfigService } from 'config/config.service';
 
 export interface IUserMessage {
   userName: string;
@@ -34,7 +35,8 @@ export interface ICreateUser {
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly userRoleService: UserRoleService
+    private readonly userRoleService: UserRoleService,
+    private readonly config: ConfigService,
     ) {}
 
   @Get('/list')
@@ -148,6 +150,18 @@ export class UserController {
     res.send({
       success: true,
       count,
+    })
+  }
+
+  @Get('/adminUsers')
+  @ApiProperty({
+    description: '获取管理员用户'
+  })
+  async getAdminUsers(@Res() res: Response) {
+    const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+    res.send({
+      success: true,
+      list: adminUserNames,
     })
   }
 }

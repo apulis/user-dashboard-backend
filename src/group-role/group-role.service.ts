@@ -75,4 +75,11 @@ export class GroupRoleService {
       this.groupRoleRepository.remove(removeItem);
     }
   }
+
+  async getGroupIdByRoleId(roleId: number) {
+    const groupIds = await this.groupRoleRepository.find({
+      roleId,
+    })
+    return groupIds.map(val => val.groupId);
+  }
 }
