@@ -5,6 +5,7 @@ import { CookieGuard } from 'src/guards/cookie.guard';
 import { ConfigService } from 'config/config.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { UserService } from 'src/user/user.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('给其他平台使用的 api')
 @Controller('open')
@@ -46,6 +47,9 @@ export class OpenController {
   }
 
   @Get('/getUserIdByUserName/:userName')
+  @ApiOperation({
+    description: '根据用户名称获取 uid'
+  })
   async getUIdByUserName(@Param('userName') userName: string, @Res() res: Response) {
     const userId = await this.userService.getUserIdsByUserNames([userName]);
     console.log('userId', userId);
@@ -53,5 +57,30 @@ export class OpenController {
       success: true,
       uid: userId[0].id,
     });
+  }
+
+  @Get('/adminUser')
+  @ApiOperation({
+    description: '获取具有 admin 权限的用户名'
+  })
+  @UseGuards(AuthGuard('jwt'))
+  async getAdminUser(@Res() res: Response) {
+    const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+    res.send({
+      success: true,
+      list: adminUserNames,
+    })
+  }
+
+  @Get('/allUsers')
+  @ApiOperation({
+    description: '获取所有用户',
+  })
+  async getAllUsers(@Res() res: Response) {
+    const list = await this.userService.openFindAll();
+    res.send({
+      success: true,
+      list
+    })
   }
 }

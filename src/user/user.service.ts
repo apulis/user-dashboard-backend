@@ -10,6 +10,12 @@ import { User } from './user.entity';
 import { ConfigService } from 'config/config.service';
 import { encodePassword, md5 } from 'src/utils';
 
+export const openRegisterTypes = {
+  Microsoft: 3001,
+  Wechat: 3003,
+  Account: 3005,
+}
+
 interface ICreateUser extends IUserMessage {
   createTime: string;
   openId: string;
@@ -334,5 +340,23 @@ export class UserService {
       .select('id')
       .where("userName IN (:...names)", { names: userNames })
       .execute()
+  }
+
+  async openFindAll() {
+    const list = await this.usersRepository
+      .createQueryBuilder('user')
+      .select(['user.userName', 'user.id', 'user.registerType'])
+      .where('isDelete != 1')
+      .getMany();
+    const result = list.map(l => {
+      const registerType = l.registerType;
+      return {
+        uid: l.id,
+        userName: l.userName,
+        // @ts-ignore
+        gid: openRegisterTypes[registerType]
+      }
+    })
+    return result;
   }
 }
