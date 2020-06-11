@@ -76,6 +76,7 @@ export class OpenController {
   @ApiOperation({
     description: '获取所有用户',
   })
+  @UseGuards(AuthGuard('jwt'))
   async getAllUsers(@Res() res: Response) {
     const list = await this.userService.openFindAll();
     res.send({
