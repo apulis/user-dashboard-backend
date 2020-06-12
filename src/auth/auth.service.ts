@@ -96,7 +96,6 @@ export class AuthService {
     const isPasswordBeReseted = await this.resetPasswordRespository.findOne({
       userId: uid,
     });
-    console.log(123123, isPasswordBeReseted)
     if (isPasswordBeReseted) {
       return undefined;
     }
