@@ -1,14 +1,16 @@
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, getManager } from 'typeorm';
 import { Injectable, Res } from '@nestjs/common';
 import { Brackets } from 'typeorm';
 import { IUserMessage } from './user.controller';
+import { ResetPassword } from './reset-password.entity';
 
 import { RegisterTypes } from 'src/constants/enums'
 import { User } from './user.entity';
 import { ConfigService } from 'config/config.service';
 import { encodePassword, md5 } from 'src/utils';
+import { async } from 'rxjs/internal/scheduler/async';
 
 export const openRegisterTypes = {
   Microsoft: 3001,
@@ -31,6 +33,7 @@ const noteQuery = 'note LIKE :search';
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly resetPasswordRepository: Repository<ResetPassword>,
     private readonly config: ConfigService,
   ) { }
 
@@ -365,7 +368,19 @@ export class UserService {
     if (currentUser) {
       
       currentUser.password = encodePassword(password,  this.config.get('SECRET_KEY'));
-      return await this.usersRepository.save(currentUser);
+      getManager()
+        .transaction(async() => {
+          await this.usersRepository.save(currentUser);
+          await this.resetPasswordRepository.createQueryBuilder()
+            .insert()
+            .orIgnore()
+            .into(ResetPassword)
+            .values([{
+              userId,
+            }])
+            .execute()
+        })
+      
     }
     return false;
   }

@@ -11,9 +11,10 @@ import { RoleService } from 'src/role/role.service';
 import { Role } from 'src/role/role.entity';
 import { CasbinService } from 'src/common/authz';
 import { InitCasbin } from 'src/common/authz/init-casbin';
+import { ResetPassword } from './reset-password.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserRole, Role]), InitCasbin],
+  imports: [TypeOrmModule.forFeature([User, UserRole, Role, ResetPassword]), InitCasbin],
   controllers: [UserController],
   providers: [UserService, UserRoleService, ConfigService, RoleService],
 })
