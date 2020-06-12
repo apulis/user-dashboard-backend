@@ -48,3 +48,8 @@ export class EditUserDto {
   @IsString()
   phone: string;
 }
+
+export class resetPasswordDto {
+  @IsString()
+  newPassword: string;
+}

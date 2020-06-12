@@ -359,4 +359,14 @@ export class UserService {
     })
     return result;
   }
+
+  async resetPassword(userId: number, password: string) {
+    const currentUser = await this.usersRepository.findOne(userId);
+    if (currentUser) {
+      
+      currentUser.password = encodePassword(password,  this.config.get('SECRET_KEY'));
+      return await this.usersRepository.save(currentUser);
+    }
+    return false;
+  }
 }

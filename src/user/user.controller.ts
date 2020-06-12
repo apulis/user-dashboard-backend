@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch, UseGuards, MethodNotAllowedException } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { UpdateResult } from 'typeorm';
 import { UserRoleService } from 'src/user-role/user-role.service';
-import { CreateUserDto, EditUserDto } from './user.dto'
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto, EditUserDto, resetPasswordDto } from './user.dto'
+import { ApiProperty, ApiTags, ApiDefaultResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthzGuard } from 'src/guards/authz.guard';
@@ -162,6 +162,24 @@ export class UserController {
     res.send({
       success: true,
       list: adminUserNames,
+    })
+  }
+
+  @Patch('/:userId/resetPassword')
+  @ApiProperty({
+    description: '重置用户密码',
+  })
+  async resetUserPassword(@Param('userId') userId: number, @Body() resetPassword: resetPasswordDto, @Res() res: Response) {
+    userId = Number(userId);
+    const result = await this.userService.resetPassword(userId, resetPassword.newPassword);
+    let status: HttpStatus;
+    if (result === false) {
+      status = 200;
+    } else {
+      status = 201;
+    }
+    res.status(status).send({
+      success: status === 201 ? true : false,
     })
   }
 }
