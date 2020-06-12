@@ -16,6 +16,7 @@ import { MS_OAUTH2_URL } from 'src/constants/config';
 import { RegisterTypes } from 'src/constants/enums';
 import { CasbinService } from 'src/common/authz';
 import { UserRoleService } from 'src/user-role/user-role.service';
+import { ResetPassword } from 'src/user/reset-password.entity';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,7 @@ export class AuthService {
     @InjectRepository(GroupRole) private readonly groupRoleRespository: Repository<GroupRole>,
     @InjectRepository(UserRole) private readonly userRoleRespository: Repository<UserRole>,
     @InjectRepository(Role) private readonly roleRespository: Repository<Role>,
+    @InjectRepository(ResetPassword) private readonly resetPasswordRespository: Repository<ResetPassword>,
     private readonly config: ConfigService,
     private readonly casbinService: CasbinService,
   ) {
@@ -91,6 +93,13 @@ export class AuthService {
       id: uid,
       isDelete: 0,
     });
+    const isPasswordBeReseted = await this.resetPasswordRespository.findOne({
+      userId: uid,
+    });
+    console.log(123123, isPasswordBeReseted)
+    if (isPasswordBeReseted) {
+      return undefined;
+    }
     if (user) {
       const currentRole = await this.getUserRoles(user.id);
       const permissionList = await this.getUserPermissionList(user.id);
@@ -142,5 +151,16 @@ export class AuthService {
     return await this.usersRepository.findOne({
       wechatId
     })
+  }
+
+  async clearResetPasswordTag(userId: number) {
+    const r = await this.resetPasswordRespository.findOne({
+      userId,
+    })
+    if (r) {
+      await this.resetPasswordRespository.remove(r);
+      return true;
+    }
+    return false
   }
 }

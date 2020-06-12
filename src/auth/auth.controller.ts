@@ -133,7 +133,8 @@ export class AuthController {
     if (validatedUser) {
       const token = await this.authService.getIdToken(validatedUser.id, validatedUser.userName);
       const currentRole = await this.authService.getUserRoles(validatedUser.id);
-      const permissionList = await this.authService.getUserPermissionList(validatedUser.id)
+      const permissionList = await this.authService.getUserPermissionList(validatedUser.id);
+      await this.authService.clearResetPasswordTag(validatedUser.id);
       res.cookie('token', token, {
         httpOnly: true,
         maxAge: getJwtExp()
@@ -200,6 +201,7 @@ export class AuthController {
         const user = await this.userService.getMSUserInfoByOpenId(userInfo.openId, userInfo.nickName, userInfo.registerType);
         if (user) {
           const token = this.authService.getIdToken(user.id, user.userName);
+          await this.authService.clearResetPasswordTag(user.id);
           res.cookie('token', token, {
             httpOnly: true,
             maxAge: getJwtExp()
@@ -216,6 +218,7 @@ export class AuthController {
         const dbUser = await this.userService.updateUserMicrosoftId(stateObj.userId, userInfo.openId);
         if (dbUser) {
           const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
+          await this.authService.clearResetPasswordTag(stateObj.userId);
           res.cookie('token', token, {
             httpOnly: true,
             maxAge: getJwtExp()
@@ -279,6 +282,7 @@ export class AuthController {
         const user = await this.userService.getWXUserInfoByOpenId(tempOpenId, nickname, RegisterTypes.Wechat);
         if (user) {
           const token = this.authService.getIdToken(user.id, user.userName);
+          await this.authService.clearResetPasswordTag(user.id);
           res.cookie('token', token, {
             httpOnly: true,
             maxAge: getJwtExp()
@@ -294,6 +298,7 @@ export class AuthController {
         
         if (dbUser) {
           const token = this.authService.getIdToken(stateObj.userId, dbUser.userName);
+          await this.authService.clearResetPasswordTag(stateObj.userId);
           res.cookie('token', token, {
             httpOnly: true,
             maxAge: getJwtExp()
