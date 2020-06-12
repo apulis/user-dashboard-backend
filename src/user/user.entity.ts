@@ -16,7 +16,7 @@ export class User {
   userName: string;
 
   @IsString()
-  @Length(5, 18)
+  @Length(5, 20)
   @Column('varchar', { length: 191, nullable: true })
   password: string;
 
