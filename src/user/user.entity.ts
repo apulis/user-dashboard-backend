@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany } from 'typeorm';
-import { IsString, IsEmail, Length, IsDateString, IsOptional } from 'class-validator';
-import { UserRole } from 'src/user-role/user-role.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { IsString, IsEmail, Length } from 'class-validator';
 
 
 @Entity({
