@@ -63,7 +63,6 @@ export class OpenController {
   @ApiOperation({
     description: '获取具有 admin 权限的用户名'
   })
-  @UseGuards(AuthGuard('jwt'))
   async getAdminUser(@Res() res: Response) {
     const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
     res.send({
