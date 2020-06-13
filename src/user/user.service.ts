@@ -11,6 +11,7 @@ import { User } from './user.entity';
 import { ConfigService } from 'config/config.service';
 import { encodePassword, md5 } from 'src/utils';
 import { async } from 'rxjs/internal/scheduler/async';
+import axios from 'axios';
 
 export const openRegisterTypes = {
   Microsoft: 3001,
@@ -203,14 +204,32 @@ export class UserService {
 
   }
 
-  async remove(userNames: string[]): Promise<any> {
-    return await this.usersRepository
+  async remove(userNames: string[]) {
+    const result = await Promise.all(userNames.map(async userName => {
+      return await this.checkUserActiveJobs(userName)
+    }));
+    if (result.includes(false)) {
+      const activeJobUserName: string[] = []
+      result.forEach((r, index) => {
+        if (r) {
+          activeJobUserName.push(userNames[index]);
+        }
+      })
+      return {
+        success: false,
+        message: 'User ' + activeJobUserName.join(', ') + ' has active job, please confirm!'
+      }
+    }
+    await this.usersRepository
       .createQueryBuilder('user')
       .delete()
       .where('user.userName IN (:userNames)', {
         userNames: userNames
       })
       .execute()
+    return {
+      success: true
+    }
   }
 
   async findUserByUserNames(userNames: string[]): Promise<any[]> {
@@ -383,5 +402,15 @@ export class UserService {
       
     }
     return false;
+  }
+
+  async checkUserActiveJobs(userName: string): Promise<boolean> {
+    const RESTFULAPI = this.config.get('RESTFULAPI');
+    const res = await axios.get(RESTFULAPI + '/HasCurrentActiveJob', {
+      params: {
+        userName,
+      }
+    })
+    return res.data;
   }
 }

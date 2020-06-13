@@ -107,12 +107,19 @@ export class UserController {
     description: '删除用户'
   })
   async removeUsers(@Body() body: string[], @Res() res: Response) {
-    const userNames = body
-    const result: UpdateResult = await this.userService.remove(userNames);
-    res.status(HttpStatus.ACCEPTED).json({
-      success: true,
-      message: `Success remove ${result.raw.affectedRows} records`
-    })
+    const userNames = body;
+    if (userNames.length > 0) {
+      
+    }
+    const result = await this.userService.remove(userNames);
+    if (result.success) {
+      res.status(HttpStatus.ACCEPTED).json({
+        success: true,
+      });
+    } else {
+      res.send(result);
+    }
+    
   }
 
   @Get('/detail/:id')
