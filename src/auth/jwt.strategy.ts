@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (payload.uid === 30000) {
       // 其他平台调用
       return {
-        userName: 'Admin',
+        userName: 'ADMIN_FOR_SELF',
       }
     }
     const user = await this.authService.validateUser(payload.uid);
