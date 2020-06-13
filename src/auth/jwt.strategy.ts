@@ -18,7 +18,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any): Promise<User | UnauthorizedException> {
+  async validate(payload: any): Promise<User | UnauthorizedException | any> {
+    if (payload.uid === 30000) {
+      // 其他平台调用
+      return {
+        userName: 'Admin',
+      }
+    }
     const user = await this.authService.validateUser(payload.uid);
     if (user) {
       return user;
