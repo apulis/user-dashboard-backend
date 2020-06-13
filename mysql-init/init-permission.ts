@@ -9,7 +9,7 @@ export enum EnumPermissionKeys {
   MANAGE_VC = 'MANAGE_VC',
   VIEW_VC = 'VIEW_VC',
   VIEW_ALL_USER_JOB = 'VIEW_ALL_USER_JOB',
-  MANAGE_ALL_USERS_JOB = 'MANAGE_ALL_USERS_JOB',
+  VIEW_AND_MANAGE_ALL_USERS_JOB = 'VIEW_AND_MANAGE_ALL_USERS_JOB',
   VIEW_CLUSTER_STATUS = 'VIEW_CLUSTER_STATUS',
   MANAGE_USER = 'MANAGE_USER',
 }
@@ -45,8 +45,8 @@ export const initialPermissions: Permission[] = [
   },
   {
     id: 5,
-    name: 'Manage all users job',
-    key: EnumPermissionKeys.MANAGE_ALL_USERS_JOB,
+    name: 'View and manage all users job',
+    key: EnumPermissionKeys.VIEW_AND_MANAGE_ALL_USERS_JOB,
     note: '',
     project: ProjectTypes.DLWORKSPACE,
   },
