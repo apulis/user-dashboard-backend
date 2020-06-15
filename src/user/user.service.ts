@@ -387,7 +387,7 @@ export class UserService {
     if (currentUser) {
       
       currentUser.password = encodePassword(password,  this.config.get('SECRET_KEY'));
-      getManager()
+      await getManager()
         .transaction(async() => {
           await this.usersRepository.save(currentUser);
           await this.resetPasswordRepository.createQueryBuilder()
@@ -399,6 +399,7 @@ export class UserService {
             }])
             .execute()
         })
+      return true
       
     }
     return false;
