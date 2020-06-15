@@ -36,6 +36,9 @@ export class AuthService {
     const user = await this.usersRepository.findOne({
       userName,
     })
+    if (user?.userName !== userName) {
+      return false;
+    }
     const SECRET_KEY = this.config.get('SECRET_KEY');
     if (user && user.password === encodePassword(password, SECRET_KEY)) {
       return user;
