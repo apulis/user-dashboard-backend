@@ -208,7 +208,7 @@ export class UserService {
     const result = await Promise.all(userNames.map(async userName => {
       return await this.checkUserActiveJobs(userName)
     }));
-    if (result.includes(false)) {
+    if (result.includes(true)) {
       const activeJobUserName: string[] = []
       result.forEach((r, index) => {
         if (r) {
