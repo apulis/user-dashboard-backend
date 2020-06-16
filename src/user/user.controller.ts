@@ -106,11 +106,10 @@ export class UserController {
   @ApiProperty({
     description: '删除用户'
   })
-  async removeUsers(@Body() body: string[], @Res() res: Response) {
-    const userNames = body;
-    if (userNames.length > 0) {
-      
-    }
+  async removeUsers(@Body() body: number[], @Res() res: Response) {
+    const userIds = body;
+    const removingUsers: any[] = await this.userService.findUsersByUserIds(userIds);
+    const userNames = removingUsers.map(u => u.userName);
     const result = await this.userService.remove(userNames);
     if (result.success) {
       res.status(HttpStatus.ACCEPTED).json({
