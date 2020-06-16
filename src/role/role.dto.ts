@@ -6,7 +6,7 @@ export class CreateRoleDto {
   
   @ApiProperty({ description: '角色名称' })
   @IsNotEmpty()
-  @Length(1, 15)
+  @Length(1, 20)
   name: string;
   
   @ApiProperty({ description: '角色功能描述' })
