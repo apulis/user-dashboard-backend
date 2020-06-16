@@ -204,7 +204,7 @@ export class UserService {
 
   }
 
-  async remove(userNames: string[]) {
+  async remove(userNames: string[], userIds: number[]) {
     const result = await Promise.all(userNames.map(async userName => {
       return await this.checkUserActiveJobs(userName)
     }));
@@ -223,8 +223,8 @@ export class UserService {
     await this.usersRepository
       .createQueryBuilder('user')
       .delete()
-      .where('user.userName IN (:userNames)', {
-        userNames: userNames
+      .where('user.id IN (:userIds)', {
+        userIds: userIds
       })
       .execute()
     return {

@@ -110,7 +110,7 @@ export class UserController {
     const userIds = body;
     const removingUsers: any[] = await this.userService.findUsersByUserIds(userIds);
     const userNames = removingUsers.map(u => u.userName);
-    const result = await this.userService.remove(userNames);
+    const result = await this.userService.remove(userNames, userIds);
     if (result.success) {
       res.status(HttpStatus.ACCEPTED).json({
         success: true,
