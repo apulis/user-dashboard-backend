@@ -29,7 +29,6 @@ export interface ICreateUser {
 }
 
 @Controller('/users')
-@UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
 @UseGuards(RolesGuard)
 @ApiTags('用户')
 export class UserController {
@@ -43,6 +42,7 @@ export class UserController {
   @ApiProperty({
     description: '分页获取用户列表'
   })
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async getUsers(
     @Res() res: Response,
     @Query('pageNo') pageNo?: string | number, 
@@ -80,6 +80,7 @@ export class UserController {
   @ApiProperty({
     description: '新增用户'
   })
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async createUsers(@Body() body: CreateUserDto, @Res() res: Response) {
     const { userMessage, userRole } = body;
     const userNames = userMessage.map(val => val.userName);
@@ -106,6 +107,7 @@ export class UserController {
   @ApiProperty({
     description: '删除用户'
   })
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async removeUsers(@Body() body: number[], @Res() res: Response) {
     const userIds = body;
     const removingUsers: any[] = await this.userService.findUsersByUserIds(userIds);
@@ -125,6 +127,7 @@ export class UserController {
   @ApiProperty({
     description: '获取用户详情'
   })
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async getUserById(@Param('id') id: number, @Res() res: Response) {
     const userId = Number(id);
     const user = await this.userService.getUserById(userId);
@@ -138,6 +141,7 @@ export class UserController {
   @ApiProperty({
     description: '修改用户角色'
   })
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async editUserRole(@Param('id') id: number, @Body() userInfo: EditUserDto, @Res() res: Response) {
     const userId = Number(id);
     const { email, phone, note, nickName} = userInfo;
@@ -151,6 +155,7 @@ export class UserController {
   @ApiProperty({
     description: '获取用户总数'
   })
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async getTotalUsersCount(@Res() res: Response) {
     const count: number = await this.userService.getUserCount()
     res.send({
@@ -175,6 +180,7 @@ export class UserController {
   @ApiProperty({
     description: '重置用户密码',
   })
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async resetUserPassword(@Param('userId') userId: number, @Body() resetPassword: resetPasswordDto, @Res() res: Response) {
     userId = Number(userId);
     const result = await this.userService.resetPassword(userId, resetPassword.newPassword);
