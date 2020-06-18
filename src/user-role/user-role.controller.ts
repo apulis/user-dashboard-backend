@@ -83,4 +83,14 @@ export class UserRoleController {
       success: true,
     })
   }
+
+  @Get('/user-by-roleId/:roleId')
+  async getUserByRoleId(@Param('roleId') roleId: number, @Res() res: Response) {
+    roleId = Number(roleId);
+    const userIds = await this.userRoleService.findUserIdByRoleId(roleId);
+    res.send({
+      success: true,
+      list: userIds,
+    })
+  }
 }

@@ -131,4 +131,11 @@ export class UserRoleService {
     }
     return false;
   }
+
+  async findUserIdByRoleId(roleId: number) {
+    const userRole = await this.userRoleRepository.find({
+      roleId,
+    })
+    return userRole.map(val => val.userId);
+  }
 }
