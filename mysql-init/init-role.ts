@@ -5,13 +5,13 @@ export const initialRole: Role[] = [
   {
     name: 'System Admin',
     isPreset: 1,
-    note: '',
+    note: 'All permissions',
     id: 1,
   },
   {
     name: 'User',
     isPreset: 1,
-    note: '',
+    note: 'Submit training job, View VC, View cluster status',
     id: 2,
   }
 ]
