@@ -1,7 +1,7 @@
 import { Permission } from '../src/permission/permission.entity';
 
 export enum ProjectTypes {
-  DLWORKSPACE = 'DLWORKSPACE'
+  DLWORKSPACE = 'Apulis AI Training Platform'
 }
 
 export enum EnumPermissionKeys {
@@ -17,7 +17,7 @@ export enum EnumPermissionKeys {
 export const initialPermissions: Permission[] = [
   {
     id: 1,
-    name: 'Submit traning job',
+    name: 'Submit training job',
     key: EnumPermissionKeys.SUBMIT_TRAINING_JOB,
     note: '',
     project: ProjectTypes.DLWORKSPACE,
