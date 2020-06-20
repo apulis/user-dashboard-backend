@@ -100,11 +100,13 @@ export class GroupController {
     const { name, note } = body;
     const dup = await this.groupService.checkDupGroup(name);
     if (dup) {
-      res.send({
-        success: false,
-        message: `Groupname ${name} duplicated!`
-      });
-      return;
+      if (dup.id !== id) {
+        res.send({
+          success: false,
+          message: `Groupname ${name} duplicated!`
+        });
+        return;
+      }
     }
     await this.groupService.editGroupDetail(id, note, name);
     res.send({

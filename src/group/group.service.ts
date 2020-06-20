@@ -109,9 +109,17 @@ export class GroupService {
       .execute()
   }
 
-  async checkDupGroup(groupName: string) {
-    return this.groupRepository.findOne({
-      name: groupName
-    })
+  async checkDupGroup(groupName: string, id?: number) {
+    if (id) {
+      return this.groupRepository.findOne({
+        name: groupName,
+        id,
+      })
+    } else {
+      return this.groupRepository.findOne({
+        name: groupName,
+      })
+    }
+    
   }
 }
