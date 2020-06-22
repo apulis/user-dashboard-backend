@@ -11,7 +11,7 @@ export const initialRole: Role[] = [
   {
     name: 'User',
     isPreset: 1,
-    note: 'Submit training job, View VC, View cluster status',
+    note: 'Submit training job, View VC, View cluster status, View all users job',
     id: 2,
   }
 ]
