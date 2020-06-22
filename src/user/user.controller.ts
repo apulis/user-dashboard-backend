@@ -142,11 +142,12 @@ export class UserController {
 
   @Patch('/:id')
   @ApiProperty({
-    description: '修改用户角色'
+    description: '修改用户详情'
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async editUserRole(@Param('id') id: number, @Body() userInfo: EditUserDto, @Res() res: Response) {
     const userId = Number(id);
+    await this.authService.checkIfChangeAdminUsers([userId]);
     const { email, phone, note, nickName} = userInfo;
     await this.userService.editUserDetail(userId, email, phone, note, nickName);
     res.send({
@@ -186,6 +187,7 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async resetUserPassword(@Param('userId') userId: number, @Body() resetPassword: resetPasswordDto, @Res() res: Response) {
     userId = Number(userId);
+    await this.authService.checkIfChangeAdminUsers([userId]);
     const result = await this.userService.resetPassword(userId, resetPassword.newPassword);
     let status: HttpStatus;
     if (result === false) {
