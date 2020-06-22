@@ -1,7 +1,7 @@
 import { Permission } from '../src/permission/permission.entity';
 
 export enum ProjectTypes {
-  DLWORKSPACE = 'Apulis AI Training Platform'
+  DLWORKSPACE = 'Apulis Deep Learning Platform'
 }
 
 export enum EnumPermissionKeys {
