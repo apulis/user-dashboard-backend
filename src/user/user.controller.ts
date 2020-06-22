@@ -10,6 +10,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { ConfigService } from 'config/config.service';
+import { AuthService } from 'src/auth/auth.service';
 
 export interface IUserMessage {
   userName: string;
@@ -36,6 +37,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly userRoleService: UserRoleService,
     private readonly config: ConfigService,
+    private readonly authService: AuthService
     ) {}
 
   @Get('/list')
@@ -110,6 +112,7 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async removeUsers(@Body() body: number[], @Res() res: Response) {
     const userIds = body;
+    await this.authService.checkIfChangeAdminUsers(userIds);
     const removingUsers: any[] = await this.userService.findUsersByUserIds(userIds);
     const userNames = removingUsers.map(u => u.userName);
     const result = await this.userService.remove(userNames, userIds);
