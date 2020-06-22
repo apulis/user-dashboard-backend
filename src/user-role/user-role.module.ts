@@ -9,10 +9,14 @@ import { InitCasbin } from 'src/common/authz/init-casbin';
 import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
+import { AuthService } from 'src/auth/auth.service';
+import { GroupUser } from 'src/group-user/group-user.entity';
+import { GroupRole } from 'src/group-role/group-role.entity';
+import { ResetPassword } from 'src/user/reset-password.entity';
 
 @Module({
   controllers: [UserRoleController],
-  providers: [UserRoleService, RoleService, UserService, ConfigService],
-  imports: [TypeOrmModule.forFeature([UserRole, Role, User]), InitCasbin]
+  providers: [UserRoleService, RoleService, UserService, ConfigService, AuthService],
+  imports: [TypeOrmModule.forFeature([UserRole, Role, User, GroupUser, GroupRole, ResetPassword]), InitCasbin]
 })
 export class UserRoleModule {}

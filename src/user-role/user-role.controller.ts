@@ -7,6 +7,7 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('user-role')
 @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -14,7 +15,8 @@ import { AuthzGuard } from 'src/guards/authz.guard';
 export class UserRoleController {
   constructor(
     private readonly userRoleService: UserRoleService,
-    private readonly roleService: RoleService
+    private readonly roleService: RoleService,
+    private readonly authService: AuthService,
   ) { }
 
   @Post()
@@ -36,6 +38,7 @@ export class UserRoleController {
   })
   async editUserRoles(@Body() body: EditUserRolesDto, @Res() res: Response) {
     const { userId, roleIds } = body;
+    await this.authService.checkIfChangeAdminUsers([userId]);
     await this.userRoleService.eidtUserRoles(userId, roleIds);
     res.send({
       success: true,
@@ -78,6 +81,7 @@ export class UserRoleController {
   async removeUserROle(@Param('userId') userId: number, @Res() res: Response, @Query() query: RemoveUserRoleDto) {
     const { roleId } = query;
     userId = Number(userId);
+    await this.authService.checkIfChangeAdminUsers([userId]);
     await this.userRoleService.removeRoleForUser(userId, roleId);
     res.send({
       success: true,
