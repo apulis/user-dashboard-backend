@@ -24,15 +24,18 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  const options = new DocumentBuilder()
+  if (process.env.NODE_ENV === 'develop') {
+    const options = new DocumentBuilder()
     .setTitle('User group example')
     .setDescription('The user group API description')
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('user group')
     .build();
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('/docs', app, document);
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('/docs', app, document);
+  }
+
   app.use(helmet());
   app.use(cookieParser());
   app.disable('x-powered-by');
