@@ -29,6 +29,7 @@ const userNameQuery = 'userName LIKE :search';
 const nickNameQuery = 'nickName LIKE :search';
 const emailQuery = 'email LIKE :search';
 const noteQuery = 'note LIKE :search';
+const phoneQuery = 'phone LIKE :search';
 
 @Injectable()
 export class UserService {
@@ -111,6 +112,8 @@ export class UserService {
         return subQuery
           .where(userNameQuery)
           .orWhere(nickNameQuery)
+          .orWhere(emailQuery)
+          .orWhere(phoneQuery)
       }))
       .setParameters(
         {search: search}
@@ -125,7 +128,7 @@ export class UserService {
           .where(userNameQuery)
           .orWhere(nickNameQuery)
           .orWhere(emailQuery)
-          .orWhere(noteQuery)
+          .orWhere(phoneQuery)
       }))
       .setParameters(
         {search: search}
@@ -147,6 +150,8 @@ export class UserService {
         return subQuery
           .where(userNameQuery)
           .orWhere(nickNameQuery)
+          .orWhere(emailQuery)
+          .orWhere(phoneQuery)
       }))
       .setParameters(
         {search: search}
@@ -161,7 +166,7 @@ export class UserService {
           .where(userNameQuery)
           .orWhere(nickNameQuery)
           .orWhere(emailQuery)
-          .orWhere(noteQuery)
+          .orWhere(phoneQuery)
       }))
       .setParameters(
         {search: search}
