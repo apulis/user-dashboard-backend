@@ -12,9 +12,13 @@ export enum EnumPermissionKeys {
   VIEW_AND_MANAGE_ALL_USERS_JOB = 'VIEW_AND_MANAGE_ALL_USERS_JOB',
   VIEW_CLUSTER_STATUS = 'VIEW_CLUSTER_STATUS',
   MANAGE_USER = 'MANAGE_USER',
+  // optional
+  MODEL_DEPLOYMENT = 'MODEL_DEPLOYMENT',
+  CLOUD_INFERENCE = 'CLOUD_INFERENCE',
+  EDGE_INFERENCE = 'EDGE_INFERENCE',
 }
 
-export const initialPermissions: Permission[] = [
+const initialPermissions: Permission[] = [
   {
     id: 1,
     name: 'Submit training job',
@@ -64,4 +68,36 @@ export const initialPermissions: Permission[] = [
     note: '',
     project: ProjectTypes.DLWORKSPACE,
   },
+
 ]
+
+
+const atlasPermission = [
+  {
+    name: 'Model Deployment',
+    key: EnumPermissionKeys.MODEL_DEPLOYMENT,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
+  {
+    name: 'Cloud inference',
+    key: EnumPermissionKeys.CLOUD_INFERENCE,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
+  {
+    name: 'Edge inference',
+    key: EnumPermissionKeys.EDGE_INFERENCE,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  }]
+
+atlasPermission.forEach(p => {
+  initialPermissions.push({
+    ...p,
+    id: initialPermissions.length
+  })
+})
+
+
+export { initialPermissions };
