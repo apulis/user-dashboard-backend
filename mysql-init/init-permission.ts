@@ -74,7 +74,7 @@ const initialPermissions: Permission[] = [
 
 const atlasPermission = [
   {
-    name: 'Model Deployment',
+    name: 'Model deployment',
     key: EnumPermissionKeys.MODEL_DEPLOYMENT,
     note: '',
     project: ProjectTypes.DLWORKSPACE,
