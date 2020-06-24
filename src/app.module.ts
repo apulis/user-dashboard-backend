@@ -26,6 +26,7 @@ import { User } from './user/user.entity';
 import { ConfigService } from 'config/config.service';
 import { UserRoleService } from './user-role/user-role.service';
 import { UserRole } from './user-role/user-role.entity';
+import { LanguageModule } from './language/language.module';
 
  
 @Module({
@@ -45,6 +46,7 @@ import { UserRole } from './user-role/user-role.entity';
     AuthModule,
     TypeOrmModule.forFeature([Permission, Role, User, UserRole]),
     OpenModule,
+    LanguageModule,
   ],
   controllers: [AppController],
   providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService],
