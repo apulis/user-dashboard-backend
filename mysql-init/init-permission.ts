@@ -1,7 +1,15 @@
 import { Permission } from '../src/permission/permission.entity';
 
 export enum ProjectTypes {
-  DLWORKSPACE = 'Apulis Platform'
+  DLWORKSPACE = 'DLWORKSPACE'
+}
+
+export const enProjectTypes: {[props: string]: string} = {
+  DLWORKSPACE: 'Apulis platform',
+}
+
+export const cnProjectTypes: {[props: string]: string}  = {
+  DLWORKSPACE: '依瞳平台',
 }
 
 export enum EnumPermissionKeys {
@@ -83,7 +91,20 @@ const atlasPermission = [
     key: EnumPermissionKeys.EDGE_INFERENCE,
     note: '',
     project: ProjectTypes.DLWORKSPACE,
-  }]
+  }
+];
+
+export const cnNames: {[props: string]: string} = {
+  DLWORKSPACE: '依瞳平台',
+  SUBMIT_TRAINING_JOB: '提交训练任务',
+  MANAGE_VC: '管理虚拟集群',
+  VIEW_ALL_USER_JOB: '查看所有用户任务',
+  VIEW_AND_MANAGE_ALL_USERS_JOB: '查看并管理所有用户任务',
+  VIEW_CLUSTER_STATUS: '查看集群状态',
+  MANAGE_USER: '管理用户',
+  CLOUD_INFERENCE: '模型转换与推送',
+  EDGE_INFERENCE: '中心侧推理',
+}
 
 atlasPermission.forEach(p => {
   initialPermissions.push({
