@@ -13,7 +13,6 @@ export enum EnumPermissionKeys {
   VIEW_CLUSTER_STATUS = 'VIEW_CLUSTER_STATUS',
   MANAGE_USER = 'MANAGE_USER',
   // optional
-  MODEL_DEPLOYMENT = 'MODEL_DEPLOYMENT',
   CLOUD_INFERENCE = 'CLOUD_INFERENCE',
   EDGE_INFERENCE = 'EDGE_INFERENCE',
 }
@@ -73,12 +72,6 @@ const initialPermissions: Permission[] = [
 
 
 const atlasPermission = [
-  {
-    name: 'Model deployment',
-    key: EnumPermissionKeys.MODEL_DEPLOYMENT,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
   {
     name: 'Cloud inference',
     key: EnumPermissionKeys.CLOUD_INFERENCE,
