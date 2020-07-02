@@ -26,7 +26,12 @@ export class PermissionService {
     if (this.checkPermissionKeyUnique(initialPermissions).length > 0) {
       throw new Error('permission key duplicate, please check');
     }
-    await this.permissionRepository.save(initialPermissions);
+    await this.permissionRepository.createQueryBuilder()
+      .insert()
+      .orIgnore()
+      .into(Permission)
+      .values(initialPermissions)
+      .execute()
   }
 
   public async getAppPermissions() {
