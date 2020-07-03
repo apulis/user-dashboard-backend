@@ -98,6 +98,7 @@ export const cnNames: {[props: string]: string} = {
   DLWORKSPACE: '依瞳平台',
   SUBMIT_TRAINING_JOB: '提交训练任务',
   MANAGE_VC: '管理虚拟集群',
+  VIEW_VC: '查看 VC',
   VIEW_ALL_USER_JOB: '查看所有用户任务',
   VIEW_AND_MANAGE_ALL_USERS_JOB: '查看并管理所有用户任务',
   VIEW_CLUSTER_STATUS: '查看集群状态',
