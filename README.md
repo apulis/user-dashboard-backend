@@ -67,11 +67,7 @@ yarn
 yarn build
 ```
 
-初始化数据库（如果没有，则新建一个数据库）
 
-```
-yarn run database-init
-```
 
 ### 3. 运行项目命令
 
@@ -83,5 +79,5 @@ yarn start:prod
 
 ### 4. 初始化数据库 Table 和数据
 
-项目使用的 typeorm 会自带新建数据库的 Table，建立  table 后会生成默认数据到 Table 中
+项目使用的 typeorm 会自动初始化数据库
 

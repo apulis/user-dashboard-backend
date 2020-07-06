@@ -50,7 +50,7 @@ export class RoleController {
     await this.roleService.createRole(body)
     res.status(HttpStatus.CREATED).json({
       success: true,
-      message: 'suucess',
+      message: 'success',
     })
   }
 
