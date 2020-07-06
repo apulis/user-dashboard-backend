@@ -88,7 +88,7 @@ const atlasPermission = [
 atlasPermission.forEach(p => {
   initialPermissions.push({
     ...p,
-    id: initialPermissions.length
+    id: initialPermissions.length + 1
   })
 })
 
