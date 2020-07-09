@@ -1,6 +1,6 @@
 declare module 'dotenv/config';
 
-declare module 'mysql'
+declare module 'mysql2'
 
 declare module NodeJS {
   interface Global {

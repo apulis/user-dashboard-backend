@@ -94,3 +94,9 @@ atlasPermission.forEach(p => {
 
 
 export { initialPermissions };
+
+
+
+// 项目管理员
+// ADMIN
+// USER

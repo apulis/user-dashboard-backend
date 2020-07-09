@@ -1,7 +1,7 @@
 
 
 import * as fs from 'fs';
-import * as mysql from 'mysql';
+import * as mysql from 'mysql2';
 import * as dotenv from 'dotenv';
 
 
