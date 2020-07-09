@@ -72,12 +72,12 @@ const initialPermissions: Permission[] = [
 
 
 const atlasPermission = [
-  {
-    name: 'Cloud inference',
-    key: EnumPermissionKeys.CLOUD_INFERENCE,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
+  // {
+  //   name: 'Cloud inference',
+  //   key: EnumPermissionKeys.CLOUD_INFERENCE,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
   {
     name: 'Edge inference',
     key: EnumPermissionKeys.EDGE_INFERENCE,
@@ -94,9 +94,3 @@ atlasPermission.forEach(p => {
 
 
 export { initialPermissions };
-
-
-
-// 项目管理员
-// ADMIN
-// USER
