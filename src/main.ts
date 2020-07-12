@@ -20,7 +20,7 @@ import 'initial/init-request';
 async function bootstrap() {
   await initDataBase();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: ['error', 'warn']
+    logger: ['error', 'warn', 'log']
   });
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
