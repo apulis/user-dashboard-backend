@@ -80,12 +80,12 @@ const initialPermissions: Permission[] = [
 
 
 const atlasPermission = [
-  {
-    name: 'Cloud inference',
-    key: EnumPermissionKeys.CLOUD_INFERENCE,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
+  // {
+  //   name: 'Cloud inference',
+  //   key: EnumPermissionKeys.CLOUD_INFERENCE,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
   {
     name: 'Edge inference',
     key: EnumPermissionKeys.EDGE_INFERENCE,
@@ -110,7 +110,7 @@ export const cnNames: {[props: string]: string} = {
 atlasPermission.forEach(p => {
   initialPermissions.push({
     ...p,
-    id: initialPermissions.length
+    id: initialPermissions.length + 1
   })
 })
 
