@@ -1,15 +1,18 @@
 import { Permission } from '../src/permission/permission.entity';
 
 export enum ProjectTypes {
-  DLWORKSPACE = 'DLWORKSPACE'
+  DLWORKSPACE = 'DLWORKSPACE',
+  AI_ARTS = 'AI_ARTS',
 }
 
 export const enProjectTypes: {[props: string]: string} = {
-  DLWORKSPACE: 'Apulis platform',
+  DLWORKSPACE: 'Expert Page',
+  AI_ARTS: 'AI_ARTS'
 }
 
 export const cnProjectTypes: {[props: string]: string}  = {
-  DLWORKSPACE: '依瞳平台',
+  DLWORKSPACE: '专家系统',
+  AI_ARTS: '高效能平台'
 }
 
 export enum EnumPermissionKeys {
@@ -20,9 +23,7 @@ export enum EnumPermissionKeys {
   VIEW_AND_MANAGE_ALL_USERS_JOB = 'VIEW_AND_MANAGE_ALL_USERS_JOB',
   VIEW_CLUSTER_STATUS = 'VIEW_CLUSTER_STATUS',
   MANAGE_USER = 'MANAGE_USER',
-  // optional
-  CLOUD_INFERENCE = 'CLOUD_INFERENCE',
-  EDGE_INFERENCE = 'EDGE_INFERENCE',
+  AI_ARTS_ALL = 'AI_ARTS_ALL',
 }
 
 const initialPermissions: Permission[] = [
@@ -75,24 +76,31 @@ const initialPermissions: Permission[] = [
     note: '',
     project: ProjectTypes.DLWORKSPACE,
   },
+  {
+    id: 8,
+    name: 'AI Arts All',
+    key: EnumPermissionKeys.AI_ARTS_ALL,
+    note: '',
+    project: ProjectTypes.AI_ARTS,
+  },
 
 ]
 
 
-const atlasPermission = [
-  // {
-  //   name: 'Cloud inference',
-  //   key: EnumPermissionKeys.CLOUD_INFERENCE,
-  //   note: '',
-  //   project: ProjectTypes.DLWORKSPACE,
-  // },
-  {
-    name: 'Edge inference',
-    key: EnumPermissionKeys.EDGE_INFERENCE,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  }
-];
+// const atlasPermission = [
+//   // {
+//   //   name: 'Cloud inference',
+//   //   key: EnumPermissionKeys.CLOUD_INFERENCE,
+//   //   note: '',
+//   //   project: ProjectTypes.DLWORKSPACE,
+//   // },
+//   {
+//     name: 'Edge inference',
+//     key: EnumPermissionKeys.EDGE_INFERENCE,
+//     note: '',
+//     project: ProjectTypes.DLWORKSPACE,
+//   }
+// ];
 
 export const cnNames: {[props: string]: string} = {
   DLWORKSPACE: '依瞳平台',
@@ -105,14 +113,15 @@ export const cnNames: {[props: string]: string} = {
   MANAGE_USER: '管理用户',
   CLOUD_INFERENCE: '模型转换与推送',
   EDGE_INFERENCE: '中心侧推理',
+  AI_ARTS_ALL: '高效能平台所有权限'
 }
 
-atlasPermission.forEach(p => {
-  initialPermissions.push({
-    ...p,
-    id: initialPermissions.length + 1
-  })
-})
+// atlasPermission.forEach(p => {
+//   initialPermissions.push({
+//     ...p,
+//     id: initialPermissions.length + 1
+//   })
+// })
 
 
 export { initialPermissions };
