@@ -46,7 +46,7 @@
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
-    "mysql": "npm:mysql2@^2.1.0",
+    "mysql": "2.18.1",
     "mysql2": "^2.1.0",
     "nestjs-rate-limiter": "^1.0.1",
     "passport": "^0.4.1",
