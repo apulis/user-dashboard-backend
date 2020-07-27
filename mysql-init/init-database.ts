@@ -4,8 +4,6 @@ import * as fs from 'fs';
 import * as mysql from 'mysql';
 import * as mysql2 from 'mysql2';
 import * as dotenv from 'dotenv';
-import { async } from 'rxjs/internal/scheduler/async';
-import { func } from '@hapi/joi';
 
 
 
