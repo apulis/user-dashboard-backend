@@ -42,5 +42,6 @@ export class CasbinService {
     this.addPermissionForRole(2, EnumPermissionKeys.VIEW_ALL_USER_JOB);
     this.addPermissionForRole(2, EnumPermissionKeys.VIEW_CLUSTER_STATUS);
     this.addPermissionForRole(2, EnumPermissionKeys.VIEW_VC);
+    this.addPermissionForRole(3, EnumPermissionKeys.LABELING_IMAGE);
   }
 }

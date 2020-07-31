@@ -3,16 +3,19 @@ import { Permission } from '../src/permission/permission.entity';
 export enum ProjectTypes {
   DLWORKSPACE = 'DLWORKSPACE',
   AI_ARTS = 'AI_ARTS',
+  LABELING_PLATFORM = 'LABELING_PLATFORM',
 }
 
 export const enProjectTypes: {[props: string]: string} = {
   DLWORKSPACE: 'Expert Page',
-  AI_ARTS: 'AI_ARTS'
+  AI_ARTS: 'AI_ARTS',
+  LABELING_PLATFORM: 'LABELING_PLATFORM',
 }
 
 export const cnProjectTypes: {[props: string]: string}  = {
   DLWORKSPACE: '专家系统',
-  AI_ARTS: '高效能平台'
+  AI_ARTS: '高效能平台',
+  LABELING_PLATFORM: '标注平台',
 }
 
 export enum EnumPermissionKeys {
@@ -22,8 +25,14 @@ export enum EnumPermissionKeys {
   VIEW_ALL_USER_JOB = 'VIEW_ALL_USER_JOB',
   VIEW_AND_MANAGE_ALL_USERS_JOB = 'VIEW_AND_MANAGE_ALL_USERS_JOB',
   VIEW_CLUSTER_STATUS = 'VIEW_CLUSTER_STATUS',
+  //
   MANAGE_USER = 'MANAGE_USER',
+  //
   AI_ARTS_ALL = 'AI_ARTS_ALL',
+  //
+  LABELING_IMAGE = 'LABELING_IMAGE',
+  DISPATCH_LABELING_TASK = 'DISPATCH_LABELING_TASK',
+  REVIEW_LABELING_TASK = 'REVIEW_LABELING_TASK'
 }
 
 const initialPermissions: Permission[] = [
@@ -83,6 +92,27 @@ const initialPermissions: Permission[] = [
     note: '',
     project: ProjectTypes.AI_ARTS,
   },
+  {
+    id: 9,
+    name: 'Labeling Image',
+    key: EnumPermissionKeys.LABELING_IMAGE,
+    note: '',
+    project: ProjectTypes.LABELING_PLATFORM,
+  },
+  {
+    id: 10,
+    name: 'Dispatch Labeling Task',
+    key: EnumPermissionKeys.DISPATCH_LABELING_TASK,
+    note: '',
+    project: ProjectTypes.LABELING_PLATFORM,
+  },
+  {
+    id: 11,
+    name: 'Review Labeling Task',
+    key: EnumPermissionKeys.REVIEW_LABELING_TASK,
+    note: '',
+    project: ProjectTypes.LABELING_PLATFORM,
+  },
 
 ]
 
@@ -113,7 +143,10 @@ export const cnNames: {[props: string]: string} = {
   MANAGE_USER: '管理用户',
   CLOUD_INFERENCE: '模型转换与推送',
   EDGE_INFERENCE: '中心侧推理',
-  AI_ARTS_ALL: '高效能平台所有权限'
+  AI_ARTS_ALL: '高效能平台所有权限',
+  LABELING_IMAGE: '标注图片',
+  DISPATCH_LABELING_TASK: '派发标注任务',
+  REVIEW_LABELING_TASK: '检验标注作业',
 }
 
 // atlasPermission.forEach(p => {
