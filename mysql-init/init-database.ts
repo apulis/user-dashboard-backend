@@ -23,7 +23,7 @@ export async function fixMysql8Sha2Password() {
     port: DB_PORT,
     password: DB_PASSWORD,
   })
-  await connection.promise().query(`alter user ${DB_USERNAME}@'%' identified with mysql_native_password by '${DB_PASSWORD}'`);
+  await connection.promise().query(`alter user '${DB_USERNAME}'@'%' identified with mysql_native_password by '${DB_PASSWORD}'`);
   await connection.end()
 }
 
@@ -39,7 +39,10 @@ export async function initDataBase() {
     connection.connect((err: any) => {
       if (err) throw reject(err);
       connection.query(`CREATE DATABASE IF NOT EXISTS ${DB_NAME} DEFAULT CHARACTER SET 'utf8mb4'`, (err: any) => {
-        if (err) throw err;
+        if (err) {
+          console.log('err', err)
+          throw err;
+        }
         console.log(`success init database ${DB_NAME}`);
         connection.end();
         resolve();
