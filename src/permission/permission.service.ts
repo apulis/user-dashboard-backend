@@ -58,7 +58,6 @@ export class PermissionService {
         }
       })
     })
-    console.log(123, permissions)
     // 暂时去除专家系统
     permissions = permissions.filter(val => {
       return val.project !== '专家系统'
