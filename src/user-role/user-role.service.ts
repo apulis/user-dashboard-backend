@@ -49,9 +49,9 @@ export class UserRoleService {
   async initAdminUserRole() {
     const adminUserNames: string[] = JSON.parse(this.configService.get('ADMINISTRATOR_USER_NAME'));
     const adminUserIds = await this.userService.getUserIdsByUserNames(adminUserNames);
-    const adminRole = await this.roleService.getRoleByRoleName('System Admin');
+    const adminRole = await this.roleService.getRolesByRoleIds([1]);
     if (adminRole) {
-      return await this.addRoleToUser(adminUserIds.map(val => val.id), [adminRole.id]);
+      return await this.addRoleToUser(adminUserIds.map(val => val.id), [adminRole[0].id]);
     }
     return true;
   }
