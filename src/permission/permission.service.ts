@@ -43,7 +43,7 @@ export class PermissionService {
     return permissions;
   }
   public async getAppCNPermissions() {
-    const permissions = await this.permissionRepository.find();
+    let permissions = await this.permissionRepository.find();
     permissions.forEach(p => {
       Object.keys(cnNames).forEach(key => {
         if (key === p.key) {
@@ -57,6 +57,11 @@ export class PermissionService {
           p.project = cnProjectTypes[pt];
         }
       })
+    })
+    console.log(123, permissions)
+    // 暂时去除专家系统
+    permissions = permissions.filter(val => {
+      return val.project !== '专家系统'
     })
     return permissions;
   }
