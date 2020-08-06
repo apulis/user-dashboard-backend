@@ -5,7 +5,7 @@ import { User } from './user.entity';
 import { UpdateResult } from 'typeorm';
 import { UserRoleService } from 'src/user-role/user-role.service';
 import { CreateUserDto, EditUserDto, resetPasswordDto } from './user.dto'
-import { ApiProperty, ApiTags, ApiDefaultResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthzGuard } from 'src/guards/authz.guard';
@@ -41,7 +41,7 @@ export class UserController {
     ) {}
 
   @Get('/list')
-  @ApiProperty({
+  @ApiOperation({
     description: '分页获取用户列表'
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -79,7 +79,7 @@ export class UserController {
   }
 
   @Post('/')
-  @ApiProperty({
+  @ApiOperation({
     description: '新增用户'
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -106,7 +106,7 @@ export class UserController {
   }
 
   @Delete('/')
-  @ApiProperty({
+  @ApiOperation({
     description: '删除用户'
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -127,7 +127,7 @@ export class UserController {
   }
 
   @Get('/detail/:id')
-  @ApiProperty({
+  @ApiOperation({
     description: '获取用户详情'
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -141,7 +141,7 @@ export class UserController {
   }
 
   @Patch('/:id')
-  @ApiProperty({
+  @ApiOperation({
     description: '修改用户详情'
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -156,7 +156,7 @@ export class UserController {
   }
 
   @Get('/count')
-  @ApiProperty({
+  @ApiOperation({
     description: '获取用户总数'
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -169,7 +169,7 @@ export class UserController {
   }
 
   @Get('/adminUsers')
-  @ApiProperty({
+  @ApiOperation({
     description: '获取管理员用户'
   })
   async getAdminUsers(@Res() res: Response) {
@@ -181,7 +181,7 @@ export class UserController {
   }
 
   @Patch('/:userId/resetPassword')
-  @ApiProperty({
+  @ApiOperation({
     description: '重置用户密码',
   })
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
