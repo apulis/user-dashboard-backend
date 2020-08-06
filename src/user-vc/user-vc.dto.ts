@@ -1,7 +1,7 @@
-import { IsArray } from "class-validator";
+import { IsArray, IsNumber } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class vcListDto {
+export class ModifyVCDto {
   @IsArray()
   @ApiProperty({
     description: 'VC 名称数组',
@@ -9,5 +9,13 @@ export class vcListDto {
     example: ['vc1', 'vc2']
   })
   vcList: string[];
+
+  @IsNumber()
+  @ApiProperty({
+    description: '用户 ID',
+    required: true,
+    example: 30001
+  })
+  userId: number;
 
 }

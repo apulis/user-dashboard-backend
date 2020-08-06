@@ -7,6 +7,7 @@ export enum TypesPrefix {
   user = 'user:',
   role = 'role:',
   group = 'group:',
+  vc = 'vc:'
 }
 
 @Injectable()

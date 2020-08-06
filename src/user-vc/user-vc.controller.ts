@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Patch, Body, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Get, Post, Patch, Body, Req, Res, Param } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
-import { vcListDto } from './user-vc.dto';
-import { ApiProperty, ApiDefaultResponse, ApiTags } from '@nestjs/swagger';
+import { ModifyVCDto } from './user-vc.dto';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { IRequestUser } from 'src/auth/auth.controller';
 
 
-@Controller('user-vc')
+@Controller('vc')
 @ApiTags('用户和 VC 相关')
 export class UserVcController {
   constructor(
@@ -14,20 +15,27 @@ export class UserVcController {
 
   }
 
-  @Get()
-  @ApiProperty({
+  @Get('/user/:userId')
+  @ApiOperation({
     description: '获取用户的 VC',
   })
-  getUserVcList() {
+  async getUserVcList(@Param('userId') userId: number) {
+    userId = Number(userId);
+    const vcNames = await this.userVcService.listVcForUser(userId);
     
   }
 
   @Patch()
-  @ApiProperty({
-    description: '修改用户可以使用的 VC'
+  @ApiOperation({
+    description: '修改用户 VC',
   })
-  modifyUserVc(@Body() vcList: vcListDto, @Req() req: Request) {
-    console.log('vcList', vcList)
+  async modifyUserVc(@Body() body: ModifyVCDto, @Req() req: Request, @Res() res: Response) {
+    const { vcList, userId } = body;
+    await this.userVcService.modifyUserVc(userId + '', vcList);
+    res.send({
+      success: true,
+      message: 'success',
+    })
   }
 
 
