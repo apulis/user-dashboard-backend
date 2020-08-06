@@ -17,6 +17,7 @@ import { GroupRoleModule } from './group-role/group-role.module';
 import { UserRoleModule } from './user-role/user-role.module';
 import { AuthModule } from './auth/auth.module';
 import { PermissionService } from './permission/permission.service';
+import { UserVcService } from './user-vc/user-vc.service';
 import { Permission } from './permission/permission.entity';
 import { RoleService } from './role/role.service';
 import { Role } from './role/role.entity';
@@ -27,6 +28,7 @@ import { ConfigService } from 'config/config.service';
 import { UserRoleService } from './user-role/user-role.service';
 import { UserRole } from './user-role/user-role.entity';
 import { LanguageModule } from './language/language.module';
+import { UserVcModule } from './user-vc/user-vc.module';
 
  
 @Module({
@@ -47,8 +49,9 @@ import { LanguageModule } from './language/language.module';
     TypeOrmModule.forFeature([Permission, Role, User, UserRole]),
     OpenModule,
     LanguageModule,
+    UserVcModule
   ],
   controllers: [AppController],
-  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService],
+  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService, UserVcService],
 })
 export class AppModule {}
