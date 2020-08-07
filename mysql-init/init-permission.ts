@@ -14,7 +14,7 @@ export const enProjectTypes: {[props: string]: string} = {
 
 export const cnProjectTypes: {[props: string]: string}  = {
   DLWORKSPACE: '专家系统',
-  AI_ARTS: '高效能平台',
+  AI_ARTS: '华为深度学习系统',
   LABELING_PLATFORM: '标注平台',
 }
 
@@ -143,7 +143,7 @@ export const cnNames: {[props: string]: string} = {
   MANAGE_USER: '管理用户',
   CLOUD_INFERENCE: '模型转换与推送',
   EDGE_INFERENCE: '中心侧推理',
-  AI_ARTS_ALL: '高效能平台所有权限',
+  AI_ARTS_ALL: '华为深度学习系统所有权限',
   LABELING_IMAGE: '标注图片',
   DISPATCH_LABELING_TASK: '派发标注任务',
   REVIEW_LABELING_TASK: '检验标注作业',
