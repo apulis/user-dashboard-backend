@@ -16,7 +16,7 @@ export class UserVcController {
 
   @Get('/user/:userId')
   @ApiOperation({
-    description: '获取用户的 VC',
+    description: '根据 userId 获取用户的 VC',
   })
   async getUserVcList(@Param('userId') userId: number, @Res() res: Response) {
     userId = Number(userId);
