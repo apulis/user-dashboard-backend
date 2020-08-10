@@ -12,11 +12,12 @@ import { Role } from 'src/role/role.entity';
 import { InitCasbin } from 'src/common/authz/init-casbin';
 import { UserService } from 'src/user/user.service';
 import { ResetPassword } from 'src/user/reset-password.entity';
+import { UserVcService } from 'src/user-vc/user-vc.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role, ResetPassword]), InitCasbin],
   controllers: [OpenController],
-  providers: [OpenService, ConfigService, AuthService, UserService],
+  providers: [OpenService, ConfigService, AuthService, UserService, UserVcService],
 })
 export class OpenModule {
 }
