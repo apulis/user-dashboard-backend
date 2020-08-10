@@ -22,15 +22,35 @@ export class UserVcService {
 
   public async modifyUserVc(userId: string, vcNames: string[]) {
     userId = TypesPrefix.user + userId;
-    await this.enforcer.deletePermissionsForUser(userId);
     vcNames.forEach((vcName) => {
-      this.enforcer.addPermissionForUser(userId, TypesPrefix.vc,  vcName)
+      this.enforcer.addPermissionForUser(userId, TypesPrefix.vc, vcName)
     })
+    const existed = await this.enforcer.getPermissionsForUser(userId);
+    const existedVC = existed.map(e => {
+      return e[2];
+    })
+    console.log(111, existedVC, vcNames)
+    const deleteItems = this.findToDeleteItems(existedVC, vcNames);
+    for (const item of deleteItems) {
+      await this.enforcer.deletePermissionForUser(userId, TypesPrefix.vc, item);
+    }
+    return true;
+    
   }
 
   public async getVCUserCount(vcName: string) {
     const result = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc, vcName);
     return result.length;
+  }
+
+  private findToDeleteItems(arr1: string[], arr2: string[]) {
+    const result: string[] = []
+    arr1.forEach(val => {
+      if (!arr2.includes(val)) {
+        result.push(val)
+      }
+    })
+    return result;
   }
 
 }
