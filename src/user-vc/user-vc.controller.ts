@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
 import { ModifyVCDto } from './user-vc.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthzGuard } from 'src/guards/authz.guard';
 
 
 @Controller('vc')
@@ -15,6 +17,7 @@ export class UserVcController {
   }
 
   @Get('/user/:userId')
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
     description: '根据 userId 获取用户的 VC',
   })
@@ -28,6 +31,7 @@ export class UserVcController {
   }
 
   @Patch()
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
     description: '修改用户 VC',
   })
@@ -41,6 +45,7 @@ export class UserVcController {
   }
 
   @Get('/:vcName/user/count')
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
     description: '获取 VC 下用户数量'
   })
