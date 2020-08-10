@@ -10,13 +10,13 @@ export class UserRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => User, user => user.id, { onDelete: 'CASCADE', eager: true })
+  @ManyToOne(type => User, user => user, { onDelete: 'CASCADE', eager: true })
   @JoinColumn({ name: 'userId'} )
-  user: number;
+  user: User;
 
-  @ManyToOne(type => Role, role => role.id, { onDelete: 'CASCADE', eager: true })
+  @ManyToOne(type => Role, role => role, { onDelete: 'CASCADE', eager: true })
   @JoinColumn({ name: 'roleId' })
-  role: number;
+  role: Role;
 
   @Column()
   roleId: number;

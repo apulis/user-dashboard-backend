@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRole } from './user-role.entity';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { ConfigService } from 'config/config.service';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
@@ -137,5 +137,15 @@ export class UserRoleService {
       roleId,
     })
     return userRole.map(val => val.userId);
+  }
+
+  async getUsersRoles(userIds: number[]) {
+    const userRole = await this.userRoleRepository
+      .find({
+        userId: In(userIds)
+      });
+    console.log('userRole1111', userRole)
+    return userRole;
+
   }
 }

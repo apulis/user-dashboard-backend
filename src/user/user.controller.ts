@@ -29,6 +29,10 @@ export interface ICreateUser {
   userRole: TypeUserRole
 }
 
+export interface IResponseUserList extends User {
+  role?: string[];
+}
+
 @Controller('/users')
 @UseGuards(RolesGuard)
 @ApiTags('用户')
@@ -69,10 +73,22 @@ export class UserController {
       }
     }
     
-    
+    const role = await this.userRoleService.getUsersRoles(result.list.map(val => val.id));
+    const list: IResponseUserList[] = result.list;
+    role.forEach(r => {
+      const user = list.find(val => val.id === r.userId);
+      if (user) {
+        if (!user.role) {
+          user.role = [r.role.name]
+        } else {
+          user.role.push(r.role.name)
+        }
+      }
+      
+    })
     res.status(HttpStatus.OK).json({
       success: true, 
-      list: result.list,
+      list,
       total: result.total,
     });
     return result.list;
