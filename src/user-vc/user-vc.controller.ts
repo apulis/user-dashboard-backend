@@ -2,7 +2,7 @@ import { Controller, Get, Post, Patch, Body, Req, Res, Param } from '@nestjs/com
 import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
 import { ModifyVCDto } from './user-vc.dto';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse } from '@nestjs/swagger';
 import { IRequestUser } from 'src/auth/auth.controller';
 
 
@@ -38,7 +38,17 @@ export class UserVcController {
     })
   }
 
+  @Get('/:vcName/user/count')
+  @ApiOperation({
+    description: '获取 VC 下用户数量'
+  })
+  async getVCUserCount(@Param('vcName') vcName: string, @Res() res: Response) {
+    const count = await this.userVcService.getVCUserCount(vcName);
+    res.json({
+      success: true,
+      count,
+    })
+  }
 
-
-
+ 
 }

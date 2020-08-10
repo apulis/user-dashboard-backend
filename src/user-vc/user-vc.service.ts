@@ -28,4 +28,9 @@ export class UserVcService {
     })
   }
 
+  public async getVCUserCount(vcName: string) {
+    const result = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc, vcName);
+    return result.length;
+  }
+
 }
