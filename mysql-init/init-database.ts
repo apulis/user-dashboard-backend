@@ -4,16 +4,11 @@ import * as fs from 'fs';
 import * as mysql from 'mysql';
 import * as mysql2 from 'mysql2';
 import * as dotenv from 'dotenv';
-import { async } from 'rxjs/internal/scheduler/async';
-import { func } from '@hapi/joi';
-
 
 
 const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));
 
-
 const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME } = envConfig;
-
 
 
 export async function fixMysql8Sha2Password() {
@@ -26,7 +21,6 @@ export async function fixMysql8Sha2Password() {
   await connection.promise().query(`alter user '${DB_USERNAME}'@'%' identified with mysql_native_password by '${DB_PASSWORD}'`);
   await connection.end()
 }
-
 
 export async function initDataBase() {
   const connection = mysql.createConnection({
