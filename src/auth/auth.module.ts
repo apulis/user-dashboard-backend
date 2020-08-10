@@ -16,13 +16,14 @@ import { JwtStrategy } from './jwt.strategy';
 import { CasbinService } from 'src/common/authz';
 import { InitCasbin } from 'src/common/authz/init-casbin';
 import { ResetPassword } from 'src/user/reset-password.entity';
+import { RedisProvider } from 'src/common/cache-manager';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role, ResetPassword]),
     InitCasbin
   ],
-  providers: [AuthService, UserService, ConfigService, JwtStrategy, CasbinService],
+  providers: [AuthService, UserService, ConfigService, JwtStrategy, CasbinService, RedisProvider],
   controllers: [AuthController],
 })
 export class AuthModule {}

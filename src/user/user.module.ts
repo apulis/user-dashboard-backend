@@ -15,10 +15,11 @@ import { ResetPassword } from './reset-password.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { GroupRole } from 'src/group-role/group-role.entity';
 import { GroupUser } from 'src/group-user/group-user.entity';
+import { RedisProvider } from 'src/common/cache-manager';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, UserRole, Role, ResetPassword, GroupRole, GroupUser]), InitCasbin],
   controllers: [UserController],
-  providers: [UserService, UserRoleService, ConfigService, RoleService, AuthService],
+  providers: [UserService, UserRoleService, ConfigService, RoleService, AuthService, RedisProvider],
 })
 export class UserModule {}

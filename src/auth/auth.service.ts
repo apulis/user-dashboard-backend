@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable, ForbiddenException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { sign, decode } from 'jsonwebtoken';
@@ -18,6 +18,8 @@ import { CasbinService } from 'src/common/authz';
 import { UserRoleService } from 'src/user-role/user-role.service';
 import { ResetPassword } from 'src/user/reset-password.entity';
 import { UserService } from 'src/user/user.service';
+import { IRequestUser } from './auth.controller';
+import { TypesPrefix } from 'src/common/authz';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +32,8 @@ export class AuthService {
     @InjectRepository(ResetPassword) private readonly resetPasswordRespository: Repository<ResetPassword>,
     private readonly config: ConfigService,
     private readonly casbinService: CasbinService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    @Inject('REDIS_MANAGER') private readonly redisCache: any
   ) {
   }
   
@@ -55,6 +58,18 @@ export class AuthService {
       userName,
       exp: getJwtExp(),
     }, JWT_SECRET_KEY)
+  }
+
+  async setUserToMemory(userId: number, user: IRequestUser){
+    return new Promise((resolve, reject) => {
+      this.redisCache.set(TypesPrefix.user + userId, JSON.stringify(user), { ttl: 60 }, (err: any) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    })
   }
 
   async getUserRoles(userId: number) {

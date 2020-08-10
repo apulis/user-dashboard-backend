@@ -13,11 +13,12 @@ import { InitCasbin } from 'src/common/authz/init-casbin';
 import { UserService } from 'src/user/user.service';
 import { ResetPassword } from 'src/user/reset-password.entity';
 import { UserVcService } from 'src/user-vc/user-vc.service';
+import { RedisProvider } from 'src/common/cache-manager';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role, ResetPassword]), InitCasbin],
   controllers: [OpenController],
-  providers: [OpenService, ConfigService, AuthService, UserService, UserVcService],
+  providers: [OpenService, ConfigService, AuthService, UserService, UserVcService, RedisProvider],
 })
 export class OpenModule {
 }
