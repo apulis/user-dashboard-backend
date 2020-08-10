@@ -144,7 +144,6 @@ export class UserRoleService {
       .find({
         userId: In(userIds)
       });
-    console.log('userRole1111', userRole)
     return userRole;
 
   }
