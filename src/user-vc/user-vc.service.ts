@@ -43,6 +43,14 @@ export class UserVcService {
     return result.length;
   }
 
+  public async removeAllVCPolicy(vcName: string) {
+    return await this.enforcer.removeFilteredNamedPolicy('p', 0, '', TypesPrefix.vc, vcName)
+  }
+
+  public async removeUserForVC(userId: number) {
+    return await this.enforcer.removeFilteredNamedPolicy('p', 0, TypesPrefix.user + userId, TypesPrefix.vc, '');
+  }
+
   private findToDeleteItems(arr1: string[], arr2: string[]) {
     const result: string[] = []
     arr1.forEach(val => {

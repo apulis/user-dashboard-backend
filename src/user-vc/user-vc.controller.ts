@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Body, Req, Res, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
 import { ModifyVCDto } from './user-vc.dto';
@@ -49,6 +49,5 @@ export class UserVcController {
       count,
     })
   }
-
- 
+  
 }
