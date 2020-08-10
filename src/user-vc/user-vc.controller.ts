@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
 import { ModifyVCDto } from './user-vc.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse } from '@nestjs/swagger';
-import { IRequestUser } from 'src/auth/auth.controller';
 
 
 @Controller('vc')
@@ -19,10 +18,13 @@ export class UserVcController {
   @ApiOperation({
     description: '获取用户的 VC',
   })
-  async getUserVcList(@Param('userId') userId: number) {
+  async getUserVcList(@Param('userId') userId: number, @Res() res: Response) {
     userId = Number(userId);
     const vcNames = await this.userVcService.listVcForUser(userId);
-    
+    res.json({
+      success: true,
+      vcNames,
+    })
   }
 
   @Patch()
@@ -49,5 +51,5 @@ export class UserVcController {
       count,
     })
   }
-  
+
 }
