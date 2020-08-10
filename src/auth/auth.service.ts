@@ -62,12 +62,26 @@ export class AuthService {
 
   async setUserToMemory(userId: number, user: IRequestUser){
     return new Promise((resolve, reject) => {
+      console.log(22234, TypesPrefix.user + userId, JSON.stringify(user))
       this.redisCache.set(TypesPrefix.user + userId, JSON.stringify(user), { ttl: 60 }, (err: any) => {
         if (err) {
           reject(err);
           return;
         }
         resolve();
+      });
+    })
+  }
+
+  async getUserFromMemory(userId: number){
+    return new Promise((resolve, reject) => {
+      this.redisCache.get(TypesPrefix.user + userId, (err: any, result: string) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        console.log(111, result)
+        resolve(JSON.parse(result));
       });
     })
   }
@@ -109,26 +123,33 @@ export class AuthService {
   }
 
   async validateUser(uid: number) {
-    const user = await this.usersRepository.findOne({
-      id: uid,
-      isDelete: 0,
-    });
-    const isPasswordBeReseted = await this.resetPasswordRespository.findOne({
-      userId: uid,
-    });
-    if (isPasswordBeReseted) {
-      return undefined;
-    }
-    if (user) {
-      const currentRole = await this.getUserRoles(user.id);
-      const permissionList = await this.getUserPermissionList(user.id);
-      return {
-        ...user,
-        permissionList,
-        currentRole: currentRole.map(val => val.name),
+    let memoUser = await this.getUserFromMemory(uid);
+    if (memoUser) {
+      return memoUser;
+    } else {
+      const user = await this.usersRepository.findOne({
+        id: uid,
+        isDelete: 0,
+      });
+      const isPasswordBeReseted = await this.resetPasswordRespository.findOne({
+        userId: uid,
+      });
+      if (isPasswordBeReseted) {
+        return undefined;
+      }
+      if (user) {
+        const currentRole = await this.getUserRoles(user.id);
+        const permissionList = await this.getUserPermissionList(user.id);
+        const userInfo = {
+          ...user,
+          permissionList,
+          currentRole: currentRole.map(val => val.name),
+        }
+        
+        this.setUserToMemory(uid, userInfo);
+        return userInfo;
       }
     }
-    return user;
   }
 
   async getUserPermissionList(userId: number) {
