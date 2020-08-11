@@ -29,7 +29,6 @@ export class UserVcService {
     const existedVC = existed.map(e => {
       return e[2];
     })
-    console.log(111, existedVC, vcNames)
     const deleteItems = this.findToDeleteItems(existedVC, vcNames);
     for (const item of deleteItems) {
       await this.enforcer.deletePermissionForUser(userId, TypesPrefix.vc, item);

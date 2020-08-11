@@ -80,7 +80,6 @@ export class AuthService {
           reject(err);
           return;
         }
-        console.log(111, result)
         resolve(JSON.parse(result));
       });
     })
