@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from 'src/user/user.entity';
 import { ConfigService } from '@nestjs/config';
+import { initialPermissions } from 'mysql-init/init-permission';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -23,6 +24,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // 其他平台调用
       return {
         userName: 'ADMIN_FOR_SELF',
+        uid: 30000,
+        permissionList: initialPermissions.map(val => val.key),
       }
     }
     const user = await this.authService.validateUser(payload.uid);
