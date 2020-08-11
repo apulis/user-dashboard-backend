@@ -1,10 +1,13 @@
 import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
-import { ModifyVCDto } from './user-vc.dto';
-import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse, ApiResponse } from '@nestjs/swagger';
+import { ModifyVCDto, GetVCResponse } from './user-vc.dto';
+import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse, ApiResponse, ApiProperty } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
+import { bool, boolean } from '@hapi/joi';
+import { type } from 'os';
+import { IRequestUser } from 'src/auth/auth.controller';
 
 
 @Controller('vc')
@@ -23,6 +26,20 @@ export class UserVcController {
   })
   async getUserVcList(@Param('userId') userId: number) {
     userId = Number(userId);
+    const vcList = await this.userVcService.listVcForUser(userId);
+    return {
+      success: true,
+      vcList,
+    }
+  }
+
+  @Get('/bytoken')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({
+    description: '获取用户自己的 token',
+  })
+  async getUserByToken(@Req() req: Request) {
+    const userId = (req.user as IRequestUser).id;
     const vcList = await this.userVcService.listVcForUser(userId);
     return {
       success: true,

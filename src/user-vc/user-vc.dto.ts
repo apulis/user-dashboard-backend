@@ -19,3 +19,11 @@ export class ModifyVCDto {
   userId: number;
 
 }
+
+export class GetVCResponse {
+
+  success: boolean;
+
+  vcList: string[]
+
+}
