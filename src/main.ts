@@ -37,7 +37,7 @@ async function bootstrap() {
     .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('/docs', app, document);
-  }
+  // }
 
   app.use(helmet());
   app.use(cookieParser());
