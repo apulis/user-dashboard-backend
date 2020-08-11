@@ -6,6 +6,7 @@ import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowe
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { IRequestUser } from 'src/auth/auth.controller';
+import { boolean } from '@hapi/joi';
 
 
 @Controller('vc')
@@ -20,11 +21,11 @@ export class UserVcController {
   @Get('/user/:userId')
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
-    description: '根据 userId 获取用户的 VC',
+    summary: '根据 userId 获取用户的 VC',
   })
   async getUserVcList(@Param('userId') userId: number) {
     userId = Number(userId);
-    const vcList = await this.userVcService.listVcForUser(userId);
+    const vcList = await this.userVcService.listVcNamesForUser(userId);
     return {
       success: true,
       vcList,
@@ -34,7 +35,7 @@ export class UserVcController {
   @Get('/bytoken')
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({
-    description: '获取用户自己的 token',
+    summary: '获取用户自己的 VC'
   })
   async getUserByToken(@Req() req: Request) {
     const userId = (req.user as IRequestUser).id;
@@ -48,7 +49,7 @@ export class UserVcController {
   @Patch()
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
-    description: '修改用户 VC',
+    summary: '修改用户 VC',
   })
   async modifyUserVc(@Body() body: ModifyVCDto) {
     const { vcList, userId } = body;
@@ -62,7 +63,7 @@ export class UserVcController {
   @Get('/:vcName/user/count')
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
-    description: '获取 VC 下用户数量'
+    summary: '获取 VC 下用户数量'
   })
   async getVCUserCount(@Param('vcName') vcName: string) {
     const count = await this.userVcService.getVCUserCount(vcName);
@@ -75,10 +76,10 @@ export class UserVcController {
   @Get('/all')
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
-    description: '获取所有 vc 名称列表'
+    summary: '获取所有 vc 名称列表'
   })
   async getALLVC() {
-    return await this.userVcService.fetchAllVC()
+    return (await this.userVcService.fetchAllVC()).map((val: any) => val.vcName);
   }
 
 

@@ -15,6 +15,16 @@ export class UserVcService {
     private readonly userService: UserService
   ) { }
 
+  public async listVcNamesForUser(userId: number) {
+    let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
+    const vcNames: string[] = []
+    vcPolicys.forEach(p => {
+      if (p && (p[1] === TypesPrefix.vc)) {
+        vcNames.push(p[2]);
+      }
+    })
+    return vcNames;
+  }
   public async listVcForUser(userId: number) {
     let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
     const vcNames: string[] = []
@@ -23,8 +33,12 @@ export class UserVcService {
         vcNames.push(p[2]);
       }
     })
-    console.log('vcNames', vcNames)
-    return vcNames;
+    let allVc = await this.fetchAllVC();
+    allVc = allVc.filter(val => {
+      return vcNames.includes(val.vcName);
+    })
+    return allVc;
+  
   }
 
   public async modifyUserVc(userId: string, vcNames: string[]) {
@@ -71,8 +85,9 @@ export class UserVcService {
     const RESTFULAPI = this.config.get('RESTFULAPI');
     const res = await axios.get(RESTFULAPI + '/ListVCs');
     if (res.data.result) {
-      return res.data.result.map((val: any) => val.vcName);
+      return (res.data.result as {vcName: string, [propsName: string]: any}[]);
     }
+    return []
   }
 
   public async addPlatFormVCForAdminUsers() {
