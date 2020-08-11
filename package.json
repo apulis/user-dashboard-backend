@@ -36,6 +36,7 @@
     "@types/passport": "^1.0.3",
     "@types/passport-jwt": "^3.0.3",
     "axios": "^0.19.2",
+    "cache-manager": "^3.3.0",
     "cache-manager-redis-store": "^2.0.0",
     "casbin": "^4.2.1",
     "class-transformer": "^0.2.3",
