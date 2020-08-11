@@ -2,7 +2,7 @@ import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete, UseGuards 
 import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
 import { ModifyVCDto } from './user-vc.dto';
-import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
 
@@ -21,13 +21,13 @@ export class UserVcController {
   @ApiOperation({
     description: '根据 userId 获取用户的 VC',
   })
-  async getUserVcList(@Param('userId') userId: number, @Res() res: Response) {
+  async getUserVcList(@Param('userId') userId: number) {
     userId = Number(userId);
-    const vcNames = await this.userVcService.listVcForUser(userId);
-    res.json({
+    const vcList = await this.userVcService.listVcForUser(userId);
+    return {
       success: true,
-      vcNames,
-    })
+      vcList,
+    }
   }
 
   @Patch()
@@ -35,13 +35,13 @@ export class UserVcController {
   @ApiOperation({
     description: '修改用户 VC',
   })
-  async modifyUserVc(@Body() body: ModifyVCDto, @Req() req: Request, @Res() res: Response) {
+  async modifyUserVc(@Body() body: ModifyVCDto) {
     const { vcList, userId } = body;
     await this.userVcService.modifyUserVc(userId + '', vcList);
-    res.send({
+    return {
       success: true,
       message: 'success',
-    })
+    }
   }
 
   @Get('/:vcName/user/count')
@@ -49,12 +49,12 @@ export class UserVcController {
   @ApiOperation({
     description: '获取 VC 下用户数量'
   })
-  async getVCUserCount(@Param('vcName') vcName: string, @Res() res: Response) {
+  async getVCUserCount(@Param('vcName') vcName: string) {
     const count = await this.userVcService.getVCUserCount(vcName);
-    res.json({
+    return {
       success: true,
       count,
-    })
+    }
   }
 
 }
