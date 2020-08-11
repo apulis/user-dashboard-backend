@@ -74,4 +74,14 @@ export class UserVcController {
     }
   }
 
+  @Get('/all')
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
+  @ApiOperation({
+    description: '获取所有 vc'
+  })
+  async getALLVC() {
+    return await this.userVcService.fetchAllVC()
+  }
+
+
 }

@@ -1,11 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CASBIN_ENFORCER, TypesPrefix } from 'src/common/authz';
 import { Enforcer } from 'casbin';
+import axios from 'axios';
+import { ConfigService } from 'config/config.service';
 
 @Injectable()
 export class UserVcService {
   constructor(
-    @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer
+    @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer,
+    private readonly config: ConfigService,
   ) { }
 
   public async listVcForUser(userId: number) {
@@ -58,6 +61,18 @@ export class UserVcService {
       }
     })
     return result;
+  }
+
+  public async fetchAllVC() {
+    const RESTFULAPI = this.config.get('RESTFULAPI');
+    const res = await axios.get(RESTFULAPI + '/ListVCs');
+    if (res.data.result) {
+      return res.data.result.map((val: any) => val.vcName);
+    }
+  }
+
+  public addPlatFormVCForAdminUsers(adminUsers: number[]) {
+    
   }
 
 }
