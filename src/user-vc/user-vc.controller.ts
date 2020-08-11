@@ -6,8 +6,6 @@ import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowe
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { IRequestUser } from 'src/auth/auth.controller';
-import { boolean } from '@hapi/joi';
-
 
 @Controller('vc')
 @ApiTags('用户和 VC 相关')

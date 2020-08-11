@@ -23,8 +23,11 @@ export class UserVcService {
         vcNames.push(p[2]);
       }
     })
-
-    return vcNames;
+    let allVc = await this.fetchAllVC();
+    allVc = allVc.filter(val => {
+      return vcNames.includes(val.vcName);
+    })
+    return allVc;
   }
 
   public async getUserVcNames(userId: number) {
