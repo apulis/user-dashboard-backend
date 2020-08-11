@@ -5,6 +5,8 @@ import axios from 'axios';
 import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 
+export const initialVCName = 'platform';
+
 @Injectable()
 export class UserVcService {
   constructor(
@@ -78,7 +80,7 @@ export class UserVcService {
     const userIds = await this.userService.getUserIdsByUserNames(adminUserNames);
     userIds.forEach(val => {
       const userId = TypesPrefix.user + val.id;
-      this.enforcer.addPermissionForUser(userId, TypesPrefix.vc, 'platform')
+      this.enforcer.addPermissionForUser(userId, TypesPrefix.vc, initialVCName)
     })
   }
 
