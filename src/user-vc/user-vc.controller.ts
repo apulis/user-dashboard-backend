@@ -25,7 +25,7 @@ export class UserVcController {
   })
   async getUserVcList(@Param('userId') userId: number) {
     userId = Number(userId);
-    const vcList = await this.userVcService.listVcNamesForUser(userId);
+    const vcList = await this.userVcService.getUserVcDetail(userId);
     return {
       success: true,
       vcList,
@@ -39,7 +39,7 @@ export class UserVcController {
   })
   async getUserByToken(@Req() req: Request) {
     const userId = (req.user as IRequestUser).id;
-    const vcList = await this.userVcService.listVcForUser(userId);
+    const vcList = await this.userVcService.getUserVcNames(userId);
     return {
       success: true,
       vcList,

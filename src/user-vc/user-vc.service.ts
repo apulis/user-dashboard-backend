@@ -15,7 +15,19 @@ export class UserVcService {
     private readonly userService: UserService
   ) { }
 
-  public async listVcNamesForUser(userId: number) {
+  public async getUserVcDetail(userId: number) {
+    let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
+    const vcNames: string[] = []
+    vcPolicys.forEach(p => {
+      if (p && (p[1] === TypesPrefix.vc)) {
+        vcNames.push(p[2]);
+      }
+    })
+
+    return vcNames;
+  }
+
+  public async getUserVcNames(userId: number) {
     let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
     const vcNames: string[] = []
     vcPolicys.forEach(p => {
@@ -24,20 +36,6 @@ export class UserVcService {
       }
     })
     return vcNames;
-  }
-  public async listVcForUser(userId: number) {
-    let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
-    const vcNames: string[] = []
-    vcPolicys.forEach(p => {
-      if (p && (p[1] === TypesPrefix.vc)) {
-        vcNames.push(p[2]);
-      }
-    })
-    let allVc = await this.fetchAllVC();
-    allVc = allVc.filter(val => {
-      return vcNames.includes(val.vcName);
-    })
-    return allVc;
   
   }
 
