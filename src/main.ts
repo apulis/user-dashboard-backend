@@ -27,7 +27,7 @@ async function bootstrap() {
   app.use(logger);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  if (process.env.NODE_ENV === 'develop') {
+  // if (process.env.NODE_ENV === 'develop') {
     const options = new DocumentBuilder()
     .setTitle('User group example')
     .setDescription('The user group API description')
