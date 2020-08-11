@@ -5,8 +5,6 @@ import { ModifyVCDto, GetVCResponse } from './user-vc.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse, ApiResponse, ApiProperty } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
-import { bool, boolean } from '@hapi/joi';
-import { type } from 'os';
 import { IRequestUser } from 'src/auth/auth.controller';
 
 

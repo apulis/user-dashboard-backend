@@ -3,12 +3,14 @@ import { CASBIN_ENFORCER, TypesPrefix } from 'src/common/authz';
 import { Enforcer } from 'casbin';
 import axios from 'axios';
 import { ConfigService } from 'config/config.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class UserVcService {
   constructor(
     @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer,
     private readonly config: ConfigService,
+    private readonly userService: UserService
   ) { }
 
   public async listVcForUser(userId: number) {
@@ -71,8 +73,13 @@ export class UserVcService {
     }
   }
 
-  public addPlatFormVCForAdminUsers(adminUsers: number[]) {
-    
+  public async addPlatFormVCForAdminUsers() {
+    const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+    const userIds = await this.userService.getUserIdsByUserNames(adminUserNames);
+    userIds.forEach(val => {
+      const userId = TypesPrefix.user + val.id;
+      this.enforcer.addPermissionForUser(userId, TypesPrefix.vc, 'platform')
+    })
   }
 
 }
