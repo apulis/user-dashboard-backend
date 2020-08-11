@@ -71,6 +71,15 @@ yarn build
 
 ### 3. 运行项目命令
 
+- 启动 redis
+如果本地安装了 docker，可以运行
+```
+docker run -p9301:6379 redis
+```
+在 9301 端口运行 redis
+
+
+- 启动项目
 ```
 yarn start:prod
 ```
