@@ -19,7 +19,7 @@ export class UserVcController {
   @Get('/user/:userId')
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
-    summary: '根据 userId 获取用户的 VC',
+    summary: '用户管理员根据 userId 获取 VC 详情',
   })
   async getUserVcList(@Param('userId') userId: number) {
     userId = Number(userId);
