@@ -4,12 +4,13 @@ import { ConfigService } from 'config/config.service';
 import { AuthService } from 'src/auth/auth.service';
 
 const validateRequest = (request: any, JWT_SECRET_KEY: string): boolean => {
-  const { cookies } = request;
-  if (cookies) {
-    const { token } = cookies;
-    if (token) {
+  const { headers } = request;
+  console.log('headers', headers)
+  if (headers) {
+    const { authorization } = headers;
+    if (authorization) {
       try {
-        const user = verify(token, JWT_SECRET_KEY);
+        const user = verify(authorization.replace(/^Bearer /, ''), JWT_SECRET_KEY);
         request.userId = (user as any).uid;
       } catch (err) {
         return false;
@@ -34,7 +35,7 @@ export class OpenGuard implements CanActivate {
   ): Promise<boolean>{
     const request = context.switchToHttp().getRequest();
     if (validateRequest(request, this.configService.get('JWT_SECRET_KEY'))) {
-      if (request.userId === 30001) {
+      if (request.userId === 30000) {
         return true;
       }
     };

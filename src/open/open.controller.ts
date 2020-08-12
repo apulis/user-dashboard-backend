@@ -54,13 +54,19 @@ export class OpenController {
   @ApiOperation({
     description: '根据用户名称获取 uid'
   })
-  async getUIdByUserName(@Param('userName') userName: string, @Res() res: Response) {
+  async getUIdByUserName(@Param('userName') userName: string) {
     const userId = await this.userService.getUserIdsByUserNames([userName]);
     console.log('userId', userId);
-    res.send({
-      success: true,
-      uid: userId[0].id,
-    });
+    if (userId[0]) {
+      return {
+        success: true,
+        uid: userId[0]?.id,
+      }
+    } else {
+      return {
+        success: false,
+      }
+    }
   }
 
   @Get('/adminUser')
