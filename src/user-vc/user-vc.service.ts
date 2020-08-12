@@ -19,7 +19,7 @@ export class UserVcService {
     @Inject('REDIS_MANAGER') private readonly redisCache: Cache
   ) { }
 
-  public async getUserVcDetail(userId: number) {
+  public async getUserVcDetail(userId: number, pageNo: number, pageSize: number) {
     let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
     const vcNames: string[] = []
     vcPolicys.forEach(p => {
@@ -31,7 +31,7 @@ export class UserVcService {
     allVc = allVc.filter(val => {
       return vcNames.includes(val.vcName);
     })
-    return allVc;
+    return allVc.slice(pageNo * pageSize, pageSize);
   }
 
   public async getUserVcNames(userId: number) {

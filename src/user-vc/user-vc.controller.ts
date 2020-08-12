@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
 import { ModifyVCDto, GetVCResponse } from './user-vc.dto';
@@ -6,6 +6,7 @@ import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowe
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { IRequestUser } from 'src/auth/auth.controller';
+import { type } from 'os';
 
 @Controller('vc')
 @ApiTags('用户和 VC 相关')
@@ -19,11 +20,17 @@ export class UserVcController {
   @Get('/user/:userId')
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
-    summary: '用户管理员根据 userId 获取 VC 详情',
+    summary: '用户管理员根据 userId 分页获取 VC 详情',
   })
-  async getUserVcList(@Param('userId') userId: number) {
+  async getUserVcList(@Param('userId') userId: number, @Query('pageNo') pageNo: number, @Query('pageSize') pageSize: number) {
     userId = Number(userId);
-    const vcList = await this.userVcService.getUserVcDetail(userId);
+    if (typeof pageNo !== 'undefined') {
+      pageNo = Number(pageNo);
+    }
+    if (typeof pageSize !== 'undefined') {
+      pageSize = Number(pageSize);
+    }
+    const vcList = await this.userVcService.getUserVcDetail(userId, pageNo - 1, pageSize);
     return {
       success: true,
       vcList,
