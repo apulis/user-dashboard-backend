@@ -6,9 +6,10 @@ import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
+import { RedisProvider } from 'src/common/cache-manager';
 
 @Module({
-  providers: [UserVcService, ConfigService, UserService],
+  providers: [UserVcService, ConfigService, UserService, RedisProvider],
   controllers: [UserVcController],
   imports: [InitCasbin, TypeOrmModule.forFeature([User])]
 })

@@ -4,15 +4,19 @@ import { Enforcer } from 'casbin';
 import axios from 'axios';
 import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
+import { Cache } from 'cache-manager';
+import { ttl } from 'src/common/cache-manager';
 
 export const initialVCName = 'platform';
+export const allVCListTag = 'allVCList';
 
 @Injectable()
 export class UserVcService {
   constructor(
     @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer,
     private readonly config: ConfigService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    @Inject('REDIS_MANAGER') private readonly redisCache: Cache
   ) { }
 
   public async getUserVcDetail(userId: number) {
@@ -83,12 +87,20 @@ export class UserVcService {
   }
 
   public async fetchAllVC() {
-    const RESTFULAPI = this.config.get('RESTFULAPI');
-    const res = await axios.get(RESTFULAPI + '/ListVCs');
-    if (res.data.result) {
-      return (res.data.result as {vcName: string, [propsName: string]: any}[]);
+    const memoAllVCList = await this.redisCache.get(allVCListTag);
+    let allVc = {}
+    if (!memoAllVCList) {
+      const RESTFULAPI = this.config.get('RESTFULAPI');
+      const res = await axios.get(RESTFULAPI + '/ListVCs');
+      if (res.data.result) {
+        allVc = res.data.result;
+        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
+      }
+      return []
+    } else {
+      allVc = JSON.parse(memoAllVCList);
     }
-    return []
+    return allVc as {vcName: string, [props: string]: any}[];
   }
 
   public async addPlatFormVCForAdminUsers() {

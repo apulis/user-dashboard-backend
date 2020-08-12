@@ -29,6 +29,7 @@
     "@nestjs/platform-express": "^6.10.14",
     "@nestjs/swagger": "^4.5.1",
     "@nestjs/typeorm": "^6.3.3",
+    "@types/cache-manager": "^2.10.3",
     "@types/cookie-parser": "^1.4.2",
     "@types/express-rate-limit": "^5.0.0",
     "@types/helmet": "^0.0.47",

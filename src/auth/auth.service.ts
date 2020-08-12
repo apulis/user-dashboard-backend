@@ -15,11 +15,11 @@ import { Role } from 'src/role/role.entity';
 import { MS_OAUTH2_URL } from 'src/constants/config';
 import { RegisterTypes } from 'src/constants/enums';
 import { CasbinService } from 'src/common/authz';
-import { UserRoleService } from 'src/user-role/user-role.service';
 import { ResetPassword } from 'src/user/reset-password.entity';
 import { UserService } from 'src/user/user.service';
 import { IRequestUser } from './auth.controller';
 import { TypesPrefix } from 'src/common/authz';
+import { Cache } from 'cache-manager'
 
 @Injectable()
 export class AuthService {
@@ -33,7 +33,7 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly casbinService: CasbinService,
     private readonly userService: UserService,
-    @Inject('REDIS_MANAGER') private readonly redisCache: any
+    @Inject('REDIS_MANAGER') private readonly redisCache: Cache
   ) {
   }
   
@@ -62,7 +62,6 @@ export class AuthService {
 
   async setUserToMemory(userId: number, user: IRequestUser){
     return new Promise((resolve, reject) => {
-      console.log(22234, TypesPrefix.user + userId, JSON.stringify(user))
       this.redisCache.set(TypesPrefix.user + userId, JSON.stringify(user), { ttl: 60 }, (err: any) => {
         if (err) {
           reject(err);

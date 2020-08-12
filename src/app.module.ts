@@ -29,6 +29,7 @@ import { UserRoleService } from './user-role/user-role.service';
 import { UserRole } from './user-role/user-role.entity';
 import { LanguageModule } from './language/language.module';
 import { UserVcModule } from './user-vc/user-vc.module';
+import { RedisProvider } from './common/cache-manager';
 
  
 @Module({
@@ -52,6 +53,6 @@ import { UserVcModule } from './user-vc/user-vc.module';
     UserVcModule
   ],
   controllers: [AppController],
-  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService, UserVcService],
+  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService, UserVcService, RedisProvider],
 })
 export class AppModule {}
