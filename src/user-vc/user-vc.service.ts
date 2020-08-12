@@ -100,4 +100,19 @@ export class UserVcService {
     })
   }
 
+  public async getAllVCUserCount() {
+    const result: {[props: string]: number} = {};
+
+    const vcPolicys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc);
+    vcPolicys.forEach(p => {
+      const vc = p[2];
+      if (typeof result[vc] === 'undefined') {
+        result[vc] = 1;
+      } else {
+        result[vc] += 1;
+      }
+    })
+    return result;
+  }
+
 }

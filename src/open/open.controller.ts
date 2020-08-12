@@ -107,4 +107,18 @@ export class OpenController {
       message: 'success',
     })
   }
+
+  @Get('/vc/user/count')
+  @ApiOperation({
+    summary: '获取所有 vc 和对应的用户数量',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(OpenGuard)
+  async getAllVCCount() {
+    const allVCCount = await this.userVcService.getAllVCUserCount();
+    return {
+      success: true,
+      vcUserCount: allVCCount,
+    }
+  }
 }
