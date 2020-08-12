@@ -30,10 +30,11 @@ export class UserVcController {
     if (typeof pageSize !== 'undefined') {
       pageSize = Number(pageSize);
     }
-    const vcList = await this.userVcService.getUserVcDetail(userId, pageNo - 1, pageSize);
+    const { list, total} = await this.userVcService.getUserVcDetail(userId, pageNo - 1, pageSize);
     return {
       success: true,
-      vcList,
+      list,
+      total,
     }
   }
 

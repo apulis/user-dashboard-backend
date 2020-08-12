@@ -31,7 +31,10 @@ export class UserVcService {
     allVc = allVc.filter(val => {
       return vcNames.includes(val.vcName);
     })
-    return allVc.slice(pageNo * pageSize, pageSize);
+    return {
+      list: allVc.slice(pageNo * pageSize, pageSize),
+      total: allVc.length,
+    }
   }
 
   public async getUserVcNames(userId: number) {
