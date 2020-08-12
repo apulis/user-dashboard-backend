@@ -89,7 +89,7 @@ export class UserVcService {
     return result;
   }
 
-  public async fetchAllVC() {
+  public async fetchAllVC(pageNo?: number, pageSize?: number, name?: string) {
     const memoAllVCList = await this.redisCache.get(allVCListTag)
     let allVc = {}
     if (!memoAllVCList) {
@@ -104,6 +104,25 @@ export class UserVcService {
       allVc = JSON.parse(memoAllVCList);
     }
     return allVc as {vcName: string, [props: string]: any}[];
+  }
+
+  public async searchVC(pageNo?: number, pageSize?: number, search?: string) {
+    let allVc = {}
+    const params = {
+      page: pageNo,
+      size: pageSize,
+      name: search,
+    }
+    const RESTFULAPI = this.config.get('RESTFULAPI');
+    const res = await axios.get(RESTFULAPI + '/ListVCs', {
+      params,
+    });
+    if (res.data.result) {
+      console.log(res.data, params)
+      allVc = res.data.result;
+    }
+    return allVc
+    
   }
 
   public async addPlatFormVCForAdminUsers() {

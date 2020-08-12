@@ -84,8 +84,12 @@ export class UserVcController {
   @ApiOperation({
     summary: '获取所有 vc 名称列表'
   })
-  async getALLVC() {
-    return (await this.userVcService.fetchAllVC()).map((val: any) => val.vcName);
+  async getALLVC(@Query('pageNo') pageNo?: number, @Query('pageSize') pageSize?: number, @Query('search') search?: string) {
+    const vcList = await this.userVcService.searchVC(Number(pageNo), Number(pageSize), search);
+    return {
+      success: true,
+      vcList,
+    }
   }
 
 
