@@ -87,7 +87,7 @@ export class UserVcService {
   }
 
   public async fetchAllVC() {
-    const memoAllVCList = await this.redisCache.get(allVCListTag);
+    const memoAllVCList = await this.redisCache.get(allVCListTag)
     let allVc = {}
     if (!memoAllVCList) {
       const RESTFULAPI = this.config.get('RESTFULAPI');

@@ -2,7 +2,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import * as cacheManager from 'cache-manager';
 import { IRequestUser } from 'src/auth/auth.controller';
 
-export const ttl = 60
+export const ttl = 30
 
 
 
