@@ -5,7 +5,6 @@ import { AuthService } from 'src/auth/auth.service';
 
 const validateRequest = (request: any, JWT_SECRET_KEY: string): boolean => {
   const { headers } = request;
-  console.log('headers', headers)
   if (headers) {
     const { authorization } = headers;
     if (authorization) {
