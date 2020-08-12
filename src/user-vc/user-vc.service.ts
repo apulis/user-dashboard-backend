@@ -118,8 +118,7 @@ export class UserVcService {
       params,
     });
     if (res.data.result) {
-      console.log(res.data, params)
-      allVc = res.data.result;
+      allVc = {list: res.data.result, total: res.data.totalNum };
     }
     return allVc
     
