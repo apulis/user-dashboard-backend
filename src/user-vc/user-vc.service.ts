@@ -89,7 +89,7 @@ export class UserVcService {
     return result;
   }
 
-  public async fetchAllVC(pageNo?: number, pageSize?: number, name?: string) {
+  public async fetchAllVC() {
     const memoAllVCList = await this.redisCache.get(allVCListTag)
     let allVc = {}
     if (!memoAllVCList) {
@@ -99,7 +99,6 @@ export class UserVcService {
         allVc = res.data.result;
         this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
       }
-      return []
     } else {
       allVc = JSON.parse(memoAllVCList);
     }
