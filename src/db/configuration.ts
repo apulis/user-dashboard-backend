@@ -6,7 +6,7 @@ const isProductionEnvironment = process.env.NODE_ENV === 'prod';
 
 
 const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));
-console.log('envConfig', envConfig)
+// console.log('envConfig', envConfig)
 export default {
   environment: process.env.NODE_ENV || 'development',
   typeorm: {
