@@ -22,8 +22,8 @@ export class LoggerMiddleware implements NestMiddleware {
 }
 
 export function logger(req: Request, res: Response, next: () => any) {
-  const code = res.statusCode; // 响应状态码
   next();
+  const code = res.statusCode; // 响应状态码
   // 组装日志信息
   const logFormat = ` >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     Request original url: ${req.originalUrl}
