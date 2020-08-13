@@ -26,6 +26,7 @@ interface IState {
 export interface IRequestUser extends User {
   currentRole: string[];
   permissionList: string[];
+  currentVC?: string[]
 }
 
 const getWXAuthenticationUrl = (options: { to: string; clientId: string; userId?: number }) => {
@@ -160,6 +161,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
     const user = (req.user as IRequestUser);
+    console.log('user', user)
     if (user) {
       res.send({
         success: true,
@@ -173,7 +175,8 @@ export class AuthController {
         wechatId: user.wechatId,
         nickName: user.nickName,
         currentRole: user.currentRole,
-        permissionList: user.permissionList
+        permissionList: user.permissionList,
+        currentVC: user.currentVC
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED)

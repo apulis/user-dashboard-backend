@@ -20,6 +20,7 @@ import { UserService } from 'src/user/user.service';
 import { IRequestUser } from './auth.controller';
 import { TypesPrefix } from 'src/common/authz';
 import { Cache } from 'cache-manager'
+import { UserVcService } from 'src/user-vc/user-vc.service';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,8 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly casbinService: CasbinService,
     private readonly userService: UserService,
-    @Inject('REDIS_MANAGER') private readonly redisCache: Cache
+    @Inject('REDIS_MANAGER') private readonly redisCache: Cache,
+
   ) {
   }
   
@@ -136,12 +138,20 @@ export class AuthService {
         return undefined;
       }
       if (user) {
-        const currentRole = await this.getUserRoles(user.id);
-        const permissionList = await this.getUserPermissionList(user.id);
+        const [
+          currentRole,
+          permissionList,
+          currentVC
+        ] = await Promise.all([
+          this.getUserRoles(user.id),
+          this.getUserPermissionList(user.id),
+          this.casbinService.getUserVcNames(uid),
+        ])
         const userInfo = {
           ...user,
           permissionList,
           currentRole: currentRole.map(val => val.name),
+          currentVC,
         }
         
         this.setUserToMemory(uid, userInfo);

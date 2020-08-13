@@ -37,18 +37,6 @@ export class UserVcService {
     }
   }
 
-  public async getUserVcNames(userId: number) {
-    let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
-    const vcNames: string[] = []
-    vcPolicys.forEach(p => {
-      if (p && (p[1] === TypesPrefix.vc)) {
-        vcNames.push(p[2]);
-      }
-    })
-    return vcNames;
-  
-  }
-
   public async modifyUserVc(userId: string, vcNames: string[]) {
     userId = TypesPrefix.user + userId;
     vcNames.forEach((vcName) => {

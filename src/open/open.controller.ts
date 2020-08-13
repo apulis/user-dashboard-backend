@@ -41,7 +41,8 @@ export class OpenController {
         wechatId: user.wechatId,
         nickName: user.nickName,
         currentRole: user.currentRole,
-        permissionList: user.permissionList
+        permissionList: user.permissionList,
+        currentVC: user.currentVC
       });
     } else {
       res.status(HttpStatus.UNAUTHORIZED)

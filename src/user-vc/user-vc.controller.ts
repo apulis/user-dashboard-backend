@@ -6,13 +6,14 @@ import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowe
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { IRequestUser } from 'src/auth/auth.controller';
-import { type } from 'os';
+import { CasbinService } from 'src/common/authz';
 
 @Controller('vc')
 @ApiTags('用户和 VC 相关')
 export class UserVcController {
   constructor(
-    private readonly userVcService: UserVcService
+    private readonly userVcService: UserVcService,
+    private readonly casbinService: CasbinService,
   ) {
 
   }
@@ -45,7 +46,7 @@ export class UserVcController {
   })
   async getUserByToken(@Req() req: Request) {
     const userId = (req.user as IRequestUser).id;
-    const vcList = await this.userVcService.getUserVcNames(userId);
+    const vcList = await this.casbinService.getUserVcNames(userId);
     return {
       success: true,
       vcList,
