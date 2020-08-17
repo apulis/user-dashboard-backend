@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ScheduleModule } from 'nest-schedule';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -50,7 +50,8 @@ import { RedisProvider } from './common/cache-manager';
     TypeOrmModule.forFeature([Permission, Role, User, UserRole]),
     OpenModule,
     LanguageModule,
-    UserVcModule
+    UserVcModule,
+    ScheduleModule.register()
   ],
   controllers: [AppController],
   providers: [
