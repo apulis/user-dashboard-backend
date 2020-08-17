@@ -17,13 +17,22 @@ import { CasbinService } from 'src/common/authz';
 import { InitCasbin } from 'src/common/authz/init-casbin';
 import { ResetPassword } from 'src/user/reset-password.entity';
 import { RedisProvider } from 'src/common/cache-manager';
+import { UserVcService } from 'src/user-vc/user-vc.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, GroupUser, GroupRole, UserRole, Role, ResetPassword]),
     InitCasbin
   ],
-  providers: [AuthService, UserService, ConfigService, JwtStrategy, CasbinService, RedisProvider],
+  providers: [
+    AuthService,
+    UserService,
+    ConfigService,
+    JwtStrategy,
+    CasbinService,
+    UserVcService,
+    RedisProvider
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

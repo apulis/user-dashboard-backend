@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req, Query, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Req, Query, ForbiddenException, Inject, forwardRef } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response, Request } from 'express';
 import WechatOauth from 'wechat-oauth-ts';
@@ -79,7 +79,7 @@ const getMSAuthenticationUrl = (options: { to: string; clientId: string; userId?
 @ApiTags('用户认证相关')
 export class AuthController {
   constructor(
-    private readonly userService: UserService,
+    @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly config: ConfigService,
     private readonly casbinService: CasbinService

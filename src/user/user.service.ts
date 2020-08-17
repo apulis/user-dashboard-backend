@@ -1,7 +1,7 @@
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getManager } from 'typeorm';
-import { Injectable, Res } from '@nestjs/common';
+import { Injectable, Res, Inject, forwardRef } from '@nestjs/common';
 import { Brackets } from 'typeorm';
 import { IUserMessage } from './user.controller';
 import { ResetPassword } from './reset-password.entity';
@@ -12,6 +12,7 @@ import { ConfigService } from 'config/config.service';
 import { encodePassword, md5 } from 'src/utils';
 import { async } from 'rxjs/internal/scheduler/async';
 import axios from 'axios';
+import { UserVcService } from 'src/user-vc/user-vc.service';
 
 export const openRegisterTypes = {
   Microsoft: 3001,
@@ -36,6 +37,7 @@ export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(User) private readonly resetPasswordRepository: Repository<ResetPassword>,
+    @Inject(forwardRef(() => UserVcService)) private readonly userVcService: UserVcService,
     private readonly config: ConfigService,
   ) { }
 

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { CASBIN_ENFORCER, TypesPrefix } from 'src/common/authz';
 import { Enforcer } from 'casbin';
 import axios from 'axios';
@@ -15,6 +15,7 @@ export class UserVcService {
   constructor(
     @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer,
     private readonly config: ConfigService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     @Inject('REDIS_MANAGER') private readonly redisCache: Cache
   ) { }
@@ -133,6 +134,18 @@ export class UserVcService {
       }
     })
     return result;
+  }
+
+  public async getUserVcNames(userId: number) {
+    let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
+    const vcNames: string[] = []
+    vcPolicys.forEach(p => {
+      if (p && (p[1] === TypesPrefix.vc)) {
+        vcNames.push(p[2]);
+      }
+    })
+    return vcNames;
+  
   }
 
 }

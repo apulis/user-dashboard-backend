@@ -19,6 +19,14 @@ import { UserVcService } from 'src/user-vc/user-vc.service';
 @Module({
   imports: [TypeOrmModule.forFeature([User, UserRole, Role, ResetPassword, GroupRole, GroupUser]), InitCasbin],
   controllers: [UserController],
-  providers: [UserService, UserRoleService, ConfigService, RoleService, AuthService, RedisProvider, UserVcService],
+  providers: [
+    UserService,
+    UserRoleService,
+    ConfigService,
+    RoleService,
+    AuthService,
+    RedisProvider,
+    UserVcService
+  ],
 })
 export class UserModule {}

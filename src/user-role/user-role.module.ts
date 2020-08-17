@@ -14,10 +14,11 @@ import { GroupUser } from 'src/group-user/group-user.entity';
 import { GroupRole } from 'src/group-role/group-role.entity';
 import { ResetPassword } from 'src/user/reset-password.entity';
 import { RedisProvider } from 'src/common/cache-manager';
+import { UserVcService } from 'src/user-vc/user-vc.service';
 
 @Module({
   controllers: [UserRoleController],
-  providers: [UserRoleService, RoleService, UserService, ConfigService, AuthService, RedisProvider],
+  providers: [UserRoleService, RoleService, UserService, ConfigService, AuthService, RedisProvider, UserVcService],
   imports: [TypeOrmModule.forFeature([UserRole, Role, User, GroupUser, GroupRole, ResetPassword]), InitCasbin]
 })
 export class UserRoleModule {}

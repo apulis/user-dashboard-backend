@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException, Inject } from '@nestjs/common';
+import { Injectable, ForbiddenException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { sign, decode } from 'jsonwebtoken';
@@ -33,7 +33,8 @@ export class AuthService {
     @InjectRepository(ResetPassword) private readonly resetPasswordRespository: Repository<ResetPassword>,
     private readonly config: ConfigService,
     private readonly casbinService: CasbinService,
-    private readonly userService: UserService,
+    @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
+    @Inject(forwardRef(() => UserVcService)) private readonly userVcService: UserVcService,
     @Inject('REDIS_MANAGER') private readonly redisCache: Cache,
 
   ) {
@@ -145,7 +146,7 @@ export class AuthService {
         ] = await Promise.all([
           this.getUserRoles(user.id),
           this.getUserPermissionList(user.id),
-          this.casbinService.getUserVcNames(uid),
+          this.userVcService.getUserVcNames(uid),
         ])
         const userInfo = {
           ...user,

@@ -53,6 +53,15 @@ import { RedisProvider } from './common/cache-manager';
     UserVcModule
   ],
   controllers: [AppController],
-  providers: [AppService, PermissionService, RoleService, UserService, ConfigService, UserRoleService, UserVcService, RedisProvider],
+  providers: [
+    AppService,
+    PermissionService,
+    RoleService,
+    UserService,
+    ConfigService,
+    UserRoleService,
+    UserVcService,
+    RedisProvider
+  ],
 })
 export class AppModule {}
