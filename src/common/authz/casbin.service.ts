@@ -36,7 +36,6 @@ export class CasbinService {
   }
 
   public async removeRolePermissions(roleId: number) {
-    console.log(TypesPrefix.role + roleId)
     return await this.enforcer.deletePermissionsForUser(TypesPrefix.role + roleId)
   }
   public initRolePermissions() {
