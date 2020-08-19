@@ -10,8 +10,6 @@ import { CasbinService } from 'src/common/authz';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { initialPermissions } from 'mysql-init/init-permission';
 import { PermissionService } from 'src/permission/permission.service';
-import { Permission } from 'src/permission/permission.entity';
-import { bool } from '@hapi/joi';
 
 @Controller('role')
 @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -93,6 +91,16 @@ export class RoleController {
       permissions: permissions.filter(p => {
         return permissionKeys.includes(p.key)
       })
+    }
+  }
+
+  @Get('/:roleId/detail')
+  @ApiOperation({ summary: '获取一个角色详情' })
+  async getRoleDetail(@Param('roleId') roleId: number) {
+    roleId = Number(roleId);
+    return {
+      success: true,
+      detail: await this.roleService.getRoleDetail(roleId)
     }
   }
 
