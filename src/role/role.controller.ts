@@ -100,7 +100,7 @@ export class RoleController {
     roleId = Number(roleId);
     return {
       success: true,
-      detail: await this.roleService.getRoleDetail(roleId)
+      detail: await this.roleService.getRoleDetail(roleId) || {}
     }
   }
 
