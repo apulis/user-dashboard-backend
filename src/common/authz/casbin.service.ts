@@ -35,6 +35,10 @@ export class CasbinService {
     return rolePermissions.map(val => val[1]);
   }
 
+  public async removeRolePermissions(roleId: number) {
+    console.log(TypesPrefix.role + roleId)
+    return await this.enforcer.deletePermissionsForUser(TypesPrefix.role + roleId)
+  }
   public initRolePermissions() {
     // admin
     this.addPermissionForRole(1, initialPermissions.map(val => val.key));
