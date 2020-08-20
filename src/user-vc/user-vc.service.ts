@@ -5,7 +5,6 @@ import axios from 'axios';
 import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
-import { ttl } from 'src/common/cache-manager';
 
 export const initialVCName = 'platform';
 export const allVCListTag = 'allVCList';
@@ -136,8 +135,13 @@ export class UserVcService {
     return result;
   }
 
-  public async getUserVcNames(userId: number) {
-
+  public async getUserVcNames(userId: number, userName?: string) {
+    
+    const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+    if (userName && adminUserNames.includes(userName)) {
+      const vcList = await this.fetchAllVC();
+      return vcList.map(val => val.vcName);
+    }
     let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
     const vcNames: string[] = []
     vcPolicys.forEach(p => {

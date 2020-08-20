@@ -146,7 +146,7 @@ export class AuthService {
         ] = await Promise.all([
           this.getUserRoles(user.id),
           this.getUserPermissionList(user.id),
-          this.userVcService.getUserVcNames(uid),
+          this.userVcService.getUserVcNames(uid, user.userName)
         ])
         const userInfo = {
           ...user,
