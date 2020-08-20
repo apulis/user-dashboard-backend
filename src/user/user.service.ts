@@ -67,14 +67,17 @@ export class UserService {
       });
     });
     adminUsers[0].id = 30001;
-    const result = await this.usersRepository
-      .createQueryBuilder()
-      .insert()
-      .orIgnore()
-      .into(User)
-      .values(adminUsers)
-      .execute();
-    return result;
+    for await (const user of adminUsers) {
+      await this.usersRepository
+        .createQueryBuilder()
+        .insert()
+        .orIgnore()
+        .into(User)
+        .values(user)
+        .execute();
+    }
+     
+    return true;
   }
 
   async find(pageNo: number, pageSize: number): Promise<{list: User[], total: number}> {
