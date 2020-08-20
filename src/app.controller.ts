@@ -26,7 +26,7 @@ export class AppController {
       .then(async() => {
         userRoleService.initAdminUserRole();
         casbinService.initRolePermissions();
-        userVcService.addPlatFormVCForAdminUsers();
+        // userVcService.addPlatFormVCForAdminUsers();
       })
   }
 

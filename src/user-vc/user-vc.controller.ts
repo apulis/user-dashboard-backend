@@ -7,6 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { IRequestUser } from 'src/auth/auth.controller';
 import { CasbinService } from 'src/common/authz';
+import { ConfigService } from 'config/config.service';
 
 @Controller('vc')
 @ApiTags('用户和 VC 相关')
@@ -14,6 +15,7 @@ export class UserVcController {
   constructor(
     private readonly userVcService: UserVcService,
     private readonly casbinService: CasbinService,
+    private readonly config: ConfigService,
   ) {
 
   }
@@ -45,7 +47,14 @@ export class UserVcController {
     summary: '获取用户自己的 VC'
   })
   async getUserByToken(@Req() req: Request) {
-    const userId = (req.user as IRequestUser).id;
+    const {id: userId, userName} = (req.user as IRequestUser);
+    const adminUserNames = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+    if (adminUserNames.includes(userName)) {
+      return {
+        success: true,
+        vcList: (await this.userVcService.fetchAllVC()).map(val => val.vcName),
+      }
+    }
     const vcList = await this.userVcService.getUserVcNames(userId);
     return {
       success: true,
