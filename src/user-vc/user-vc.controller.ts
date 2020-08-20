@@ -48,14 +48,7 @@ export class UserVcController {
   })
   async getUserByToken(@Req() req: Request) {
     const {id: userId, userName} = (req.user as IRequestUser);
-    const adminUserNames = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
-    if (adminUserNames.includes(userName)) {
-      return {
-        success: true,
-        vcList: (await this.userVcService.fetchAllVC()).map(val => val.vcName),
-      }
-    }
-    const vcList = await this.userVcService.getUserVcNames(userId);
+    const vcList = await this.userVcService.getUserVcNames(userId, userName);
     return {
       success: true,
       vcList,
