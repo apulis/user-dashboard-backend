@@ -86,7 +86,7 @@ export class UserVcService {
       const res = await axios.get(RESTFULAPI + '/ListVCs');
       if (res.data.result) {
         allVc = res.data.result;
-        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
+        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: 3 })
       }
     } else {
       allVc = JSON.parse(memoAllVCList);
@@ -137,6 +137,7 @@ export class UserVcService {
   }
 
   public async getUserVcNames(userId: number) {
+
     let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
     const vcNames: string[] = []
     vcPolicys.forEach(p => {
