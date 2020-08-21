@@ -72,20 +72,22 @@ export class UserController {
         result = await this.userService.find(Number(pageNo) - 1, Number(pageSize));
       }
     }
-    
-    const role = await this.userRoleService.getUsersRoles(result.list.map(val => val.id));
     const list: IResponseUserList[] = result.list;
-    role.forEach(r => {
-      const user = list.find(val => val.id === r.userId);
-      if (user) {
-        if (!user.role) {
-          user.role = [r.role.name]
-        } else {
-          user.role.push(r.role.name)
-        }
-      }
+    if (list.length > 0) {
+      const role = await this.userRoleService.getUsersRoles(list.map(val => val.id));
       
-    })
+      role.forEach(r => {
+        const user = list.find(val => val.id === r.userId);
+        if (user) {
+          if (!user.role) {
+            user.role = [r.role.name]
+          } else {
+            user.role.push(r.role.name)
+          }
+        }
+      })
+    }
+    
     res.status(HttpStatus.OK).json({
       success: true, 
       list,
