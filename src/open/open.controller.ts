@@ -122,4 +122,18 @@ export class OpenController {
       vcUserCount: allVCCount,
     }
   }
+
+  @Get('/vc/user/name')
+  @ApiOperation({
+    summary: '根据vc名称获取和对应的用户名称',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(OpenGuard)
+  async getVCUsers(@Query('vcNames') vcNames: string[]) {
+    const vcUserNames = await this.userVcService.getVCUsers(JSON.parse(String(vcNames)));
+    return {
+      success: true,
+      vcUserNames
+    }
+  }
 }

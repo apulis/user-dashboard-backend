@@ -153,4 +153,21 @@ export class UserVcService {
   
   }
 
+  public async getVCUsers(vcNames: string[]) {
+    const vcPolicys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc);
+    const result: {[propsName: string]: number[]} = {};
+    vcPolicys.forEach(p => {
+      if (typeof result[p[2]] !== 'undefined') {
+        const userId = Number(p[0].replace(new RegExp('^' + TypesPrefix.user), ''));
+        result[p[2]].push(userId)
+      } else {
+        result[p[2]] = [];
+      }
+    })
+    for await (const vc of vcNames) {
+      const res = await this.userService.findUsersByUserIds(result[vc])
+      result[vc] = res.map(val => val.userName);
+    }
+    return result;
+  }
 }
