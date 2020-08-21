@@ -153,7 +153,7 @@ export class UserVcService {
   
   }
 
-  public async getVCUsers(vcNames: string[]) {
+  public async getVCUsers() {
     const vcPolicys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc);
     const result: {[propsName: string]: number[]} = {};
     vcPolicys.forEach(p => {
@@ -164,7 +164,7 @@ export class UserVcService {
         result[p[2]] = [];
       }
     })
-    for await (const vc of vcNames) {
+    for await (const vc of Object.keys(result)) {
       const res = await this.userService.findUsersByUserIds(result[vc])
       result[vc] = res.map(val => val.userName);
     }
