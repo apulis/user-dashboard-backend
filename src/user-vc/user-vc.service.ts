@@ -165,7 +165,7 @@ export class UserVcService {
       }
     })
     for await (const vc of Object.keys(result)) {
-      if (result[vc].length === 0) return
+      if (result[vc].length === 0) continue;
       const res = await this.userService.findUsersByUserIds(result[vc])
       result[vc] = res.map(val => val.userName);
     }
