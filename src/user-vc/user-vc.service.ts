@@ -158,11 +158,11 @@ export class UserVcService {
     const vcPolicys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc);
     const result: {[propsName: string]: number[]} = {};
     vcPolicys.forEach(p => {
+      const userId = Number(p[0].replace(new RegExp('^' + TypesPrefix.user), ''));
       if (typeof result[p[2]] !== 'undefined') {
-        const userId = Number(p[0].replace(new RegExp('^' + TypesPrefix.user), ''));
         result[p[2]].push(userId)
       } else {
-        result[p[2]] = [];
+        result[p[2]] = [userId];
       }
     })
     for await (const vc of Object.keys(result)) {
