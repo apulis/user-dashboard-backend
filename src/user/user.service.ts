@@ -230,6 +230,9 @@ export class UserService {
         message: 'User ' + activeJobUserName.join(', ') + ' has active job, please confirm!'
       }
     }
+    userIds.forEach(uid => {
+      this.userVcService.removeUserPolicys(uid)
+    })
     await this.usersRepository
       .createQueryBuilder('user')
       .delete()

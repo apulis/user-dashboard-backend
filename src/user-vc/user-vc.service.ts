@@ -172,4 +172,8 @@ export class UserVcService {
     }
     return result;
   }
+
+  public async removeUserPolicys(userId: number) {
+    return await this.enforcer.deletePermissionsForUser(TypesPrefix.user + userId);
+  }
 }
