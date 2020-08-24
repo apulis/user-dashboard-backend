@@ -21,6 +21,7 @@ import { IRequestUser } from './auth.controller';
 import { TypesPrefix } from 'src/common/authz';
 import { Cache } from 'cache-manager'
 import { UserVcService } from 'src/user-vc/user-vc.service';
+import { ttl } from 'src/common/cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -65,7 +66,7 @@ export class AuthService {
 
   async setUserToMemory(userId: number, user: IRequestUser){
     return new Promise((resolve, reject) => {
-      this.redisCache.set(TypesPrefix.user + userId, JSON.stringify(user), { ttl: 60 }, (err: any) => {
+      this.redisCache.set(TypesPrefix.user + userId, JSON.stringify(user), { ttl: ttl }, (err: any) => {
         if (err) {
           reject(err);
           return;

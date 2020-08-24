@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
+import { ttl } from 'src/common/cache-manager';
 
 export const initialVCName = 'platform';
 export const allVCListTag = 'allVCList';
@@ -85,7 +86,7 @@ export class UserVcService {
       const res = await axios.get(RESTFULAPI + '/ListVCs');
       if (res.data.result) {
         allVc = res.data.result;
-        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: 3 })
+        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
       }
     } else {
       allVc = JSON.parse(memoAllVCList);
