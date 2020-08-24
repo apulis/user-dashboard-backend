@@ -27,3 +27,9 @@ export class RemoveRoleDto {
   @IsArray()
   roleIds: number[]
 }
+
+export class EditPermissionDto {
+  @ApiProperty({ description: '编辑新权限的 KEY', example: ['PERMISSION_1', 'PERMISSION_2'] })
+  @IsArray()
+  permissionKeys: string[]
+}

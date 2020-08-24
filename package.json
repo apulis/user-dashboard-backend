@@ -51,6 +51,7 @@
     "moment": "^2.27.0",
     "mysql": "2.18.1",
     "mysql2": "^2.1.0",
+    "nest-schedule": "^0.6.4",
     "nestjs-rate-limiter": "^1.0.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

@@ -1,13 +1,15 @@
-import { Controller, Get, Query, Res, HttpStatus, Post, Body, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Res, HttpStatus, Post, Body, Delete, UseGuards, Param, Patch } from '@nestjs/common';
 import { ApiTags, ApiExtraModels, ApiOperation, ApiProperty } from '@nestjs/swagger';
 import { Response }  from 'express'
 
 
-import { CreateRoleDto, RemoveRoleDto } from './role.dto'
+import { CreateRoleDto, RemoveRoleDto, EditPermissionDto } from './role.dto'
 import { RoleService } from './role.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CasbinService } from 'src/common/authz';
 import { AuthzGuard } from 'src/guards/authz.guard';
+import { initialPermissions } from 'mysql-init/init-permission';
+import { PermissionService } from 'src/permission/permission.service';
 
 @Controller('role')
 @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
@@ -15,10 +17,12 @@ import { AuthzGuard } from 'src/guards/authz.guard';
 export class RoleController {
   constructor(
     private readonly roleService: RoleService,
+    private readonly casbinService: CasbinService,
+    private readonly permissionService: PermissionService
   ) {}
 
   @Get()
-  @ApiOperation({ description: '分页查询角色列表'})
+  @ApiOperation({ summary: '分页查询角色列表'})
   async index(
     @Query('pageNo') pageNo: number, 
     @Query('pageSize') pageSize: number,
@@ -35,7 +39,7 @@ export class RoleController {
   }
 
   @Post()
-  @ApiOperation({ description: '新建角色' })
+  @ApiOperation({ summary: '新建角色' })
   async create(
     @Body() body: CreateRoleDto,
     @Res() res: Response
@@ -55,7 +59,7 @@ export class RoleController {
   }
 
   @Delete()
-  @ApiOperation({ description: '删除角色' })
+  @ApiOperation({ summary: '删除角色' })
   async remove(@Body() body: RemoveRoleDto, @Res() res: Response) {
     await this.roleService.removeRoles(body.roleIds);
     res.status(HttpStatus.OK).json({
@@ -65,7 +69,7 @@ export class RoleController {
   }
 
   @Get('/count')
-  @ApiOperation({ description: '获取角色总数' })
+  @ApiOperation({ summary: '获取角色总数' })
   async getRolesTotal(@Res() res: Response) {
     const count = await this.roleService.getRoleCount()
     res.send({
@@ -73,4 +77,43 @@ export class RoleController {
       count,
     })
   }
+
+  @Get('/:roleId/permission')
+  @ApiOperation({ summary: '获取一个角色已有的权限' })
+  async getRolePermission(@Param('roleId') roleId: number) {
+    roleId = Number(roleId);
+    const [permissionKeys, permissions] = await Promise.all([
+      this.casbinService.getPermissionForRole(roleId),
+      this.permissionService.getAppPermissions()
+    ])
+    return {
+      success: true,
+      permissions: permissions.filter(p => {
+        return permissionKeys.includes(p.key)
+      })
+    }
+  }
+
+  @Get('/:roleId/detail')
+  @ApiOperation({ summary: '获取一个角色详情' })
+  async getRoleDetail(@Param('roleId') roleId: number) {
+    roleId = Number(roleId);
+    return {
+      success: true,
+      detail: await this.roleService.getRoleDetail(roleId) || {}
+    }
+  }
+
+  @Patch('/:roleId/permission')
+  @ApiOperation({ summary: '修改角色的权限' })
+  async modifyRolePermission(@Param('roleId') roleId: number, @Body() body: EditPermissionDto) {
+    roleId = Number(roleId);
+    await this.casbinService.removeRolePermissions(roleId);
+    await this.casbinService.addPermissionForRole(roleId, body.permissionKeys)
+    return {
+      success: true,
+      message: 'success',
+    }
+  }
+
 }

@@ -142,5 +142,11 @@ export class RoleService {
         name: roleName
       });
     }
+  
+  public async getRoleDetail(roleId: number) {
+    return await this.roleRepository.findOne({
+      id: roleId,
+    })
+  }
 
 }
