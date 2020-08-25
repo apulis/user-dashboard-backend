@@ -108,7 +108,7 @@ export class UserVcService {
     if (res.data.result) {
       const vcUsers = await this.getVCUsers();
       res.data.result.forEach((val) => {
-        val.userNameList = vcUsers[val.vcName];
+        val.userNameList = vcUsers[val.vcName] || [];
         val.userNum = vcUsers[val.vcName]?.length || 0;
       })
       allVc = { list: res.data.result, total: res.data.totalNum };
