@@ -102,11 +102,16 @@ export class UserVcService {
       name: search,
     }
     const RESTFULAPI = this.config.get('RESTFULAPI');
-    const res = await axios.get(RESTFULAPI + '/ListVCs', {
+    const res = await axios.get<{result: {vcName: string, userNum: number, userNameList: string[]}[], totalNum: number}>(RESTFULAPI + '/ListVCs', {
       params,
     });
     if (res.data.result) {
-      allVc = {list: res.data.result, total: res.data.totalNum };
+      const vcUsers = await this.getVCUsers();
+      res.data.result.forEach((val) => {
+        val.userNameList = vcUsers[val.vcName];
+        val.userNum = vcUsers[val.vcName]?.length || 0;
+      })
+      allVc = { list: res.data.result, total: res.data.totalNum };
     }
     return allVc
     
@@ -156,7 +161,7 @@ export class UserVcService {
 
   public async getVCUsers() {
     const vcPolicys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc);
-    const result: {[propsName: string]: number[]} = {};
+    const result: {[propsName: string]: (number | string)[]} = {};
     vcPolicys.forEach(p => {
       const userId = Number(p[0].replace(new RegExp('^' + TypesPrefix.user), ''));
       if (typeof result[p[2]] !== 'undefined') {
@@ -167,10 +172,10 @@ export class UserVcService {
     })
     for await (const vc of Object.keys(result)) {
       if (result[vc].length === 0) continue;
-      const res = await this.userService.findUsersByUserIds(result[vc])
+      const res = await this.userService.findUsersByUserIds(result[vc] as number[])
       result[vc] = res.map(val => val.userName);
     }
-    return result;
+    return result as {[propsName: string]: string[]};
   }
 
   public async removeUserPolicys(userId: number) {
