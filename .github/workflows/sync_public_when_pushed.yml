@@ -20,7 +20,7 @@ jobs:
         git branch
         ls -al
     - name: repo-sync to github apulis_platform
-      uses: repo-sync/github-sync@v2
+      uses: wei/git-sync@v2
       with:
         source_repo: "https://banrieen:18209188642git@github.com/apulis/addon_custom_user_dashboard_backend.git"
         source_branch: "master"
@@ -29,7 +29,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: repo-sync to gitee apulis_platform
-      uses: repo-sync/github-sync@v2
+      uses: wei/git-sync@v2
       with:
         source_repo: "https://banrieen:18209188642git@github.com/apulis/addon_custom_user_dashboard_backend.git"
         source_branch: "master" 
