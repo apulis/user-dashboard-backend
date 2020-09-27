@@ -142,6 +142,11 @@ export class UserVcService {
   }
 
   public async getUserVcNames(userId: number, userName?: string) {
+    if (this.config.get('ENABLE_VC') === 'false') {
+      // 配置未不启用 VC，则返回所有 vc
+      const vcList = await this.fetchAllVC();
+      return vcList.map(val => val.vcName);
+    }
     
     const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
     if (userName && adminUserNames.includes(userName)) {
