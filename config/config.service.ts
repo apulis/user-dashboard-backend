@@ -17,10 +17,10 @@ export class ConfigService {
   }
 
   i18n() {
-    if (this.envConfig['i18n'] === 'true') {
+    if (this.envConfig['ENABLE_I18N'] === 'true') {
       return true
     } else {
-      return this.envConfig['i18n']
+      return this.envConfig['ENABLE_I18N']
     }
   }
 

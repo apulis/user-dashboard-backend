@@ -20,7 +20,7 @@ export class PlatformConfigController {
       success: true,
       platformName: this.config.get('PLATFORM_NAME'),
       enableVC: this.config.vcEnabled(),
-      i8n: this.config.i18n(),
+      i18n: this.config.i18n(),
     }
   }  
 }
