@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from './permission.entity';
 import { Repository } from 'typeorm';
-import { initialPermissions, ProjectTypes, cnProjectTypes, enProjectTypes } from 'mysql-init/init-permission';
-import { cnNames } from 'mysql-init/init-permission';
+import { initialPermissions, ProjectTypes, cnProjectTypes, enProjectTypes } from 'db-init/init-permission';
+import { cnNames } from 'db-init/init-permission';
 import { contentSecurityPolicy } from 'helmet';
 
 @Injectable()

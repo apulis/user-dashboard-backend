@@ -83,11 +83,18 @@ export class UserVcService {
     let allVc = {}
     if (!memoAllVCList) {
       const RESTFULAPI = this.config.get('RESTFULAPI');
-      const res = await axios.get(RESTFULAPI + '/ListVCs');
-      if (res.data.result) {
-        allVc = res.data.result;
-        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
+      let res;
+      try {
+        res = await axios.get(RESTFULAPI + '/ListVCs');
+      } catch (e) {
+        console.error('fetch vc error');
       }
+      if (res && res.data.result) {
+        allVc = res.data.result;
+      } else {
+        allVc = [];
+      }
+      this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
     } else {
       allVc = JSON.parse(memoAllVCList);
     }

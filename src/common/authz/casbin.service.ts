@@ -1,7 +1,7 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { Enforcer } from "casbin";
 import { CASBIN_ENFORCER } from "./casbin.constants";
-import { initialPermissions, EnumPermissionKeys } from "mysql-init/init-permission";
+import { initialPermissions, EnumPermissionKeys } from "db-init/init-permission";
 
 export enum TypesPrefix {
   user = 'user:',

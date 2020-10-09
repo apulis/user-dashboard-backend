@@ -8,7 +8,7 @@ import { RoleService } from './role.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CasbinService } from 'src/common/authz';
 import { AuthzGuard } from 'src/guards/authz.guard';
-import { initialPermissions } from 'mysql-init/init-permission';
+import { initialPermissions } from 'db-init/init-permission';
 import { PermissionService } from 'src/permission/permission.service';
 
 @Controller('role')
