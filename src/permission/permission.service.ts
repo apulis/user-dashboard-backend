@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from './permission.entity';
 import { Repository } from 'typeorm';
-import { initialPermissions } from 'mysql-init/init-permission';
+import { initialPermissions, ProjectTypes, cnProjectTypes, enProjectTypes } from 'mysql-init/init-permission';
+import { cnNames } from 'mysql-init/init-permission';
+import { contentSecurityPolicy } from 'helmet';
 
 @Injectable()
 export class PermissionService {
@@ -26,10 +28,40 @@ export class PermissionService {
     if (this.checkPermissionKeyUnique(initialPermissions).length > 0) {
       throw new Error('permission key duplicate, please check');
     }
-    await this.permissionRepository.save(initialPermissions);
+    await this.permissionRepository.save(initialPermissions)
   }
 
   public async getAppPermissions() {
-    return await this.permissionRepository.find()
+    const permissions = await this.permissionRepository.find();
+    permissions.forEach(p => {
+      Object.keys(ProjectTypes).forEach(pt => {
+        if (p.project === pt) {
+          p.project = enProjectTypes[pt];
+        }
+      })
+    })
+    return permissions;
+  }
+  public async getAppCNPermissions() {
+    let permissions = await this.permissionRepository.find();
+    permissions.forEach(p => {
+      Object.keys(cnNames).forEach(key => {
+        if (key === p.key) {
+          p.name = cnNames[key];
+        }
+      })
+    });
+    permissions.forEach(p => {
+      Object.keys(ProjectTypes).forEach(pt => {
+        if (p.project === pt) {
+          p.project = cnProjectTypes[pt];
+        }
+      })
+    })
+    // 暂时去除专家系统
+    permissions = permissions.filter(val => {
+      return val.project !== '专家系统'
+    })
+    return permissions;
   }
 }

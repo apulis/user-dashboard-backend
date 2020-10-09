@@ -5,7 +5,6 @@ import * as mysql from 'mysql';
 import * as mysql2 from 'mysql2';
 import * as dotenv from 'dotenv';
 
-
 const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));
 
 const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME } = envConfig;
