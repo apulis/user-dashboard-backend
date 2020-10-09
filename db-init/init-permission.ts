@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
+
 import { Permission } from '../src/permission/permission.entity';
 
 export enum ProjectTypes {
@@ -6,15 +9,19 @@ export enum ProjectTypes {
   LABELING_PLATFORM = 'LABELING_PLATFORM',
 }
 
+const env = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));
+
+const { PLATFORM_NAME } = env;
+
 export const enProjectTypes: {[props: string]: string} = {
-  DLWORKSPACE: 'Expert Page',
-  AI_ARTS: 'AI_ARTS',
+  DLWORKSPACE: 'Apulis Platform',
+  AI_ARTS: PLATFORM_NAME,
   LABELING_PLATFORM: 'LABELING_PLATFORM',
 }
 
 export const cnProjectTypes: {[props: string]: string}  = {
-  DLWORKSPACE: '专家系统',
-  AI_ARTS: '华为深度学习系统',
+  DLWORKSPACE: '依瞳平台',
+  AI_ARTS: PLATFORM_NAME,
   LABELING_PLATFORM: '标注平台',
 }
 
