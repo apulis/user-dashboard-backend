@@ -13,11 +13,11 @@ export class ConfigService {
   }
 
   vcEnabled() {
-    return this.envConfig['ENABLE_VC'] === 'true';
+    return this.envConfig['ENABLE_VC'] === 'True';
   }
 
   i18n() {
-    if (this.envConfig['ENABLE_I18N'] === 'true') {
+    if (this.envConfig['ENABLE_I18N'] === 'True') {
       return true
     } else {
       return this.envConfig['ENABLE_I18N']
