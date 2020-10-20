@@ -21,6 +21,7 @@ export class PlatformConfigController {
       platformName: this.config.get('PLATFORM_NAME'),
       enableVC: this.config.vcEnabled(),
       i18n: this.config.i18n(),
+      enableAvisuals: this.config.avisuals(),
     }
   }  
 }

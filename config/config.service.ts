@@ -24,4 +24,11 @@ export class ConfigService {
     }
   }
 
+  avisuals() {
+    if (this.envConfig['ENABLE_AVISUALS'] === 'True') {
+      return true;
+    }
+    return false;
+  }
+
 }
