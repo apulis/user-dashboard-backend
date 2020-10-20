@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Brackets, InsertResult } from 'typeorm';
 
 import { Role } from './role.entity';
-import { initialRole } from 'mysql-init/init-role';
+import { initialRole } from 'db-init/init-role';
 import { CasbinService, CASBIN_ENFORCER } from 'src/common/authz';
 import { Enforcer } from 'casbin';
 

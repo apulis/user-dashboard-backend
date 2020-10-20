@@ -30,6 +30,7 @@ import { UserRole } from './user-role/user-role.entity';
 import { LanguageModule } from './language/language.module';
 import { UserVcModule } from './user-vc/user-vc.module';
 import { RedisProvider } from './common/cache-manager';
+import { PlatformConfigModule } from './platform-config/platform-config.module';
 
  
 @Module({
@@ -51,7 +52,8 @@ import { RedisProvider } from './common/cache-manager';
     OpenModule,
     LanguageModule,
     UserVcModule,
-    ScheduleModule.register()
+    ScheduleModule.register(),
+    PlatformConfigModule
   ],
   controllers: [AppController],
   providers: [

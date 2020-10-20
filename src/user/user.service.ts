@@ -227,6 +227,7 @@ export class UserService {
       })
       return {
         success: false,
+        activeJobUserName: activeJobUserName,
         message: 'User ' + activeJobUserName.join(', ') + ' has active job, please confirm!'
       }
     }

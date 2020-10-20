@@ -83,11 +83,18 @@ export class UserVcService {
     let allVc = {}
     if (!memoAllVCList) {
       const RESTFULAPI = this.config.get('RESTFULAPI');
-      const res = await axios.get(RESTFULAPI + '/ListVCs');
-      if (res.data.result) {
-        allVc = res.data.result;
-        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
+      let res;
+      try {
+        res = await axios.get(RESTFULAPI + '/ListVCs');
+      } catch (e) {
+        console.error('fetch vc error');
       }
+      if (res && res.data.result) {
+        allVc = res.data.result;
+      } else {
+        allVc = [];
+      }
+      this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
     } else {
       allVc = JSON.parse(memoAllVCList);
     }
@@ -142,6 +149,11 @@ export class UserVcService {
   }
 
   public async getUserVcNames(userId: number, userName?: string) {
+    if (this.config.get('ENABLE_VC') === 'false') {
+      // 配置未不启用 VC，则返回所有 vc
+      const vcList = await this.fetchAllVC();
+      return vcList.map(val => val.vcName);
+    }
     
     const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
     if (userName && adminUserNames.includes(userName)) {

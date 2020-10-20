@@ -4,7 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from 'src/user/user.entity';
 import { ConfigService } from '@nestjs/config';
-import { initialPermissions } from 'mysql-init/init-permission';
+import { initialPermissions } from 'db-init/init-permission';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

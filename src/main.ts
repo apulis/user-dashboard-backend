@@ -8,7 +8,7 @@ import * as helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
-import { initDataBase, fixMysql8Sha2Password } from 'mysql-init/init-database';
+import { initDataBase, fixMysql8Sha2Password } from 'db-init/init-database';
 import { logger } from './middleware/logger.middleware';
 
 const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));

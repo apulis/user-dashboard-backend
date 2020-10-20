@@ -11,4 +11,24 @@ export class ConfigService {
   get(key: string): string {
     return this.envConfig[key];
   }
+
+  vcEnabled() {
+    return this.envConfig['ENABLE_VC'] === 'True';
+  }
+
+  i18n() {
+    if (this.envConfig['ENABLE_I18N'] === 'True') {
+      return true
+    } else {
+      return this.envConfig['ENABLE_I18N']
+    }
+  }
+
+  avisuals() {
+    if (this.envConfig['ENABLE_AVISUALS'] === 'True') {
+      return true;
+    }
+    return false;
+  }
+
 }
