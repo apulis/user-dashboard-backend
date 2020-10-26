@@ -13,19 +13,20 @@ export class ConfigService {
   }
 
   vcEnabled() {
-    return this.envConfig['ENABLE_VC'] === 'True';
+    return this.envConfig['ENABLE_VC'] === 'True' || this.envConfig['ENABLE_VC'] === 'true';
   }
 
   i18n() {
-    if (this.envConfig['ENABLE_I18N'] === 'True') {
+    const env = this.envConfig['ENABLE_I18N'];
+    if (env === 'True' || env === 'true') {
       return true
     } else {
-      return this.envConfig['ENABLE_I18N']
+      return env
     }
   }
 
   avisuals() {
-    if (this.envConfig['ENABLE_AVISUALS'] === 'True') {
+    if (this.envConfig['ENABLE_AVISUALS'] === 'True' || this.envConfig['ENABLE_AVISUALS'] === 'true') {
       return true;
     }
     return false;
