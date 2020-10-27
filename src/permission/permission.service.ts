@@ -34,7 +34,7 @@ export class PermissionService {
   }
 
   public async getAppPermissions() {
-    let permissions = await this.permissionRepository.find();
+    const permissions = await this.permissionRepository.find();
     permissions.forEach(p => {
       Object.keys(ProjectTypes).forEach(pt => {
         if (p.project === pt) {
@@ -42,23 +42,6 @@ export class PermissionService {
         }
       })
     })
-    if (this.configService.i18n() === 'zh-CN') {
-      // 暂时去除专家系统
-      permissions = permissions.filter(val => {
-        return val.project !== '依瞳平台'
-      })
-    }
-    if (this.configService.i18n() === true) {
-      permissions = permissions.filter(val => {
-        return val.project !== '标注平台'
-      })
-      permissions = permissions.filter(val => {
-        return val.project !== 'LABELING_PLATFORM'
-      })
-      permissions = permissions.filter(val => {
-        return val.project !== this.configService.get('PLATFORM_NAME')
-      })
-    }
     return permissions;
   }
   public async getAppCNPermissions() {
@@ -77,20 +60,6 @@ export class PermissionService {
         }
       })
     })
-    if (this.configService.i18n() === 'zh-CN') {
-      // 暂时去除专家系统
-      permissions = permissions.filter(val => {
-        return val.project !== '依瞳平台'
-      })
-    }
-    if (this.configService.i18n() === true) {
-      permissions = permissions.filter(val => {
-        return val.project !== '标注平台'
-      })
-      permissions = permissions.filter(val => {
-        return val.project !== this.configService.get('PLATFORM_NAME')
-      })
-    }
     
     return permissions;
   }

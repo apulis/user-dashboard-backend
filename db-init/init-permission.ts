@@ -16,7 +16,7 @@ const { PLATFORM_NAME } = env;
 export const enProjectTypes: {[props: string]: string} = {
   DLWORKSPACE: 'Apulis Platform',
   AI_ARTS: PLATFORM_NAME,
-  LABELING_PLATFORM: 'LABELING_PLATFORM',
+  LABELING_PLATFORM: 'Annotation Platform',
 }
 
 export const cnProjectTypes: {[props: string]: string}  = {
@@ -43,54 +43,54 @@ export enum EnumPermissionKeys {
 }
 
 const initialPermissions: Permission[] = [
-  {
-    id: 1,
-    name: 'Submit training job',
-    key: EnumPermissionKeys.SUBMIT_TRAINING_JOB,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
-  {
-    id: 2,
-    name: 'Manage VC',
-    key: EnumPermissionKeys.MANAGE_VC,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
-  {
-    id: 3,
-    name: 'View VC',
-    key: EnumPermissionKeys.VIEW_VC,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
-  {
-    id: 4,
-    name: 'View all users jobs',
-    key: EnumPermissionKeys.VIEW_ALL_USER_JOB,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
-  {
-    id: 5,
-    name: 'View and manage all users job',
-    key: EnumPermissionKeys.VIEW_AND_MANAGE_ALL_USERS_JOB,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
-  {
-    id: 6,
-    name: 'View cluster status',
-    key: EnumPermissionKeys.VIEW_CLUSTER_STATUS,
-    note: '',
-    project: ProjectTypes.DLWORKSPACE,
-  },
+  // {
+  //   id: 1,
+  //   name: 'Submit training job',
+  //   key: EnumPermissionKeys.SUBMIT_TRAINING_JOB,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
+  // {
+  //   id: 2,
+  //   name: 'Manage VC',
+  //   key: EnumPermissionKeys.MANAGE_VC,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
+  // {
+  //   id: 3,
+  //   name: 'View VC',
+  //   key: EnumPermissionKeys.VIEW_VC,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
+  // {
+  //   id: 4,
+  //   name: 'View all users jobs',
+  //   key: EnumPermissionKeys.VIEW_ALL_USER_JOB,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
+  // {
+  //   id: 5,
+  //   name: 'View and manage all users job',
+  //   key: EnumPermissionKeys.VIEW_AND_MANAGE_ALL_USERS_JOB,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
+  // {
+  //   id: 6,
+  //   name: 'View cluster status',
+  //   key: EnumPermissionKeys.VIEW_CLUSTER_STATUS,
+  //   note: '',
+  //   project: ProjectTypes.DLWORKSPACE,
+  // },
   {
     id: 7,
     name: 'Manage user',
     key: EnumPermissionKeys.MANAGE_USER,
     note: '',
-    project: ProjectTypes.DLWORKSPACE,
+    project: ProjectTypes.AI_ARTS,
   },
   {
     id: 8,
@@ -150,7 +150,7 @@ export const cnNames: {[props: string]: string} = {
   MANAGE_USER: '管理用户',
   CLOUD_INFERENCE: '模型转换与推送',
   EDGE_INFERENCE: '中心侧推理',
-  AI_ARTS_ALL: '华为深度学习系统所有权限',
+  AI_ARTS_ALL: PLATFORM_NAME + '所有权限',
   LABELING_IMAGE: '标注图片',
   DISPATCH_LABELING_TASK: '派发标注任务',
   REVIEW_LABELING_TASK: '检验标注作业',
