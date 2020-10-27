@@ -34,7 +34,7 @@ export class PermissionService {
   }
 
   public async getAppPermissions() {
-    const permissions = await this.permissionRepository.find();
+    const permissions = initialPermissions;
     permissions.forEach(p => {
       Object.keys(ProjectTypes).forEach(pt => {
         if (p.project === pt) {
@@ -45,7 +45,7 @@ export class PermissionService {
     return permissions;
   }
   public async getAppCNPermissions() {
-    let permissions = await this.permissionRepository.find();
+    let permissions = initialPermissions;
     permissions.forEach(p => {
       Object.keys(cnNames).forEach(key => {
         if (key === p.key) {
