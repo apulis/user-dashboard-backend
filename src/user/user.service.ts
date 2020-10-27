@@ -430,7 +430,7 @@ export class UserService {
   }
 
   async openCreateUser(openId: string, userName: string) {
-    if (await this.usersRepository.find({
+    if (await this.usersRepository.findOne({
       userName
     })) {
       return false;
