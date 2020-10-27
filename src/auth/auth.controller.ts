@@ -332,11 +332,11 @@ export class AuthController {
     }
   }
 
-  @Get('/oauth2-methods')
+  @Get('/methods')
   @ApiOperation({
     description: '获取当前第三方认证的方式'
   })
-  getAuthMethod(@Res() res: Response) {
+  getAuthMethod() {
     const methods = [];
     if (this.config.get('WX_APP_ID')) {
       methods.push('wechat');
@@ -344,10 +344,13 @@ export class AuthController {
     if (this.config.get('MS_CLIENT_ID')) {
       methods.push('microsoft');
     }
-    res.send({
+    if (this.config.get('SAML_ID')) {
+      methods.push('saml');
+    }
+    return {
       success: true,
       methods
-    })
+    }
   }
 
   @Get('logout')

@@ -428,4 +428,24 @@ export class UserService {
     })
     return res.data;
   }
+
+  async openCreateUser(openId: string, userName: string) {
+    if (await this.usersRepository.find({
+      userName
+    })) {
+      return false;
+    }
+    return await this.usersRepository
+      .createQueryBuilder()
+      .insert()
+      .into(User)
+      .values({
+        userName,
+        openId,
+        registerType: 'saml',
+        samlId: openId,
+        createTime: new Date().getTime() + '',
+      })
+      .execute();
+  }
 }
