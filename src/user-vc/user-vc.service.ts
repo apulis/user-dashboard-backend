@@ -83,11 +83,18 @@ export class UserVcService {
     let allVc = {}
     if (!memoAllVCList) {
       const RESTFULAPI = this.config.get('RESTFULAPI');
-      const res = await axios.get(RESTFULAPI + '/ListVCs');
-      if (res.data.result) {
-        allVc = res.data.result;
-        this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
+      let res;
+      try {
+        res = await axios.get(RESTFULAPI + '/ListVCs');
+      } catch (e) {
+        console.error('fetch vc error');
       }
+      if (res && res.data.result) {
+        allVc = res.data.result;
+      } else {
+        allVc = [];
+      }
+      this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
     } else {
       allVc = JSON.parse(memoAllVCList);
     }
@@ -142,13 +149,18 @@ export class UserVcService {
   }
 
   public async getUserVcNames(userId: number, userName?: string) {
+    if (this.config.get('ENABLE_VC') === 'false') {
+      return ['platform'];
+      // const vcList = await this.fetchAllVC();
+      // return vcList.map(val => val.vcName);
+    }
     
     const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
     if (userName && adminUserNames.includes(userName)) {
       const vcList = await this.fetchAllVC();
       return vcList.map(val => val.vcName);
     }
-    let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
+    const vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
     const vcNames: string[] = []
     vcPolicys.forEach(p => {
       if (p && (p[1] === TypesPrefix.vc)) {

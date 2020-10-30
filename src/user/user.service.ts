@@ -237,6 +237,7 @@ export class UserService {
       })
       return {
         success: false,
+        activeJobUserName: activeJobUserName,
         message: 'User ' + activeJobUserName.join(', ') + ' has active job, please confirm!'
       }
     }
@@ -501,5 +502,25 @@ export class UserService {
       }
     })
     return res.data;
+  }
+
+  async openCreateUser(openId: string, userName: string) {
+    if (await this.usersRepository.findOne({
+      userName
+    })) {
+      return false;
+    }
+    return await this.usersRepository
+      .createQueryBuilder()
+      .insert()
+      .into(User)
+      .values({
+        userName,
+        openId,
+        registerType: 'saml',
+        samlId: openId,
+        createTime: new Date().getTime() + '',
+      })
+      .execute();
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, HttpStatus, UseGuards, Query, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Req, Res, HttpStatus, UseGuards, Query, Param, Delete, Post, Body } from '@nestjs/common';
 import { IRequestUser } from 'src/auth/auth.controller';
 import { Request, Response } from 'express';
 import { CookieGuard } from 'src/guards/cookie.guard';
@@ -8,6 +8,7 @@ import { UserService } from 'src/user/user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { OpenGuard } from 'src/guards/open.guard';
 import { UserVcService } from 'src/user-vc/user-vc.service';
+import { OpenCreateUserDto } from './open.dto';
 
 @ApiTags('给其他平台使用的 api')
 @Controller('open')
@@ -134,6 +135,20 @@ export class OpenController {
     return {
       success: true,
       vcUserNames
+    }
+  }
+
+  @Post('/user')
+  @ApiOperation({
+    summary: 'saml 方式创建用户',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(OpenGuard)
+  async createUser(@Body() body: OpenCreateUserDto) {
+    const { userName, openId } = body;
+    const result = await this.userService.openCreateUser(openId, userName);
+    return {
+      success: result && true,
     }
   }
 }

@@ -161,8 +161,11 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   async getCurrentUser(@Req() req: Request, @Res() res: Response): Promise<any> {
     const user = (req.user as IRequestUser);
-    console.log('user', user)
     if (user) {
+      const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+      if (adminUserNames.includes(user.userName)) {
+        user.permissionList = user.permissionList.concat(['SUBMIT_TRAINING_JOB', 'MANAGE_VC', 'VIEW_VC', 'VIEW_ALL_USER_JOB', 'VIEW_AND_MANAGE_ALL_USERS_JOB', 'VIEW_CLUSTER_STATUS', 'MANAGE_USER', 'AI_ARTS_ALL', 'LABELING_IMAGE', 'DISPATCH_LABELING_TASK', 'REVIEW_LABELING_TASK'])
+      }
       res.send({
         success: true,
         id: user.id,
@@ -333,11 +336,11 @@ export class AuthController {
     }
   }
 
-  @Get('/oauth2-methods')
+  @Get('/methods')
   @ApiOperation({
     description: '获取当前第三方认证的方式'
   })
-  getAuthMethod(@Res() res: Response) {
+  getAuthMethod() {
     const methods = [];
     if (this.config.get('WX_APP_ID')) {
       methods.push('wechat');
@@ -345,10 +348,13 @@ export class AuthController {
     if (this.config.get('MS_CLIENT_ID')) {
       methods.push('microsoft');
     }
-    res.send({
+    if (this.config.get('SAML_ID')) {
+      methods.push('saml');
+    }
+    return {
       success: true,
       methods
-    })
+    }
   }
 
   @Get('logout')

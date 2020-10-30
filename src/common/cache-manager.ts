@@ -1,10 +1,15 @@
 import * as redisStore from 'cache-manager-redis-store';
 import * as cacheManager from 'cache-manager';
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
+
 import { IRequestUser } from 'src/auth/auth.controller';
 
 export const ttl = 3
 
+const envConfig = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env'));
 
+const { APP_HOST } = envConfig;
 
 
 export const RedisProvider = {
@@ -12,7 +17,7 @@ export const RedisProvider = {
   useFactory: () => {
     const redisCache = cacheManager.caching({
       store: redisStore,
-      host: '127.0.0.1', // default value
+      host: APP_HOST, // default value
       port: 9301, // default value
       db: 0,
       ttl,

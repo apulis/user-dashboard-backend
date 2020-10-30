@@ -61,4 +61,7 @@ export class User {
   @Column('varchar', { length: 191, default: null, unique: true })
   wechatId: string;
 
+  @Column('varchar', { length: 191, default: null, unique: true })
+  samlId: string;
+
 }

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { Enforcer } from "casbin";
 import { CASBIN_ENFORCER } from "./casbin.constants";
-import { initialPermissions, EnumPermissionKeys } from "mysql-init/init-permission";
+import { initialPermissions, EnumPermissionKeys } from "db-init/init-permission";
 
 export enum TypesPrefix {
   user = 'user:',
@@ -46,5 +46,7 @@ export class CasbinService {
     this.addPermissionForRole(2, EnumPermissionKeys.VIEW_ALL_USER_JOB);
     this.addPermissionForRole(2, EnumPermissionKeys.VIEW_CLUSTER_STATUS);
     this.addPermissionForRole(2, EnumPermissionKeys.VIEW_VC);
+    this.addPermissionForRole(2, EnumPermissionKeys.AI_ARTS_ALL)
+    this.addPermissionForRole(3, EnumPermissionKeys.LABELING_IMAGE);
   }
 }
