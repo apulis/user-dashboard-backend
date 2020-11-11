@@ -10,9 +10,18 @@ import { RegisterTypes } from 'src/constants/enums'
 import { User } from './user.entity';
 import { ConfigService } from 'config/config.service';
 import { encodePassword, md5 } from 'src/utils';
-import { async } from 'rxjs/internal/scheduler/async';
 import axios from 'axios';
 import { UserVcService } from 'src/user-vc/user-vc.service';
+import { Cache } from 'cache-manager'
+import { TypesPrefix } from 'src/common/authz';
+import { ttl } from 'src/common/cache-manager';
+import { UserInfo } from 'os';
+
+export interface IRequestUser extends User {
+  currentRole: string[];
+  permissionList: string[];
+  currentVC?: string[]
+}
 
 export const openRegisterTypes = {
   Microsoft: 3001,
@@ -39,6 +48,7 @@ export class UserService {
     @InjectRepository(User) private readonly resetPasswordRepository: Repository<ResetPassword>,
     @Inject(forwardRef(() => UserVcService)) private readonly userVcService: UserVcService,
     private readonly config: ConfigService,
+    @Inject('REDIS_MANAGER') private readonly redisCache: Cache,
   ) { }
 
   async getUserCount(): Promise<number> {
@@ -76,11 +86,11 @@ export class UserService {
         .values(user)
         .execute();
     }
-     
+
     return true;
   }
 
-  async find(pageNo: number, pageSize: number): Promise<{list: User[], total: number}> {
+  async find(pageNo: number, pageSize: number): Promise<{ list: User[], total: number }> {
     const total = await this.getUserCount();
     const list = await this.usersRepository
       .createQueryBuilder('user')
@@ -121,7 +131,7 @@ export class UserService {
           .orWhere(phoneQuery)
       }))
       .setParameters(
-        {search: search}
+        { search: search }
       )
       .getCount();
     const list = await this.usersRepository
@@ -136,7 +146,7 @@ export class UserService {
           .orWhere(phoneQuery)
       }))
       .setParameters(
-        {search: search}
+        { search: search }
       )
       .getMany();
     return {
@@ -145,8 +155,8 @@ export class UserService {
     };
   }
 
-  async findLike(pageNo: number, pageSize: number, search: string): Promise<{list: User[], total: number}> {
-    
+  async findLike(pageNo: number, pageSize: number, search: string): Promise<{ list: User[], total: number }> {
+
     search = '%' + search + '%';
     const total = await this.usersRepository
       .createQueryBuilder('user')
@@ -159,7 +169,7 @@ export class UserService {
           .orWhere(phoneQuery)
       }))
       .setParameters(
-        {search: search}
+        { search: search }
       )
       .getCount();
     const list = await this.usersRepository
@@ -174,7 +184,7 @@ export class UserService {
           .orWhere(phoneQuery)
       }))
       .setParameters(
-        {search: search}
+        { search: search }
       )
       .skip(pageNo * pageSize)
       .take(pageSize)
@@ -184,7 +194,7 @@ export class UserService {
       total
     };
   }
-  
+
   async userNameUnique(userName: string[]) {
     return await this.usersRepository
       .createQueryBuilder()
@@ -279,7 +289,7 @@ export class UserService {
     }
   }
 
-  async getMSUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<{id: number, userName: undefined} | User> {
+  async getMSUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<{ id: number, userName: undefined } | User> {
     const user = await this.usersRepository.findOne({
       microsoftId: openId,
     });
@@ -303,7 +313,7 @@ export class UserService {
       return user;
     }
   }
-  async getWXUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<{id: number, userName: undefined} | User> {
+  async getWXUserInfoByOpenId(openId: string, nickName: string, registerType: string): Promise<{ id: number, userName: undefined } | User> {
     const user = await this.usersRepository.findOne({
       wechatId: openId,
     });
@@ -320,14 +330,14 @@ export class UserService {
           wechatId: openId,
         })
         .execute()
-        const id = result.generatedMaps[0].id;
-        return { id, userName: undefined };
+      const id = result.generatedMaps[0].id;
+      return { id, userName: undefined };
     } else {
       return user;
     }
   }
 
-  async signUpByMicrosoftId(microsoftId: string, userInfo: {userName: string, password: string, nickName: string}) {
+  async signUpByMicrosoftId(microsoftId: string, userInfo: { userName: string, password: string, nickName: string }) {
     const user = await this.usersRepository.findOne({
       microsoftId
     })
@@ -339,7 +349,7 @@ export class UserService {
       await this.usersRepository.save(user);
     }
   }
-  async signUpByWechatId(wechatId: string, userInfo: {userName: string, password: string, nickName: string}) {
+  async signUpByWechatId(wechatId: string, userInfo: { userName: string, password: string, nickName: string }) {
     const user = await this.usersRepository.findOne({
       wechatId
     })
@@ -370,7 +380,7 @@ export class UserService {
     }
   }
 
-  async getUserIdsByUserNames(userNames: string[]): Promise<{id: number}[]> {
+  async getUserIdsByUserNames(userNames: string[]): Promise<{ id: number }[]> {
     return await this.usersRepository
       .createQueryBuilder()
       .select('id')
@@ -396,13 +406,78 @@ export class UserService {
     return result;
   }
 
+  async checkMicrosoftIdExist(user: User) {
+    if (user) return Boolean(user.microsoftId)
+    return false
+  }
+
+  async checkWechatIdExist(user: User) {
+    if (user) return Boolean(user.wechatId)
+    return false
+  }
+
+  async unbindMicrosoftId(userId: number) {
+    const currentUser = await this.usersRepository.findOne(userId);
+    if (currentUser) {
+      currentUser.microsoftId = '';
+      await this.usersRepository.save(currentUser);
+      this.updateRedisUserInfoByUser(currentUser.id, currentUser);
+      return true
+    }
+    return false;
+  }
+
+  async unbindWechatId(userId: number) {
+    const currentUser = await this.usersRepository.findOne(userId);
+    if (currentUser) {
+      currentUser.wechatId = ''
+      await this.usersRepository.save(currentUser)
+      this.updateRedisUserInfoByUser(currentUser.id, currentUser);
+      return true
+    }
+    return false;
+  }
+
+  async updateRedisUserInfoByUser(uid: number, currentUser: User) {
+    // 更新redis用户缓存
+    let userInfo = await this.getUserFromMemory(currentUser.id)
+    if(userInfo){
+      userInfo = { ...userInfo, ...currentUser }
+      await this.setUserToMemory(currentUser.id, userInfo)
+    }
+  }
+
+  async setUserToMemory(userId: number, user: IRequestUser) {
+    return new Promise((resolve, reject) => {
+      this.redisCache.set(TypesPrefix.user + userId, JSON.stringify(user), { ttl: ttl }, (err: any) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    })
+  }
+
+  async getUserFromMemory(userId: number) : Promise<IRequestUser>{
+    return new Promise((resolve, reject) => {
+      this.redisCache.get(TypesPrefix.user + userId, (err: any, result: string) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(JSON.parse(result));
+      });
+    })
+  }
+
   async resetPassword(userId: number, password: string) {
     const currentUser = await this.usersRepository.findOne(userId);
     if (currentUser) {
-      
-      currentUser.password = encodePassword(password,  this.config.get('SECRET_KEY'));
+
+      currentUser.password = encodePassword(password, this.config.get('SECRET_KEY'));
       await getManager()
-        .transaction(async() => {
+        .transaction(async () => {
           await this.usersRepository.save(currentUser);
           await this.resetPasswordRepository.createQueryBuilder()
             .insert()
@@ -414,7 +489,7 @@ export class UserService {
             .execute()
         })
       return true
-      
+
     }
     return false;
   }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch, UseGuards, MethodNotAllowedException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Query, HttpStatus, Delete, Param, Patch, Put, UseGuards, MethodNotAllowedException } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
@@ -197,6 +197,49 @@ export class UserController {
       list: adminUserNames,
     })
   }
+
+  @Put('/:userId/unbind/microsoft')
+  @ApiOperation({
+    description: '解绑微软账号',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  async unbindMicrosoft(@Param('userId') userId: number, @Res() res: Response) {
+    userId = Number(userId);
+    await this.authService.checkIfChangeAdminUsers([userId]);
+    const result = await this.userService.unbindMicrosoftId(userId);
+    let status: HttpStatus;
+    if (result === false) {
+      status = 200;
+    } else {
+      status = 201;
+    }
+    res.status(status).send({
+      success: status === 201 ? true : false,
+    })
+  }
+
+  @Put('/:userId/unbind/wechat')
+  @ApiOperation({
+    description: '解绑微信账号',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  async unbindWechat(@Param('userId') userId: number, @Res() res: Response) {
+    userId = Number(userId);
+    await this.authService.checkIfChangeAdminUsers([userId]);
+    const result = await this.userService.unbindWechatId(userId);
+    let status: HttpStatus;
+    if (result === false) {
+      status = 200;
+    } else {
+      status = 201;
+    }
+    res.status(status).send({
+      success: status === 201 ? true : false,
+    })
+  }
+
+
+
 
   @Patch('/:userId/resetPassword')
   @ApiOperation({
