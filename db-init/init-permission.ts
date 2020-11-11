@@ -120,6 +120,13 @@ const initialPermissions: Permission[] = [
     note: '',
     project: ProjectTypes.LABELING_PLATFORM,
   },
+  {
+    id: 12,
+    name: 'Manage Virtual Cluster',
+    key: EnumPermissionKeys.MANAGE_VC,
+    note: '',
+    project: ProjectTypes.AI_ARTS,
+  },
 
 ]
 
