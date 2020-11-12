@@ -8,6 +8,7 @@ import { AuthzGuard } from 'src/guards/authz.guard';
 import { IRequestUser } from 'src/auth/auth.controller';
 import { CasbinService } from 'src/common/authz';
 import { ConfigService } from 'config/config.service';
+import { boolean } from '@hapi/joi';
 
 @Controller('vc')
 @ApiTags('用户和 VC 相关')
@@ -55,18 +56,27 @@ export class UserVcController {
     }
   }
 
-  @Patch()
+  @Patch('')
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   @ApiOperation({
     summary: '修改用户 VC',
   })
-  async modifyUserVc(@Body() body: ModifyVCDto) {
+  async modifyUserVc(@Body() body: ModifyVCDto, @Query('confirmed') confirm: string) {
     const { vcList, userId } = body;
-    await this.userVcService.modifyUserVc(userId + '', vcList);
-    return {
-      success: true,
-      message: 'success',
+    const { deleted, activeJobs } = await this.userVcService.modifyUserVc(userId + '', vcList, Boolean(confirm));
+    if (deleted) {
+      return {
+        success: true,
+        message: 'success',
+      }
+    } else {
+      return {
+        success: false,
+        message: 'Has active job',
+        activeJobs: activeJobs,
+      }
     }
+
   }
 
   @Get('/:vcName/user/count')

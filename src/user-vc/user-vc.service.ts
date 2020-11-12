@@ -38,8 +38,30 @@ export class UserVcService {
     }
   }
 
-  public async modifyUserVc(userId: string, vcNames: string[]) {
-    userId = TypesPrefix.user + userId;
+  public async checkUserActiveJobInCustomVC(userName: string, vcNames: string[]) {
+    const { data } = await axios.get(this.config.get('RESTFULAPI') + '/GetVCPendingJobs', {
+      params: {
+        userName,
+        vcName: vcNames.join(','),
+      }
+    })
+    console.log(123, data.data, userName, vcNames)
+    if (data.code === 0) {
+      return data.data;
+    }
+    return [];
+
+  }
+
+  public async deleteAvticeJob(userName: string, vcNames: string[]) {
+    return await axios.post(this.config.get('RESTFULAPI') + '/DettachVC', {
+      userName,
+      vcName: vcNames.join(','),
+    })
+  }
+
+  public async modifyUserVc(userIdTemp: string, vcNames: string[], confirmed?: boolean) {
+    const userId = TypesPrefix.user + userIdTemp;
     vcNames.forEach((vcName) => {
       this.enforcer.addPermissionForUser(userId, TypesPrefix.vc, vcName)
     })
@@ -48,10 +70,38 @@ export class UserVcService {
       return e[2];
     })
     const deleteItems = this.findToDeleteItems(existedVC, vcNames);
-    for (const item of deleteItems) {
-      await this.enforcer.deletePermissionForUser(userId, TypesPrefix.vc, item);
+    if (deleteItems.length > 0) {
+      const user = await this.userService.findUsersByUserIds([Number(userIdTemp)]);
+      const userName = user[0].userName;
+      const activeJobs = await this.checkUserActiveJobInCustomVC(userName, deleteItems);
+      if (confirmed && activeJobs.length > 0) {
+        const res = await this.deleteAvticeJob(userName, deleteItems);
+        for (const item of deleteItems) {
+          await this.enforcer.deletePermissionForUser(userId, TypesPrefix.vc, item);
+        }
+        if (res.data.code === 0) {
+          return {
+            deleted: true,
+          }
+        } else {
+          return {
+            deleted: false,
+          }
+        }
+      } else if (activeJobs.length === 0) {
+        for (const item of deleteItems) {
+          await this.enforcer.deletePermissionForUser(userId, TypesPrefix.vc, item);
+        }
+      } else {
+        return {
+          deleted: false,
+          activeJobs,
+        }
+      }
     }
-    return true;
+    return {
+      deleted: true,
+    }
     
   }
 
