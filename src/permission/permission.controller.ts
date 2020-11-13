@@ -5,6 +5,7 @@ import { Response, Request } from 'express';
 import { PermissionService } from './permission.service';
 import { AuthzGuard } from 'src/guards/authz.guard';
 import { Permission } from './permission.entity';
+import { ConfigService } from 'config/config.service';
 
 export enum EnumLanguageTypes {
   'zh-CN' = 'zh-CN',
@@ -15,8 +16,8 @@ export enum EnumLanguageTypes {
 @Controller('permission')
 export class PermissionController {
   constructor(
-    private readonly permissionService: PermissionService
-    
+    private readonly permissionService: PermissionService,
+    private readonly config: ConfigService,
   ) {
 
   }
@@ -26,7 +27,10 @@ export class PermissionController {
     description: '获取所有权限'
   })
   async getAllPermissions(@Res() res: Response, @Req() req: Request) {
-    const lang = req.cookies.language;
+    let lang = this.config.i18n();
+    if (lang === true) {
+      lang = req.cookies.language;
+    }
     let permissions: Permission[] = [];
     if (EnumLanguageTypes["zh-CN"] === lang) {
       permissions = await this.permissionService.getAppCNPermissions();
