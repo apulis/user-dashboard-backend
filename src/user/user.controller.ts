@@ -248,7 +248,7 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async resetUserPassword(@Param('userId') userId: number, @Body() resetPassword: resetPasswordDto, @Res() res: Response) {
     userId = Number(userId);
-    await this.authService.checkIfChangeAdminUsers([userId]);
+    // await this.authService.checkIfChangeAdminUsers([userId]);
     const result = await this.userService.resetPassword(userId, resetPassword.newPassword);
     let status: HttpStatus;
     if (result === false) {
