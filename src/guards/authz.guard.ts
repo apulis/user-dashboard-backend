@@ -1,9 +1,14 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
-const validateRequest = (request: any, permissionKey?: string): boolean => {
+const validateRequest = (request: any, permissionKey?: string | string[]): boolean => {
   if (permissionKey) {
-    return request.user.permissionList.includes(permissionKey);
+    if (typeof permissionKey === 'string') {
+      return request.user.permissionList.includes(permissionKey);
+    }
+    if (Array.isArray(permissionKey)) {
+      return ((request.user.permissionList as string[]).filter(val => permissionKey.includes(val)))?.length > 0;
+    }
   }
   return true;
 }
@@ -11,8 +16,8 @@ const validateRequest = (request: any, permissionKey?: string): boolean => {
 
 @Injectable()
 export class AuthzGuard implements CanActivate {
-  private permissionKey?: string
-  constructor(permissionKey?: string) {
+  private permissionKey?: string | string[]
+  constructor(permissionKey?: string | string[]) {
     this.permissionKey = permissionKey;
   }
   canActivate(

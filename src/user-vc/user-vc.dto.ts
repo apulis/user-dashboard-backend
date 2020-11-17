@@ -1,4 +1,4 @@
-import { IsArray, IsNumber } from "class-validator";
+import { IsArray, IsNumber, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class ModifyVCDto {
@@ -25,5 +25,22 @@ export class GetVCResponse {
   success: boolean;
 
   vcList: string[]
+
+}
+
+export class AddUserForVCDTO {
+  @IsArray()
+  @ApiProperty({
+    description: '用户ID数组',
+    required: true,
+    example: [30001, 30002]
+  })
+  userIds: number[];
+
+  @IsString()
+  @ApiProperty({
+    description: 'vc name'
+  })
+  vcName: string;
 
 }

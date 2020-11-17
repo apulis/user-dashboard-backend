@@ -6,6 +6,7 @@ import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
 import { ttl } from 'src/common/cache-manager';
+import { userInfo } from 'os';
 
 export const initialVCName = 'platform';
 export const allVCListTag = 'allVCList';
@@ -242,5 +243,32 @@ export class UserVcService {
 
   public async removeUserPolicys(userId: number) {
     return await this.enforcer.deletePermissionsForUser(TypesPrefix.user + userId);
+  }
+  
+  public async addUsersForVC(userIds: number[], vcName: string) {
+    for await (const userId of userIds) {
+      await this.enforcer.addPermissionForUser(TypesPrefix.user + userId, TypesPrefix.vc, vcName)
+    }
+  }
+
+  public async getVCUsersByVCName(vcName: string) {
+    const policys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc, vcName);
+    const userIds: number[] = [];
+    policys.forEach(val => {
+      if (new RegExp(TypesPrefix.user).test(val[0])) {
+        userIds.push(Number(val[0].replace(new RegExp(TypesPrefix.user), '')))
+      }
+    })
+    if (userIds.length === 0) {
+      return [];
+    }
+    const users = await this.userService.findUsersByUserIds(userIds);
+    return users;
+  }
+
+  public async removeVCUsers(vcName: string, userIds: number[]) {
+    for await (const userId of userIds) {
+      await this.enforcer.removeFilteredNamedPolicy('p', 0, TypesPrefix.user + userId, TypesPrefix.vc, '');
+    }
   }
 }

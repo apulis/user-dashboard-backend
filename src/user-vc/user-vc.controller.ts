@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Patch, Body, Req, Res, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserVcService } from './user-vc.service';
-import { ModifyVCDto, GetVCResponse } from './user-vc.dto';
+import { ModifyVCDto, GetVCResponse, AddUserForVCDTO } from './user-vc.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiResponseProperty, ApiMethodNotAllowedResponse, ApiResponse, ApiProperty } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthzGuard } from 'src/guards/authz.guard';
@@ -9,6 +9,7 @@ import { IRequestUser } from 'src/auth/auth.controller';
 import { CasbinService } from 'src/common/authz';
 import { ConfigService } from 'config/config.service';
 import { boolean } from '@hapi/joi';
+import { userInfo } from 'os';
 
 @Controller('vc')
 @ApiTags('用户和 VC 相关')
@@ -105,5 +106,35 @@ export class UserVcController {
     }
   }
 
+  @Post('userforvc')
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard(['MANAGE_USER', 'MANAGE_VC']))
+  async addUserForVC(@Body() body: AddUserForVCDTO) {
+    await this.userVcService.addUsersForVC(body.userIds, body.vcName);
+    return {
+      success: true,
+      msg: 'success',
+    }
+  }
+
+  @Get('/:vcName/users')
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard(['MANAGE_USER', 'MANAGE_VC']))
+  async getVCUsers(@Param('vcName') vcName: string) {
+    const users = await this.userVcService.getVCUsersByVCName(vcName);
+    return {
+      success: true,
+      users,
+    }
+  }
+
+  @Delete('/:vcName/users/:userId')
+  @UseGuards(AuthGuard('jwt'), new AuthzGuard(['MANAGE_USER', 'MANAGE_VC']))
+  async deleteVCUsers(@Param('vcName') vcName: string, @Param('userId') userId: string) {
+    console.log('userId', userId)
+    const userIds = userId.split(',').map(val => Number(val));
+    await this.userVcService.removeVCUsers(vcName, userIds)
+    return {
+      success: true
+    }
+  }
 
 }
