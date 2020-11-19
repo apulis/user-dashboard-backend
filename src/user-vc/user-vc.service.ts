@@ -6,19 +6,22 @@ import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
 import { ttl } from 'src/common/cache-manager';
+import { Interval, NestSchedule } from 'nest-schedule';
 
 export const initialVCName = 'platform';
 export const allVCListTag = 'allVCList';
 
 @Injectable()
-export class UserVcService {
+export class UserVcService extends NestSchedule {
   constructor(
     @Inject(CASBIN_ENFORCER) private readonly enforcer: Enforcer,
     private readonly config: ConfigService,
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     @Inject('REDIS_MANAGER') private readonly redisCache: Cache
-  ) { }
+  ) {
+    super();
+  }
 
   public async getUserVcDetail(userId: number, pageNo: number, pageSize: number) {
     let vcPolicys = await this.enforcer.getPermissionsForUser(TypesPrefix.user + userId)
@@ -271,5 +274,35 @@ export class UserVcService {
     for await (const userId of userIds) {
       await this.enforcer.removeFilteredNamedPolicy('p', 0, TypesPrefix.user + userId, TypesPrefix.vc, '');
     }
+  }
+
+
+  @Interval(2000)
+  public async fetchVCList() {
+    console.log(123)
+    const RESTFULAPI = this.config.get('RESTFULAPI');
+    let res;
+    try {
+      res = await axios.get<{result: { vcName: string}[] }>(RESTFULAPI + '/ListVCs');
+    } catch (e) {
+      console.error('fetch vc error');
+    }
+    let allVc: { vcName: string}[];
+    if (res && res.data.result) {
+      // 检查防止漏删
+      allVc = res.data.result;
+      const dbVCNames = allVc.map(val => val.vcName);
+      const vcPolicys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc, '');
+      const currentVCNames = [...new Set(vcPolicys.map(val => val[2]))];
+      currentVCNames.forEach(vcName => {
+        if (!dbVCNames.includes(vcName)) {
+          this.removeAllVCPolicy(vcName);
+        }
+      })
+    } else {
+      allVc = [];
+    }
+    this.redisCache.set(allVCListTag, JSON.stringify(allVc), { ttl: ttl })
+    
   }
 }

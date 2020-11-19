@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from 'nest-schedule';
+
 import { UserVcService } from './user-vc.service';
 import { UserVcController } from './user-vc.controller';
 import { InitCasbin } from 'src/common/authz/init-casbin';
@@ -11,6 +13,6 @@ import { RedisProvider } from 'src/common/cache-manager';
 @Module({
   providers: [UserVcService, ConfigService, UserService, RedisProvider],
   controllers: [UserVcController],
-  imports: [InitCasbin, TypeOrmModule.forFeature([User])]
+  imports: [InitCasbin, TypeOrmModule.forFeature([User]), ScheduleModule.register()]
 })
 export class UserVcModule {}
