@@ -6,7 +6,6 @@ import { ConfigService } from 'config/config.service';
 import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
 import { ttl } from 'src/common/cache-manager';
-import { userInfo } from 'os';
 
 export const initialVCName = 'platform';
 export const allVCListTag = 'allVCList';
@@ -215,7 +214,9 @@ export class UserVcService {
     const vcNames: string[] = []
     vcPolicys.forEach(p => {
       if (p && (p[1] === TypesPrefix.vc)) {
-        vcNames.push(p[2]);
+        if (!vcNames.includes(p[2])) {
+          vcNames.push(p[2]);
+        }
       }
     })
     return vcNames;
