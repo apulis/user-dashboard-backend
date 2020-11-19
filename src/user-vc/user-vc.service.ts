@@ -48,7 +48,6 @@ export class UserVcService extends NestSchedule {
         vcName: vcNames.join(','),
       }
     })
-    console.log(123, data.data, userName, vcNames)
     if (data.code === 0) {
       return data.data;
     }
@@ -279,7 +278,6 @@ export class UserVcService extends NestSchedule {
 
   @Interval(2000)
   public async fetchVCList() {
-    console.log(123)
     const RESTFULAPI = this.config.get('RESTFULAPI');
     let res;
     try {
