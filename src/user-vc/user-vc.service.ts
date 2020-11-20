@@ -273,6 +273,13 @@ export class UserVcService extends NestSchedule {
     for await (const userId of userIds) {
       await this.enforcer.removeFilteredNamedPolicy('p', 0, TypesPrefix.user + userId, TypesPrefix.vc, '');
     }
+    if (userIds.length) {
+      const users = await this.userService.findUsersByUserIds(userIds);
+      const userNames = users.map(val => val.userName);
+      userNames.forEach(userName => {
+        this.deleteAvticeJob(userName, [vcName]);
+      })
+    }
   }
 
 
