@@ -14,13 +14,13 @@ const env = dotenv.parse(fs.readFileSync(process.env.CONFIG_PATH || 'develop.env
 const { PLATFORM_NAME } = env;
 
 export const enProjectTypes: {[props: string]: string} = {
-  DLWORKSPACE: 'Apulis Platform',
+  DLWORKSPACE: 'Expert System',
   AI_ARTS: PLATFORM_NAME,
   LABELING_PLATFORM: 'Annotation Platform',
 }
 
 export const cnProjectTypes: {[props: string]: string}  = {
-  DLWORKSPACE: '依瞳平台',
+  DLWORKSPACE: '专家系统',
   AI_ARTS: PLATFORM_NAME,
   LABELING_PLATFORM: '标注平台',
 }
@@ -43,48 +43,48 @@ export enum EnumPermissionKeys {
 }
 
 const initialPermissions: Permission[] = [
-  // {
-  //   id: 1,
-  //   name: 'Submit training job',
-  //   key: EnumPermissionKeys.SUBMIT_TRAINING_JOB,
-  //   note: '',
-  //   project: ProjectTypes.DLWORKSPACE,
-  // },
-  // {
-  //   id: 2,
-  //   name: 'Manage VC',
-  //   key: EnumPermissionKeys.MANAGE_VC,
-  //   note: '',
-  //   project: ProjectTypes.DLWORKSPACE,
-  // },
-  // {
-  //   id: 3,
-  //   name: 'View VC',
-  //   key: EnumPermissionKeys.VIEW_VC,
-  //   note: '',
-  //   project: ProjectTypes.DLWORKSPACE,
-  // },
-  // {
-  //   id: 4,
-  //   name: 'View all users jobs',
-  //   key: EnumPermissionKeys.VIEW_ALL_USER_JOB,
-  //   note: '',
-  //   project: ProjectTypes.DLWORKSPACE,
-  // },
-  // {
-  //   id: 5,
-  //   name: 'View and manage all users job',
-  //   key: EnumPermissionKeys.VIEW_AND_MANAGE_ALL_USERS_JOB,
-  //   note: '',
-  //   project: ProjectTypes.DLWORKSPACE,
-  // },
-  // {
-  //   id: 6,
-  //   name: 'View cluster status',
-  //   key: EnumPermissionKeys.VIEW_CLUSTER_STATUS,
-  //   note: '',
-  //   project: ProjectTypes.DLWORKSPACE,
-  // },
+  {
+    id: 1,
+    name: 'Submit training job',
+    key: EnumPermissionKeys.SUBMIT_TRAINING_JOB,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
+  {
+    id: 2,
+    name: 'Manage VC',
+    key: EnumPermissionKeys.MANAGE_VC,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
+  {
+    id: 3,
+    name: 'View VC',
+    key: EnumPermissionKeys.VIEW_VC,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
+  {
+    id: 4,
+    name: 'View all users jobs',
+    key: EnumPermissionKeys.VIEW_ALL_USER_JOB,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
+  {
+    id: 5,
+    name: 'View and manage all users job',
+    key: EnumPermissionKeys.VIEW_AND_MANAGE_ALL_USERS_JOB,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
+  {
+    id: 6,
+    name: 'View cluster status',
+    key: EnumPermissionKeys.VIEW_CLUSTER_STATUS,
+    note: '',
+    project: ProjectTypes.DLWORKSPACE,
+  },
   {
     id: 7,
     name: 'Manage user',

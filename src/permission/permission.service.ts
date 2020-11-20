@@ -28,9 +28,16 @@ export class PermissionService {
 
   public async initPermissions() {
     if (this.checkPermissionKeyUnique(initialPermissions).length > 0) {
-      throw new Error('permission key duplicate, please check');
+      // throw new Error('permission key duplicate, please check');
+      const current: Permission[] = [];
+      initialPermissions.forEach(val => {
+        if (!current.find(c => c.key === val.key)) {
+          current.push(val);
+        }
+      })
+    } else {
+      await this.permissionRepository.save(initialPermissions);
     }
-    await this.permissionRepository.save(initialPermissions)
   }
 
   public async getAppPermissions() {
