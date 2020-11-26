@@ -39,7 +39,8 @@ export enum EnumPermissionKeys {
   //
   LABELING_IMAGE = 'LABELING_IMAGE',
   DISPATCH_LABELING_TASK = 'DISPATCH_LABELING_TASK',
-  REVIEW_LABELING_TASK = 'REVIEW_LABELING_TASK'
+  REVIEW_LABELING_TASK = 'REVIEW_LABELING_TASK',
+  MANAGE_JOBS = 'MANAGE_JOBS'
 }
 
 const initialPermissions: Permission[] = [
@@ -127,6 +128,13 @@ const initialPermissions: Permission[] = [
     note: '',
     project: ProjectTypes.AI_ARTS,
   },
+  {
+    id: 13,
+    name: 'Manage Jobs',
+    key: EnumPermissionKeys.MANAGE_JOBS,
+    note: '',
+    project: ProjectTypes.AI_ARTS,
+  },
 
 ]
 
@@ -161,6 +169,7 @@ export const cnNames: {[props: string]: string} = {
   LABELING_IMAGE: '标注图片',
   DISPATCH_LABELING_TASK: '派发标注任务',
   REVIEW_LABELING_TASK: '检验标注作业',
+  MANAGE_JOBS: '管理训练任务'
 }
 
 // atlasPermission.forEach(p => {
