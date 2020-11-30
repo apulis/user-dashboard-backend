@@ -11,7 +11,7 @@ export const initialRole: Role[] = [
   {
     name: 'User',
     isPreset: 1,
-    note: 'Submit training job, View all users job',
+    note: '-',
     id: 2,
   },
   
