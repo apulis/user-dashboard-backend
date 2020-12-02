@@ -55,9 +55,9 @@ export class UserVcService extends NestSchedule {
 
   }
 
-  public async deleteAvticeJob(userName: string, vcNames: string[]) {
+  public async deleteAvticeJob(userName: string | string[], vcNames: string[]) {
     return await axios.post(this.config.get('RESTFULAPI') + '/DettachVC', {
-      userName,
+      userName: typeof userName === 'string' ? userName : userName.join(','),
       vcName: vcNames.join(','),
     })
   }
@@ -269,17 +269,48 @@ export class UserVcService extends NestSchedule {
     return users;
   }
 
-  public async removeVCUsers(vcName: string, userIds: number[]) {
-    for await (const userId of userIds) {
-      await this.enforcer.removeFilteredNamedPolicy('p', 0, TypesPrefix.user + userId, TypesPrefix.vc, '');
+  public async removeVCUsers(vcName: string, userIds: number[], confirmed?: boolean) {
+    const user = await this.userService.findUsersByUserIds(userIds);
+    const userNames = user.map(val => val.userName);
+    const activeJobs = await this.checkVCHasActiveJobForUsers(userNames, vcName);
+    if (activeJobs.length > 0) {
+      if (confirmed) {
+        await this.deleteAvticeJob(userNames, [vcName]);
+        for await (const userId of userIds) {
+          await this.enforcer.removeFilteredNamedPolicy('p', 0, TypesPrefix.user + userId, TypesPrefix.vc, '');
+        }
+        return {
+          deleted: true,
+        }
+      } else {
+        return {
+          deleted: false,
+          activeJobs,
+        }
+      }
+    } else {
+      for await (const userId of userIds) {
+        await this.enforcer.removeFilteredNamedPolicy('p', 0, TypesPrefix.user + userId, TypesPrefix.vc, '');
+      }
     }
-    if (userIds.length) {
-      const users = await this.userService.findUsersByUserIds(userIds);
-      const userNames = users.map(val => val.userName);
-      userNames.forEach(userName => {
-        this.deleteAvticeJob(userName, [vcName]);
-      })
+    return {
+      deleted: true,
     }
+    
+  }
+
+  public async checkVCHasActiveJobForUsers(userNames: string[], vcName: string) {
+    const { data } = await axios.get(this.config.get('RESTFULAPI') + '/GetVCPendingJobs', {
+      params: {
+        userName: userNames.join(','),
+        vcName,
+      }
+    })
+    if (data.code === 0) {
+      return data.data;
+    }
+    return [];
+
   }
 
 

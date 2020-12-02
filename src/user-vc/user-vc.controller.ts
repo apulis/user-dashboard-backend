@@ -128,13 +128,21 @@ export class UserVcController {
 
   @Delete('/:vcName/users/:userId')
   @UseGuards(AuthGuard('jwt'), new AuthzGuard(['MANAGE_USER', 'MANAGE_VC']))
-  async deleteVCUsers(@Param('vcName') vcName: string, @Param('userId') userId: string) {
+  async deleteVCUsers(@Param('vcName') vcName: string, @Param('userId') userId: string, @Query('confirmed') confirmed: string) {
     console.log('userId', userId)
     const userIds = userId.split(',').map(val => Number(val));
-    await this.userVcService.removeVCUsers(vcName, userIds)
-    return {
-      success: true
+    const res = await this.userVcService.removeVCUsers(vcName, userIds, !!confirmed);
+    if (res.deleted) {
+      return {
+        success: true
+      }
+    } else {
+      return {
+        success: false,
+        activeJobs: res.activeJobs,
+      }
     }
+    
   }
 
 }
