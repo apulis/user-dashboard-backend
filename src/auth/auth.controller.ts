@@ -178,7 +178,7 @@ export class AuthController {
         wechatId: user.wechatId,
         nickName: user.nickName,
         currentRole: user.currentRole,
-        permissionList: user.permissionList,
+        permissionList: [...new Set(user.permissionList)],
         currentVC: user.currentVC
       })
     } else {
