@@ -330,6 +330,7 @@ export class UserVcService extends NestSchedule {
       const dbVCNames = allVc.map(val => val.vcName);
       const vcPolicys = await this.enforcer.getFilteredNamedPolicy('p', 0, '', TypesPrefix.vc, '');
       const currentVCNames = [...new Set(vcPolicys.map(val => val[2]))];
+      if (dbVCNames.length === 0) return;
       currentVCNames.forEach(vcName => {
         if (!dbVCNames.includes(vcName)) {
           this.removeAllVCPolicy(vcName);
