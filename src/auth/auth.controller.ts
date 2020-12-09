@@ -180,7 +180,7 @@ export class AuthController {
         currentRole: user.currentRole,
         permissionList: [...new Set(user.permissionList)],
         currentVC: user.currentVC,
-        jobMaxTimeSecond: user.jobMaxTimeSecond || userDefaultJobRunningSecond,
+        jobMaxTimeSecond: user.jobMaxTimeSecond,
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED)
