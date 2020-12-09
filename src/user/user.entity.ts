@@ -64,4 +64,7 @@ export class User {
   @Column('varchar', { length: 191, default: null, unique: true })
   samlId: string;
 
+  @Column('int', { default: null })
+  jobMaxTimeSecond?: number;
+
 }

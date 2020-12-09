@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, HttpStatus, UseGuards, Query, Param, Delete, Post, Body } from '@nestjs/common';
+import { Controller, Get, Req, Res, HttpStatus, UseGuards, Query, Param, Delete, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { IRequestUser } from 'src/auth/auth.controller';
 import { Request, Response } from 'express';
 import { CookieGuard } from 'src/guards/cookie.guard';
@@ -9,6 +9,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { OpenGuard } from 'src/guards/open.guard';
 import { UserVcService } from 'src/user-vc/user-vc.service';
 import { OpenCreateUserDto } from './open.dto';
+import { userDefaultJobRunningSecond } from 'src/constants/config';
+import { AuthService } from 'src/auth/auth.service';
 
 @ApiTags('给其他平台使用的 api')
 @Controller('open')
@@ -17,7 +19,8 @@ export class OpenController {
   constructor(
     private readonly config: ConfigService,
     private readonly userService: UserService,
-    private readonly userVcService: UserVcService
+    private readonly userVcService: UserVcService,
+    private readonly authService: AuthService,
   ) {
     
   }
@@ -43,7 +46,8 @@ export class OpenController {
         nickName: user.nickName,
         currentRole: user.currentRole,
         permissionList: user.permissionList,
-        currentVC: user.currentVC
+        currentVC: user.currentVC,
+        jobMaxTimeSecond: user.jobMaxTimeSecond || userDefaultJobRunningSecond,
       });
     } else {
       res.status(HttpStatus.UNAUTHORIZED)
@@ -149,6 +153,41 @@ export class OpenController {
     const result = await this.userService.openCreateUser(openId, userName);
     return {
       success: result && true,
+    }
+  }
+
+  @Get('/user-info')
+  @ApiOperation({
+    summary: '获取currentUser相关数据'
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(OpenGuard)
+  async openGetCurrentUser(@Query('userName') userName: string, @Req() req: Request) {
+    const user = await this.authService.validateUserByName(userName);
+    if (user) {
+      
+      const adminUserNames: string[] = JSON.parse(this.config.get('ADMINISTRATOR_USER_NAME'));
+      if (adminUserNames.includes(user.userName)) {
+        user.permissionList = user.permissionList.concat(['SUBMIT_TRAINING_JOB', 'MANAGE_VC', 'VIEW_VC', 'VIEW_ALL_USER_JOB', 'VIEW_AND_MANAGE_ALL_USERS_JOB', 'VIEW_CLUSTER_STATUS', 'MANAGE_USER', 'AI_ARTS_ALL', 'LABELING_IMAGE', 'DISPATCH_LABELING_TASK', 'REVIEW_LABELING_TASK'])
+      }
+      return {
+        success: true,
+        id: user.id,
+        userName: user.userName,
+        phone: user.phone,
+        registerType: user.registerType,
+        email: user.email,
+        openId: user.openId,
+        microsoftId: user.microsoftId,
+        wechatId: user.wechatId,
+        nickName: user.nickName,
+        currentRole: user.currentRole,
+        permissionList: [...new Set(user.permissionList)],
+        currentVC: user.currentVC,
+        jobMaxTimeSecond: user.jobMaxTimeSecond || userDefaultJobRunningSecond,
+      };
+    } else {
+      throw new UnauthorizedException();
     }
   }
 }

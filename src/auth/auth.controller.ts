@@ -9,7 +9,7 @@ import { RegisterDto, LoginDto } from './auth.dto';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
 import { getDomainFromUrl } from 'src/utils';
-import { apiBase, MS_OAUTH2_URL, WX_OAUTH2_URL } from 'src/constants/config';
+import { apiBase, MS_OAUTH2_URL, userDefaultJobRunningSecond, WX_OAUTH2_URL } from 'src/constants/config';
 import { ConfigService } from 'config/config.service';
 import { RegisterTypes } from 'src/constants/enums';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -179,7 +179,8 @@ export class AuthController {
         nickName: user.nickName,
         currentRole: user.currentRole,
         permissionList: [...new Set(user.permissionList)],
-        currentVC: user.currentVC
+        currentVC: user.currentVC,
+        jobMaxTimeSecond: user.jobMaxTimeSecond || userDefaultJobRunningSecond,
       })
     } else {
       res.status(HttpStatus.UNAUTHORIZED)

@@ -23,6 +23,19 @@ import { Cache } from 'cache-manager'
 import { UserVcService } from 'src/user-vc/user-vc.service';
 import { ttl } from 'src/common/cache-manager';
 
+export interface ICurrentUser extends User {
+  permissionList: string[];
+  currentRole: string[];
+  jobMaxTimeSecond?: number;
+  currentVC: string[];
+}
+
+console.log(sign({
+  uid: 30000,
+  userName: 'xxxxx',
+  exp: getJwtExp(),
+}, 'Sign key for JWT'))
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -76,14 +89,14 @@ export class AuthService {
     })
   }
 
-  async getUserFromMemory(userId: number){
+  async getUserFromMemory(userId: number) {
     return new Promise((resolve, reject) => {
       this.redisCache.get(TypesPrefix.user + userId, (err: any, result: string) => {
         if (err) {
           reject(err);
           return;
         }
-        resolve(JSON.parse(result));
+        resolve(JSON.parse(result) || undefined);
       });
     })
   }
@@ -124,10 +137,10 @@ export class AuthService {
     return currentUserRoles.map(val => ({name: val.name, id: val.id}));
   }
 
-  async validateUser(uid: number) {
+  async validateUser(uid: number): Promise<ICurrentUser | undefined> {
     let memoUser = await this.getUserFromMemory(uid);
     if (memoUser) {
-      return memoUser;
+      return memoUser as ICurrentUser;
     } else {
       const user = await this.usersRepository.findOne({
         id: uid,
@@ -159,6 +172,7 @@ export class AuthService {
         this.setUserToMemory(uid, userInfo);
         return userInfo;
       }
+      return undefined;
     }
   }
 
@@ -226,5 +240,13 @@ export class AuthService {
     if (tag) {
       throw new ForbiddenException();
     }
+  }
+
+  async validateUserByName(userName: string) {
+    const userIds = await this.userService.getUserIdsByUserNames([userName]);
+    if (userIds.length) {
+      return await this.validateUser(userIds[0].id);
+    }
+    return undefined;
   }
 }

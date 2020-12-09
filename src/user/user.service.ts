@@ -523,4 +523,13 @@ export class UserService {
       })
       .execute();
   }
+
+  async getUserByUserName(userName: string) {
+    const user = await this.usersRepository.findOne({
+      userName
+    })
+    if (user) {
+      
+    }
+  }
 }
