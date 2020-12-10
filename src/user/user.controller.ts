@@ -167,8 +167,8 @@ export class UserController {
   async editUserRole(@Param('id') id: number, @Body() userInfo: EditUserDto, @Res() res: Response) {
     const userId = Number(id);
     await this.authService.checkIfChangeAdminUsers([userId]);
-    const { email, phone, note, nickName} = userInfo;
-    await this.userService.editUserDetail(userId, email, phone, note, nickName);
+    const { email, phone, note, nickName, jobMaxTimeSecond } = userInfo;
+    await this.userService.editUserDetail(userId, email, phone, note, nickName, jobMaxTimeSecond);
     res.send({
       success: true,
     })

@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsString, IsEmail, IsArray,  } from "class-validator";
+import { ArrayNotEmpty, IsString, IsEmail, IsArray, IsNumber,  } from "class-validator";
 import { ApiProperty, ApiTags, ApiMovedPermanentlyResponse } from "@nestjs/swagger";
 
 
@@ -47,6 +47,9 @@ export class EditUserDto {
 
   @IsString()
   phone: string;
+
+  @IsNumber()
+  jobMaxTimeSecond: number;
 }
 
 export class resetPasswordDto {

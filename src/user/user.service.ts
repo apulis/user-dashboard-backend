@@ -278,13 +278,14 @@ export class UserService {
     })
   }
 
-  async editUserDetail(id: number, email: string, phone: string, note: string, nickName: string) {
+  async editUserDetail(id: number, email: string, phone: string, note: string, nickName: string, jobMaxTimeSecond: number) {
     const detail = await this.usersRepository.findOne(id);
     if (detail) {
       detail.nickName = nickName;
       detail.note = note;
       detail.phone = phone;
       detail.email = email;
+      detail.jobMaxTimeSecond = jobMaxTimeSecond;
       await this.usersRepository.save(detail);
     }
   }
