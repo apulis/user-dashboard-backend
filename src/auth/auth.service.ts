@@ -30,12 +30,6 @@ export interface ICurrentUser extends User {
   currentVC: string[];
 }
 
-console.log(sign({
-  uid: 30000,
-  userName: 'xxxxx',
-  exp: getJwtExp(),
-}, 'Sign key for JWT'))
-
 @Injectable()
 export class AuthService {
   constructor(
