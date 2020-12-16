@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Get, Res, Req } from '@nestjs/common';
+import { Controller, UseGuards, Get, Res, Req, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 import { Response, Request } from 'express';
@@ -22,15 +22,11 @@ export class PermissionController {
 
   }
 
-  @Get('/all')
+  @Get('/all/:lang')
   @ApiOperation({
     description: '获取所有权限'
   })
-  async getAllPermissions(@Res() res: Response, @Req() req: Request) {
-    let lang = this.config.i18n();
-    if (lang === true) {
-      lang = req.cookies.language;
-    }
+  async getAllPermissions(@Res() res: Response, @Req() req: Request, @Param('lang') lang: string) {
     let permissions: Permission[] = [];
     if (EnumLanguageTypes["zh-CN"] === lang) {
       permissions = await this.permissionService.getAppCNPermissions();
