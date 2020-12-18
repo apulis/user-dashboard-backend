@@ -31,10 +31,13 @@ export class PermissionController {
     if (EnumLanguageTypes["zh-CN"] === lang) {
       permissions = await this.permissionService.getAppCNPermissions();
     } else if (EnumLanguageTypes["en-US"] === lang) {
+      console.log(123)
       permissions = await this.permissionService.getAppPermissions();
+      console.log('permissions1', permissions)
     } else {
       permissions = await this.permissionService.getAppCNPermissions();
     }
+    console.log('permissions2', permissions)
     res.send({
       success: true,
       permissions,

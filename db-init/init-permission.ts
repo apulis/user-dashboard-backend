@@ -154,6 +154,33 @@ const initialPermissions: Permission[] = [
 //   }
 // ];
 
+
+
+export const enNames: {[props: string]: string} = {
+  DLWORKSPACE: '依瞳平台',
+  SUBMIT_TRAINING_JOB: '提交训练任务',
+  MANAGE_VC: '管理虚拟集群',
+  VIEW_VC: '查看 VC',
+  VIEW_ALL_USER_JOB: '查看所有用户任务',
+  VIEW_AND_MANAGE_ALL_USERS_JOB: '查看并管理所有用户任务',
+  VIEW_CLUSTER_STATUS: '查看集群状态',
+  MANAGE_USER: '管理用户',
+  CLOUD_INFERENCE: '模型转换与推送',
+  EDGE_INFERENCE: '中心侧推理',
+  AI_ARTS_ALL: PLATFORM_NAME + '所有权限',
+  LABELING_IMAGE: '标注图片',
+  DISPATCH_LABELING_TASK: '派发标注任务',
+  REVIEW_LABELING_TASK: '检验标注作业',
+  MANAGE_JOBS: '管理训练任务',
+  MANAGE_PRIVILEGE_JOB: '管理 Privilege 任务',
+  SUBMIT_PRIVILEGE_JOB: '提交 Privilege 任务',
+}
+
+initialPermissions.forEach(val => {
+  enNames[val.key] = val.name;
+})
+
+
 export const cnNames: {[props: string]: string} = {
   DLWORKSPACE: '依瞳平台',
   SUBMIT_TRAINING_JOB: '提交训练任务',

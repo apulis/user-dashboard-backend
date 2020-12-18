@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Permission } from './permission.entity';
 import { Repository } from 'typeorm';
-import { initialPermissions, ProjectTypes, cnProjectTypes, enProjectTypes } from 'db-init/init-permission';
+import { initialPermissions, ProjectTypes, cnProjectTypes, enProjectTypes, enNames } from 'db-init/init-permission';
 import { cnNames } from 'db-init/init-permission';
 import { contentSecurityPolicy } from 'helmet';
 import { ConfigService } from 'config/config.service';
@@ -41,7 +41,14 @@ export class PermissionService {
   }
 
   public async getAppPermissions() {
-    const permissions = initialPermissions;
+    let permissions = JSON.parse(JSON.stringify(initialPermissions)) as Permission[];
+    permissions.forEach(p => {
+      Object.keys(enNames).forEach(key => {
+        if (key === p.key) {
+          p.name = enNames[key];
+        }
+      })
+    });
     permissions.forEach(p => {
       Object.keys(ProjectTypes).forEach(pt => {
         if (p.project === pt) {
@@ -52,7 +59,7 @@ export class PermissionService {
     return permissions;
   }
   public async getAppCNPermissions() {
-    let permissions = initialPermissions;
+    let permissions = JSON.parse(JSON.stringify(initialPermissions)) as Permission[];
     permissions.forEach(p => {
       Object.keys(cnNames).forEach(key => {
         if (key === p.key) {
