@@ -110,7 +110,6 @@ export class RoleService {
       .into(Role)
       .values(role)
       .execute();
-    console.log('resilt', result)
     const roleId = result.identifiers[0].id;
     if (role.permissions) {
       await this.casbinService.addPermissionForRole(roleId, role.permissions);
