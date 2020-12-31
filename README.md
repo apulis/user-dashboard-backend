@@ -78,15 +78,22 @@ docker run -p9301:6379 redis
 ```
 在 9301 端口运行 redis
 
+- 启动 pg：如果指定数据库类型为pg的话
+如果本地安装了 docker，可以运行
+```
+docker run --name postgres -e POSTGRES_PASSWORD=123456 -d -p 5432:5432 postgres:10.12
+```
+在 5432 端口运行 postgres
 
 - 启动项目
 ```
 yarn start:prod
 ```
 
-
-
 ### 4. 初始化数据库 Table 和数据
 
 项目使用的 typeorm 会自动初始化数据库
+
+
+
 

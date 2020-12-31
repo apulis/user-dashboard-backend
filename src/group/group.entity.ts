@@ -24,7 +24,7 @@ export class Group {
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 191 })
+  @Column('varchar', { name:'create_time', length: 191 })
   createTime: string;
 
 }

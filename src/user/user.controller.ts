@@ -149,7 +149,7 @@ export class UserController {
   @ApiOperation({
     description: '获取用户详情'
   })
-  @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
+  // @UseGuards(AuthGuard('jwt'), new AuthzGuard('MANAGE_USER'))
   async getUserById(@Param('id') id: number, @Res() res: Response) {
     const userId = Number(id);
     const user = await this.userService.getUserById(userId);

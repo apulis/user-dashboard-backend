@@ -22,6 +22,6 @@ export class Permission {
   @Column('varchar', { length: 191 })
   project: string;
 
-  @CreateDateColumn({ type: 'timestamp', name: 'create_date' })
+  @CreateDateColumn({ name: 'create_time', type: 'timestamp' })
   createTime?: string;
 }

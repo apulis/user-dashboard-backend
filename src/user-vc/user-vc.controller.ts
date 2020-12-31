@@ -49,7 +49,7 @@ export class UserVcController {
     summary: '获取用户自己的 VC'
   })
   async getUserByToken(@Req() req: Request) {
-    const {id: userId, userName} = (req.user as IRequestUser);
+    const {id: userId, userName: userName} = (req.user as IRequestUser);
     const vcList = await this.userVcService.getUserVcNames(userId, userName);
     return {
       success: true,

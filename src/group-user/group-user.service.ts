@@ -64,7 +64,7 @@ export class GroupUserService {
     return await this.groupUserRepository
       .createQueryBuilder('group-user')
       .select(['group-user.userId'])
-      .where('groupId = ' + groupId)
+      .where('group_id = ' + groupId)
       .getMany()
   }
 
@@ -72,14 +72,14 @@ export class GroupUserService {
     return await this.groupUserRepository
       .createQueryBuilder('group-user')
       .select(['group-user.groupId'])
-      .where('userId = ' + userId)
+      .where('user_id = ' + userId)
       .getMany()
   }
 
   async removeGroupForUser(groupId: number, userId: number): Promise<boolean> {
     const deleteItem = await this.groupUserRepository.findOne({
-      groupId,
-      userId
+      groupId: groupId,
+      userId: userId
     })
     if (deleteItem) {
       await this.groupUserRepository.remove(deleteItem);

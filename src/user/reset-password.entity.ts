@@ -10,11 +10,6 @@ export class ResetPassword {
   id: number;
 
   @ManyToOne(type => User, user => user.id, { onDelete: 'CASCADE', eager: true })
-  @JoinColumn({ name: 'userId'} )
-  user: number;
-
-  @Column({
-    unique: true,
-  })
+  @JoinColumn({ name: 'user_id'} )
   userId: number;
 }

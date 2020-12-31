@@ -52,12 +52,10 @@ export class GroupService {
   async getAllGroup(search?: string): Promise<IGroup[]> {
     if (!search) {
       return await this.groupRepository
-      .createQueryBuilder('group')
-      .select(['group.name', 'group.note', 'group.createTime', 'group.id'])
-      .getMany();
+      .find({ select: ['name', 'note', 'createTime', 'id'] })
     } else {
-      const nameQuery = 'name LIKE :search';
-      const noteQuery = 'note LIKE :search';
+      const nameQuery = 'LOWER(name) LIKE LOWER(:search)';
+      const noteQuery = 'LOWER(note) LIKE LOWER(:search)';
       return await this.groupRepository
         .createQueryBuilder('group')
         .select(['group.name', 'group.note', 'group.createTime', 'group.id'])
@@ -71,7 +69,6 @@ export class GroupService {
         )
         .getMany();
     }
-    
   }
   
   async removeGroup(groupIds: number[]) {
@@ -79,7 +76,7 @@ export class GroupService {
       .createQueryBuilder('group')
       .delete()
       .from(Group)
-      .where('group.id IN (:groupIds)', {
+      .where('id IN (:...groupIds)', {
         groupIds: groupIds
       })
       .execute()
@@ -104,9 +101,9 @@ export class GroupService {
   async getGroupInfos(groupIds: number[]) {
     return await this.groupRepository
       .createQueryBuilder('group')
-      .select(['name', 'id', 'note'])
-      .where("group.id IN (:groupIds)", { groupIds: groupIds })
-      .execute()
+      .select(['group.name', 'group.id', 'group.note'])
+      .where("id IN (:...groupIds)", { groupIds: groupIds })
+      .getMany()
   }
 
   async checkDupGroup(groupName: string, id?: number) {

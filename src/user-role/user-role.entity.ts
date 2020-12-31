@@ -11,17 +11,17 @@ export class UserRole {
   id: number;
 
   @ManyToOne(type => User, user => user, { onDelete: 'CASCADE', eager: true })
-  @JoinColumn({ name: 'userId'} )
+  @JoinColumn({ name: 'user_id'} )
   user: User;
 
   @ManyToOne(type => Role, role => role, { onDelete: 'CASCADE', eager: true })
-  @JoinColumn({ name: 'roleId' })
+  @JoinColumn({ name: 'role_id' })
   role: Role;
 
-  @Column()
+  @Column({name: 'role_id'})
   roleId: number;
 
-  @Column()
+  @Column({name: 'user_id'})
   userId: number;
 
 }

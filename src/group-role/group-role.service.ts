@@ -61,15 +61,15 @@ export class GroupRoleService {
     return await this.groupRoleRepository
       .createQueryBuilder('group-role')
       .select(['group-role.roleId'])
-      .where('groupId = ' + groupId)
+      .where('group_id = ' + groupId)
       .getMany()
   }
 
   async removeRoleForGroup(groupId: number, roleId: number) {
     const removeItem = await this.groupRoleRepository
       .findOne({
-        groupId,
-        roleId,
+        groupId: groupId,
+        roleId: roleId,
       });
     if (removeItem) {
       this.groupRoleRepository.remove(removeItem);
@@ -78,7 +78,7 @@ export class GroupRoleService {
 
   async getGroupIdByRoleId(roleId: number) {
     const groupIds = await this.groupRoleRepository.find({
-      roleId,
+      roleId: roleId,
     })
     return groupIds.map(val => val.groupId);
   }

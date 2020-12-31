@@ -16,6 +16,7 @@ import { Cache } from 'cache-manager'
 import { TypesPrefix } from 'src/common/authz';
 import { ttl } from 'src/common/cache-manager';
 import { UserInfo } from 'os';
+import { Console } from 'console';
 
 export interface IRequestUser extends User {
   currentRole: string[];
@@ -35,11 +36,11 @@ interface ICreateUser extends IUserMessage {
   registerType: string;
 }
 
-const userNameQuery = 'userName LIKE :search';
-const nickNameQuery = 'nickName LIKE :search';
-const emailQuery = 'email LIKE :search';
-const noteQuery = 'note LIKE :search';
-const phoneQuery = 'phone LIKE :search';
+const userNameQuery = 'LOWER(user_name) LIKE LOWER(:search)';
+const nickNameQuery = 'LOWER(nick_name) LIKE LOWER(:search)';
+const emailQuery = 'LOWER(email) LIKE LOWER(:search)';
+const noteQuery = 'LOWER(note) LIKE LOWER(:search)';
+const phoneQuery = 'LOWER(phone) LIKE LOWER(:search)';
 
 @Injectable()
 export class UserService {
@@ -54,7 +55,7 @@ export class UserService {
   async getUserCount(): Promise<number> {
     return await this.usersRepository
       .createQueryBuilder('user')
-      .where('isDelete != 1')
+      .where('is_delete != 1')
       .getCount();
   }
 
@@ -77,6 +78,18 @@ export class UserService {
       });
     });
     adminUsers[0].id = 30001;
+    if( this.config.get('DB_TYPE') === "postgres" ) {
+      // 打补丁，让数据库从30001开始插入
+      const result = await this.usersRepository
+      .query(`SELECT MAX(id) FROM "user"`);
+      if (!(result && result[0].max)) {
+       await this.usersRepository
+      .query(`ALTER SEQUENCE user_id_seq RESTART WITH 30001`)
+      } else {
+        await this.usersRepository
+      .query(`SELECT setval('user_id_seq', ${result[0].max})`);
+      }
+    }
     for await (const user of adminUsers) {
       await this.usersRepository
         .createQueryBuilder()
@@ -86,7 +99,6 @@ export class UserService {
         .values(user)
         .execute();
     }
-
     return true;
   }
 
@@ -95,7 +107,7 @@ export class UserService {
     const list = await this.usersRepository
       .createQueryBuilder('user')
       .select(['user.userName', 'user.nickName', 'user.phone', 'user.email', 'user.note', 'user.id', 'user.jobMaxTimeSecond'])
-      .where('isDelete != 1')
+      .where('is_delete != 1')
       .skip(pageNo * pageSize)
       .take(pageSize)
       .getMany();
@@ -110,7 +122,7 @@ export class UserService {
     const list = await this.usersRepository
       .createQueryBuilder('user')
       .select(['user.userName', 'user.id', 'user.nickName', 'user.phone', 'user.email', 'user.note'])
-      .where('isDelete != 1')
+      .where('is_delete != 1')
       .getMany();
     return {
       list,
@@ -122,7 +134,7 @@ export class UserService {
     search = '%' + search + '%';
     const total = await this.usersRepository
       .createQueryBuilder('user')
-      .where('isDelete != 1')
+      .where('is_delete != 1')
       .andWhere(new Brackets(subQuery => {
         return subQuery
           .where(userNameQuery)
@@ -137,7 +149,7 @@ export class UserService {
     const list = await this.usersRepository
       .createQueryBuilder('user')
       .select(['user.userName', 'user.nickName', 'user.phone', 'user.email', 'user.note', 'user.id', 'user.jobMaxTimeSecond'])
-      .where('isDelete != 1')
+      .where('user.isDelete != 1')
       .andWhere(new Brackets(subQuery => {
         return subQuery
           .where(userNameQuery)
@@ -160,7 +172,7 @@ export class UserService {
     search = '%' + search + '%';
     const total = await this.usersRepository
       .createQueryBuilder('user')
-      .where('isDelete != 1')
+      .where('is_delete != 1')
       .andWhere(new Brackets(subQuery => {
         return subQuery
           .where(userNameQuery)
@@ -175,7 +187,7 @@ export class UserService {
     const list = await this.usersRepository
       .createQueryBuilder('user')
       .select(['user.userName', 'user.nickName', 'user.phone', 'user.email', 'user.note', 'user.id', 'user.jobMaxTimeSecond'])
-      .where('isDelete != 1')
+      .where('user.isDelete != 1')
       .andWhere(new Brackets(subQuery => {
         return subQuery
           .where(userNameQuery)
@@ -197,10 +209,10 @@ export class UserService {
 
   async userNameUnique(userName: string[]) {
     return await this.usersRepository
-      .createQueryBuilder()
-      .select('userName')
-      .where("userName IN (:...names)", { names: userName })
-      .execute()
+      .createQueryBuilder('user')
+      .select('user.userName')
+      .where("user_name IN (:...names)", { names: userName })
+      .getMany()
   }
 
   async create(users: IUserMessage[]): Promise<any> {
@@ -221,7 +233,6 @@ export class UserService {
       .into(User)
       .values(newUsers)
       .execute();
-
   }
 
   async remove(userNames: string[], userIds: number[]) {
@@ -247,7 +258,7 @@ export class UserService {
     await this.usersRepository
       .createQueryBuilder('user')
       .delete()
-      .where('user.id IN (:userIds)', {
+      .where('id IN (:...userIds)', {
         userIds: userIds
       })
       .execute()
@@ -259,17 +270,17 @@ export class UserService {
   async findUserByUserNames(userNames: string[]): Promise<any[]> {
     return await this.usersRepository
       .createQueryBuilder('user')
-      .select(['userName', 'id'])
-      .where("user.userName IN (:userNames)", { userNames: userNames })
-      .execute()
+      .select(['user.userName', 'user.id'])
+      .where("user_name IN (:...userNames)", { userNames: userNames })
+      .getMany()
   }
 
   async findUsersByUserIds(userIds: number[]): Promise<any[]> {
     return await this.usersRepository
       .createQueryBuilder('user')
-      .select(['userName', 'id', 'nickName', 'email', 'openId', 'note', 'phone'])
-      .where("user.id IN (:userIds)", { userIds: userIds })
-      .execute()
+      .select(['user.userName', 'user.id', 'user.nickName', 'user.email', 'user.openId', 'user.note', 'user.phone'])
+      .where("id IN (:...userIds)", { userIds: userIds })
+      .getMany()
   }
 
   async getUserById(id: number) {
@@ -300,9 +311,9 @@ export class UserService {
         .insert()
         .into(User)
         .values({
-          nickName,
-          openId,
-          registerType,
+          nickName: nickName,
+          openId: openId,
+          registerType: registerType,
           createTime: new Date().getTime() + '',
           microsoftId: openId,
           email: openId,
@@ -324,9 +335,9 @@ export class UserService {
         .insert()
         .into(User)
         .values({
-          nickName,
-          openId,
-          registerType,
+          nickName: nickName,
+          openId: openId,
+          registerType: registerType,
           createTime: new Date().getTime() + '',
           wechatId: openId,
         })
@@ -340,7 +351,7 @@ export class UserService {
 
   async signUpByMicrosoftId(microsoftId: string, userInfo: { userName: string, password: string, nickName: string }) {
     const user = await this.usersRepository.findOne({
-      microsoftId
+      microsoftId: microsoftId
     })
     if (user) {
       const SECRET_KEY = this.config.get('SECRET_KEY');
@@ -352,7 +363,7 @@ export class UserService {
   }
   async signUpByWechatId(wechatId: string, userInfo: { userName: string, password: string, nickName: string }) {
     const user = await this.usersRepository.findOne({
-      wechatId
+      wechatId: wechatId
     })
     if (user) {
       const SECRET_KEY = this.config.get('SECRET_KEY');
@@ -383,17 +394,17 @@ export class UserService {
 
   async getUserIdsByUserNames(userNames: string[]): Promise<{ id: number }[]> {
     return await this.usersRepository
-      .createQueryBuilder()
-      .select('id')
-      .where("userName IN (:...names)", { names: userNames })
-      .execute()
+    .createQueryBuilder('user')
+    .select('user.id')
+    .where("user_name IN (:...names)", { names: userNames })
+    .getMany();
   }
 
   async openFindAll() {
     const list = await this.usersRepository
       .createQueryBuilder('user')
       .select(['user.userName', 'user.id', 'user.registerType'])
-      .where('isDelete != 1')
+      .where('is_delete != 1')
       .getMany();
     const result = list.map(l => {
       const registerType = l.registerType;
@@ -507,7 +518,7 @@ export class UserService {
 
   async openCreateUser(openId: string, userName: string) {
     if (await this.usersRepository.findOne({
-      userName
+      userName: userName
     })) {
       return false;
     }
@@ -516,8 +527,8 @@ export class UserService {
       .insert()
       .into(User)
       .values({
-        userName,
-        openId,
+        userName: userName,
+        openId: openId,
         registerType: 'saml',
         samlId: openId,
         createTime: new Date().getTime() + '',
@@ -527,7 +538,7 @@ export class UserService {
 
   async getUserByUserName(userName: string) {
     const user = await this.usersRepository.findOne({
-      userName
+      userName: userName
     })
     if (user) {
       

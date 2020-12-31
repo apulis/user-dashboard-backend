@@ -21,8 +21,8 @@ interface IGetRoleList {
 }
 
 
-const nameQuery = 'name LIKE :search';
-const noteQuery = 'note LIKE :search'
+const nameQuery = 'LOWER(name) LIKE LOWER(:search)';
+const noteQuery = 'LOWER(note) LIKE LOWER(:search)'
 
 @Injectable()
 export class RoleService {
@@ -121,7 +121,7 @@ export class RoleService {
       .createQueryBuilder('role')
       .delete()
       .from(Role)
-      .where('role.id IN (:roleIds)', {
+      .where('id IN (:...roleIds)', {
         roleIds: roleIds
       })
       .execute()
@@ -129,10 +129,10 @@ export class RoleService {
   
   public async getRolesByRoleIds(roleIds: number[]) {
     return await this.roleRepository
-      .createQueryBuilder('role')
-      .select(['name', 'id', 'note', 'isPreset'])
-      .where("role.id IN (:roleIds)", { roleIds: roleIds })
-      .execute()
+    .createQueryBuilder('role')
+    .select(['role.name', 'role.id', 'role.note', 'role.isPreset'])
+    .where("id IN (:...roleIds)", { roleIds: roleIds })
+    .getMany()
   }
 
   public async getRoleByRoleName(roleName: string) {
