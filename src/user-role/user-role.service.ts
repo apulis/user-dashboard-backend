@@ -78,7 +78,7 @@ export class UserRoleService {
   async findUserRoleIdsById(userId: number) {
     return await this.userRoleRepository
       .find({
-        userId
+        userId: userId
       })
   }
 
@@ -122,8 +122,8 @@ export class UserRoleService {
 
   async removeRoleForUser(userId: number, roleId: number): Promise<boolean> {
     const removeItem = await this.userRoleRepository.findOne({
-      userId,
-      roleId
+      userId: userId,
+      roleId: roleId
     })
     if (removeItem) {
       await this.userRoleRepository.remove(removeItem);
@@ -134,7 +134,7 @@ export class UserRoleService {
 
   async findUserIdByRoleId(roleId: number) {
     const userRole = await this.userRoleRepository.find({
-      roleId,
+      roleId: roleId,
     })
     return userRole.map(val => val.userId);
   }

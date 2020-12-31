@@ -26,7 +26,7 @@ import { ttl } from 'src/common/cache-manager';
 export interface ICurrentUser extends User {
   permissionList: string[];
   currentRole: string[];
-  jobMaxTimeSecond?: number;
+  job_max_time_second?: number;
   currentVC: string[];
 }
 
@@ -50,7 +50,7 @@ export class AuthService {
   
   async validateUserAccount(userName: string, password: string): Promise<false | User> {
     const user = await this.usersRepository.findOne({
-      userName,
+      userName: userName,
     })
     if (user?.userName !== userName) {
       return false;
@@ -97,7 +97,7 @@ export class AuthService {
 
   async getUserRoles(userId: number) {
     const groups = await this.groupUsersRepository.find({
-      userId,
+      userId: userId,
     });
     let groupRolesId: number[];
     if (groups.length !== 0) {
@@ -105,7 +105,7 @@ export class AuthService {
       const groupRoles = await this.groupRoleRespository
         .createQueryBuilder('group_role')
         .select(['group_role.roleId', 'group_role.id', 'group_role.groupId'])
-        .where('groupId IN (:groupIds)', { groupIds })
+        .where('group_id IN (:...groupIds)', { groupIds })
         .getMany();
       groupRolesId = groupRoles.map(val => val.roleId);
     } else {
@@ -113,7 +113,7 @@ export class AuthService {
     }
     const userRoles = await this.userRoleRespository
       .find({
-        userId
+        userId: userId
       });
     const userRoleId = userRoles.map(val => val.roleId);
     const currentRoleIds = [...new Set(groupRolesId.concat(userRoleId))];
@@ -121,8 +121,8 @@ export class AuthService {
     if (currentRoleIds.length !== 0) {
       currentUserRoles = await this.roleRespository
         .createQueryBuilder('role')
-        .select(['name', 'id'].map(val => 'role.' + val))
-        .where('role.id IN (:roleIds)', { roleIds: currentRoleIds })
+        .select(['role.name', 'role.id'])
+        .where('id IN (:...roleIds)', { roleIds: currentRoleIds })
         .getMany();
     } else {
       currentUserRoles = []
@@ -201,13 +201,13 @@ export class AuthService {
 
   async getUserByMicrosoftId(microsoftId: string) {
     return await this.usersRepository.findOne({
-      microsoftId
+      microsoftId: microsoftId
     })
   }
 
   async getUserByWechatId(wechatId: string) {
     return await this.usersRepository.findOne({
-      wechatId
+      wechatId: wechatId
     })
   }
 

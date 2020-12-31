@@ -21,7 +21,7 @@ export async function fixMysql8Sha2Password() {
   await connection.end()
 }
 
-export async function initDataBase() {
+export async function initMysqlDataBase() {
   const connection = mysql.createConnection({
     host: DB_HOST,
     user: DB_USERNAME,

@@ -22,9 +22,9 @@ export class Role {
 
   @IsString()
   @Length(1, 40)
-  @Column('varchar', { length: 191, default: new Date().getTime() + '' })
+  @Column('varchar', { name: 'create_time', length: 191, default: new Date().getTime() + '' })
   createTime?: string;
 
-  @Column('int', { default: 0 })
+  @Column('int', { name: 'is_preset',default: 0 })
   isPreset: number;
 }

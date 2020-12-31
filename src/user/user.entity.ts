@@ -12,7 +12,7 @@ export class User {
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 191, unique: true, nullable: true })
+  @Column('varchar', { name: 'user_name', length: 191, unique: true, nullable: true })
   userName: string;
 
   @IsString()
@@ -22,17 +22,17 @@ export class User {
 
   @IsString()
   @Length(1, 18)
-  @Column('varchar', { length: 191, nullable: true })
+  @Column('varchar', { name: 'nick_name', length: 191, nullable: true })
   nickName: string;
 
   @IsString()
   @Length(5, 18)
-  @Column('varchar', { length: 191, unique: true, nullable: true })
+  @Column('varchar', { name: 'open_id', length: 191, unique: true, nullable: true })
   openId: string;
 
   @IsString()
   @Length(1, 18)
-  @Column('varchar', { length: 191, default: 'Account' })
+  @Column('varchar', { name: 'register_type', length: 191, default: 'Account' })
   registerType: string;
 
   @IsEmail()
@@ -49,22 +49,21 @@ export class User {
   @Column('varchar', { length: 191, nullable: true })
   note: string;
 
-  @Column('varchar', { length: 191, default: new Date().getTime() + '' })
+  @Column('varchar', { name: 'create_time', length: 191, default: new Date().getTime() + '' })
   createTime: string;
 
-  @Column('int', { default: 0 })
+  @Column('int', { name: 'is_delete', default: 0 })
   isDelete: number;
 
-  @Column('varchar', { length: 191, default: null, unique: true })
+  @Column('varchar', { name: 'microsoft_id', length: 191, default: null, unique: true })
   microsoftId: string;
 
-  @Column('varchar', { length: 191, default: null, unique: true })
+  @Column('varchar', { name: 'wechat_id', length: 191, default: null, unique: true })
   wechatId: string;
 
-  @Column('varchar', { length: 191, default: null, unique: true })
+  @Column('varchar', { name: 'saml_id', length: 191, default: null, unique: true })
   samlId: string;
 
-  @Column('int', { default: null })
+  @Column('int', { name: 'job_max_time_second', default: null })
   jobMaxTimeSecond?: number;
-
 }
