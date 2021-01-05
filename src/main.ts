@@ -22,7 +22,7 @@ import 'initial/init-request';
 async function bootstrap() {
   const dbType = envConfig.DB_TYPE;
   if (dbType === 'mysql') {
-    // await fixMysql8Sha2Password();
+    await fixMysql8Sha2Password();
     await initMysqlDataBase();
   } else if (dbType === 'postgres') {
     await initPgDataBase();

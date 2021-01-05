@@ -78,6 +78,13 @@ docker run -p9301:6379 redis
 ```
 在 9301 端口运行 redis
 
+- 启动 mysql：如果指定数据库类型为mysql的话
+如果本地安装了 docker，可以运行
+```
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=123456 -d -p 3306:3306  mysql:8.0
+```
+在 3306 端口运行 mysql
+
 - 启动 pg：如果指定数据库类型为pg的话
 如果本地安装了 docker，可以运行
 ```
