@@ -184,7 +184,7 @@ export class OpenController {
         currentRole: user.currentRole,
         permissionList: [...new Set(user.permissionList)],
         currentVC: user.currentVC,
-        jobMaxTimeSecond: user.job_max_time_second,
+        jobMaxTimeSecond: user.jobMaxTimeSecond,
       };
     } else {
       throw new UnauthorizedException();
