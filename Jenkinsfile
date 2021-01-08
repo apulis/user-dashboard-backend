@@ -9,7 +9,7 @@ buildPlugin ( {
             'imageName': 'apulistech/user_backend',
             'directory': '.',
             'dockerfilePath': '',
-            'arch': ['amd64']
+            'arch': ['amd64','arm64']
         ]
     ]
 })
