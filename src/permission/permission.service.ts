@@ -36,7 +36,14 @@ export class PermissionService {
         }
       })
     } else {
-      await this.permissionRepository.save(initialPermissions);
+      // await this.permissionRepository.save(initialPermissions);
+      await this.permissionRepository
+      .createQueryBuilder()
+      .insert()
+      .orIgnore()
+      .into(Permission)
+      .values(initialPermissions)
+      .execute();
     }
   }
 
