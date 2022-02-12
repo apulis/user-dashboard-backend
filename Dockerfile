@@ -7,7 +7,7 @@ WORKDIR /home/addon_custom_user_dasboard_backend
 ADD package.json .
 ADD yarn.lock .
 
-RUN yarn config set registry 'https://registry.npm.taobao.org'
+RUN yarn config set registry 'https://registry.npmmirror.com'
 RUN yarn
 
 COPY . /home/addon_custom_user_dasboard_backend
